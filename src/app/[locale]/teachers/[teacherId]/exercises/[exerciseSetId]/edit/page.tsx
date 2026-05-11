@@ -16,7 +16,7 @@ export default function EditExerciseSetPage({
   const t = useTranslations("EditExercise");
 
   const [title, setTitle] = useState("");
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [bulkInput, setBulkInput] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +30,10 @@ export default function EditExerciseSetPage({
         }
         const data = await response.json();
         setTitle(data.title);
-        setQuestions(data.questions || []);
+        const reconstructedInput = (data.questions || [])
+          .map((q: Question) => q.sourceText)
+          .join("\n");
+        setBulkInput(reconstructedInput);
       } catch (err) {
         setError(err instanceof Error ? err.message : t("somethingWentWrong"));
       } finally {
@@ -41,33 +44,13 @@ export default function EditExerciseSetPage({
     fetchExercise();
   }, [exerciseSetId, t]);
 
-  const handleAddQuestion = () => {
-    setQuestions([...questions, { prompt: "", correctAnswer: "" }]);
-  };
-
-  const handleRemoveQuestion = (index: number) => {
-    if (questions.length > 1) {
-      setQuestions(questions.filter((_, i) => i !== index));
-    }
-  };
-
-  const handleQuestionChange = (
-    index: number,
-    field: keyof Question,
-    value: string
-  ) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[index] = { ...updatedQuestions[index], [field]: value };
-    setQuestions(updatedQuestions);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
 
     // Basic validation
-    if (questions.length === 0 || questions.some((q) => !q.prompt || !q.correctAnswer)) {
+    if (!bulkInput.trim()) {
       setError(t("validationError"));
       setIsSubmitting(false);
       return;
@@ -75,7 +58,7 @@ export default function EditExerciseSetPage({
 
     const dto = {
       title,
-      questions,
+      bulkInput,
     };
 
     try {
@@ -140,79 +123,25 @@ export default function EditExerciseSetPage({
           />
         </div>
 
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-gray-800">
-              {t("questions")}
-            </h2>
-            <button
-              type="button"
-              onClick={handleAddQuestion}
-              className="text-sm bg-green-50 text-green-700 hover:bg-green-100 px-3 py-1 rounded border border-green-200 transition-colors"
+        <div className="space-y-4">
+          <div>
+            <label
+              htmlFor="bulkInput"
+              className="block text-sm font-medium text-gray-700 mb-1"
             >
-              {t("addQuestion")}
-            </button>
+              {t("bulkInputLabel")}
+            </label>
+            <textarea
+              id="bulkInput"
+              required
+              rows={10}
+              className="border border-gray-300 p-2 w-full rounded-md font-mono text-sm"
+              placeholder={t("bulkInputPlaceholder")}
+              value={bulkInput}
+              onChange={(e) => setBulkInput(e.target.value)}
+            />
+            <p className="mt-1 text-xs text-gray-500">{t("bulkInputHelper")}</p>
           </div>
-
-          {questions.map((question, index) => (
-            <div
-              key={index}
-              className="p-4 border border-gray-200 rounded-lg bg-gray-50 space-y-3 relative"
-            >
-              <div className="flex justify-between items-start">
-                <span className="text-sm font-medium text-gray-500">
-                  {t("question")} {index + 1}
-                </span>
-                {questions.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveQuestion(index)}
-                    className="text-red-500 hover:text-red-700 text-sm"
-                  >
-                    {t("remove")}
-                  </button>
-                )}
-              </div>
-
-              <div>
-                <label
-                  htmlFor={`prompt-${index}`}
-                  className="block text-xs font-medium text-gray-600 mb-1"
-                >
-                  {t("promptLabel")}
-                </label>
-                <input
-                  id={`prompt-${index}`}
-                  type="text"
-                  required
-                  className="bg-white border border-gray-300 p-2 w-full rounded-md text-sm"
-                  value={question.prompt}
-                  onChange={(e) =>
-                    handleQuestionChange(index, "prompt", e.target.value)
-                  }
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor={`answer-${index}`}
-                  className="block text-xs font-medium text-gray-600 mb-1"
-                >
-                  {t("answerLabel")}
-                </label>
-                <input
-                  id={`answer-${index}`}
-                  type="text"
-                  required
-                  className="bg-white border border-gray-300 p-2 w-full rounded-md text-sm"
-                  value={question.correctAnswer}
-                  onChange={(e) =>
-                    handleQuestionChange(index, "correctAnswer", e.target.value)
-                  }
-                />
-              </div>
-            </div>
-          ))}
         </div>
 
         <div className="pt-4 flex flex-col sm:flex-row gap-4">

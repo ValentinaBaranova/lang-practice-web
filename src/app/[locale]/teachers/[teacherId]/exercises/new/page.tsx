@@ -10,16 +10,13 @@ const translations = {
     teacherId: "Teacher ID",
     exerciseTitle: "Exercise Title",
     exerciseTitlePlaceholder: "e.g. Present Simple Practice",
-    questions: "Questions",
-    addQuestion: "+ Add Question",
-    question: "Question",
-    remove: "Remove",
-    promptLabel: 'Prompt (e.g. "The cat is on the ____.")',
-    answerLabel: "Correct Answer",
+    bulkInputLabel: "Questions",
+    bulkInputPlaceholder: "I [went] to [school] yesterday.\nI have an [apple].",
+    bulkInputHelper: "Format: Text with [answers] in brackets. One question per line.",
     create: "Create Exercise",
     creating: "Creating...",
     cancel: "Cancel",
-    validationError: "Please fill in all questions and answers.",
+    validationError: "Please check your input. Each line must contain at least one answer in [].",
     failedToCreate: "Failed to create exercise",
     somethingWentWrong: "Something went wrong",
   },
@@ -28,16 +25,13 @@ const translations = {
     teacherId: "ID del Profesor",
     exerciseTitle: "Título del Ejercicio",
     exerciseTitlePlaceholder: "ej. Práctica de Presente Simple",
-    questions: "Preguntas",
-    addQuestion: "+ Añadir Pregunta",
-    question: "Pregunta",
-    remove: "Eliminar",
-    promptLabel: 'Enunciado (ej. "El gato está en el ____.")',
-    answerLabel: "Respuesta Correcta",
+    bulkInputLabel: "Preguntas",
+    bulkInputPlaceholder: "Yo [fui] a la [escuela] ayer.\nTengo una [manzana].",
+    bulkInputHelper: "Formato: Texto con [respuestas] entre corchetes. Una pregunta por línea.",
     create: "Crear Ejercicio",
     creating: "Creando...",
     cancel: "Cancelar",
-    validationError: "Por favor, complete todas las preguntas y respuestas.",
+    validationError: "Por favor, verifique su entrada. Cada línea debe contener al menos una respuesta entre [].",
     failedToCreate: "Error al crear el ejercicio",
     somethingWentWrong: "Algo salió mal",
   },
@@ -53,31 +47,9 @@ export default function NewExercisePage({
   const t = translations[locale as keyof typeof translations] || translations.en;
 
   const [title, setTitle] = useState("");
-  const [questions, setQuestions] = useState<Question[]>([
-    { prompt: "", correctAnswer: "" },
-  ]);
+  const [bulkInput, setBulkInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const handleAddQuestion = () => {
-    setQuestions([...questions, { prompt: "", correctAnswer: "" }]);
-  };
-
-  const handleRemoveQuestion = (index: number) => {
-    if (questions.length > 1) {
-      setQuestions(questions.filter((_, i) => i !== index));
-    }
-  };
-
-  const handleQuestionChange = (
-    index: number,
-    field: keyof Question,
-    value: string
-  ) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[index] = { ...updatedQuestions[index], [field]: value };
-    setQuestions(updatedQuestions);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,7 +57,7 @@ export default function NewExercisePage({
     setError(null);
 
     // Basic validation
-    if (questions.some((q) => !q.prompt || !q.correctAnswer)) {
+    if (!bulkInput.trim()) {
       setError(t.validationError);
       setIsSubmitting(false);
       return;
@@ -95,7 +67,7 @@ export default function NewExercisePage({
       teacherId,
       title,
       type: ExerciseType.FILL_GAP_TEXT,
-      questions,
+      bulkInput,
     };
 
     try {
@@ -152,79 +124,25 @@ export default function NewExercisePage({
           />
         </div>
 
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-gray-800">
-              {t.questions}
-            </h2>
-            <button
-              type="button"
-              onClick={handleAddQuestion}
-              className="text-sm bg-green-50 text-green-700 hover:bg-green-100 px-3 py-1 rounded border border-green-200 transition-colors"
+        <div className="space-y-4">
+          <div>
+            <label
+              htmlFor="bulkInput"
+              className="block text-sm font-medium text-gray-700 mb-1"
             >
-              {t.addQuestion}
-            </button>
+              {t.bulkInputLabel}
+            </label>
+            <textarea
+              id="bulkInput"
+              required
+              rows={10}
+              className="border border-gray-300 p-2 w-full rounded-md font-mono text-sm"
+              placeholder={t.bulkInputPlaceholder}
+              value={bulkInput}
+              onChange={(e) => setBulkInput(e.target.value)}
+            />
+            <p className="mt-1 text-xs text-gray-500">{t.bulkInputHelper}</p>
           </div>
-
-          {questions.map((question, index) => (
-            <div
-              key={index}
-              className="p-4 border border-gray-200 rounded-lg bg-gray-50 space-y-3 relative"
-            >
-              <div className="flex justify-between items-start">
-                <span className="text-sm font-medium text-gray-500">
-                  {t.question} {index + 1}
-                </span>
-                {questions.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveQuestion(index)}
-                    className="text-red-500 hover:text-red-700 text-sm"
-                  >
-                    {t.remove}
-                  </button>
-                )}
-              </div>
-
-              <div>
-                <label
-                  htmlFor={`prompt-${index}`}
-                  className="block text-xs font-medium text-gray-600 mb-1"
-                >
-                  {t.promptLabel}
-                </label>
-                <input
-                  id={`prompt-${index}`}
-                  type="text"
-                  required
-                  className="bg-white border border-gray-300 p-2 w-full rounded-md text-sm"
-                  value={question.prompt}
-                  onChange={(e) =>
-                    handleQuestionChange(index, "prompt", e.target.value)
-                  }
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor={`answer-${index}`}
-                  className="block text-xs font-medium text-gray-600 mb-1"
-                >
-                  {t.answerLabel}
-                </label>
-                <input
-                  id={`answer-${index}`}
-                  type="text"
-                  required
-                  className="bg-white border border-gray-300 p-2 w-full rounded-md text-sm"
-                  value={question.correctAnswer}
-                  onChange={(e) =>
-                    handleQuestionChange(index, "correctAnswer", e.target.value)
-                  }
-                />
-              </div>
-            </div>
-          ))}
         </div>
 
         <div className="pt-4 flex flex-col sm:flex-row gap-4">

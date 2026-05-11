@@ -21,7 +21,10 @@
     "save": "Guardar Cambios",
     "saving": "Guardando...",
     "cancel": "Cancelar",
-    "validationError": "Por favor, complete todas las preguntas y respuestas.",
+    "bulkInputLabel": "Preguntas",
+    "bulkInputPlaceholder": "Yo [fui] a la [escuela] ayer.\nTengo una [manzana].",
+    "bulkInputHelper": "Formato: Texto con [respuestas] entre corchetes. Una pregunta por línea.",
+    "validationError": "Por favor, verifique su entrada. Cada línea debe contener al menos una respuesta entre [].",
     "failedToLoad": "Error al cargar el ejercicio",
     "failedToUpdate": "Error al actualizar el ejercicio",
     "somethingWentWrong": "Algo salió mal"

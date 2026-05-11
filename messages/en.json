@@ -21,7 +21,10 @@
     "save": "Save Changes",
     "saving": "Saving...",
     "cancel": "Cancel",
-    "validationError": "Please fill in all questions and answers.",
+    "bulkInputLabel": "Questions",
+    "bulkInputPlaceholder": "I [went] to [school] yesterday.\nI have an [apple].",
+    "bulkInputHelper": "Format: Text with [answers] in brackets. One question per line.",
+    "validationError": "Please check your input. Each line must contain at least one answer in [].",
     "failedToLoad": "Failed to load exercise",
     "failedToUpdate": "Failed to update exercise",
     "somethingWentWrong": "Something went wrong"

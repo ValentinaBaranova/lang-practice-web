@@ -6,6 +6,7 @@ export interface Question {
   id?: string;
   prompt: string;
   correctAnswer: string;
+  sourceText: string;
 }
 
 export interface ExerciseSetDto {
