@@ -26,7 +26,7 @@ export default function PracticePage({
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [answers, setAnswers] = useState<string[]>([]);
+  const [answers, setAnswers] = useState<string[][]>([]);
   const [results, setResults] = useState<(boolean | null)[]>([]);
   const [attemptId, setAttemptId] = useState<string | null>(null);
   const [isFinished, setIsFinished] = useState(false);
@@ -49,7 +49,16 @@ export default function PracticePage({
         }
         const data = await response.json();
         setExercise(data);
-        setAnswers(new Array(data.questions.length).fill(""));
+        
+        // Initialize answers as an array of arrays, one per question
+        const initialAnswers = data.questions.map((q: Question) => {
+          if (data.type === ExerciseType.FILL_GAP_TEXT) {
+            const gapCount = (q.prompt.match(/_+/g) || []).length;
+            return new Array(gapCount).fill("");
+          }
+          return [""];
+        });
+        setAnswers(initialAnswers);
         setResults(new Array(data.questions.length).fill(null));
       } catch (err) {
         setError(err instanceof Error ? err.message : tEdit("somethingWentWrong"));
@@ -94,9 +103,22 @@ export default function PracticePage({
     if (!attemptId || !exercise || isSubmitting) return;
 
     const currentQuestion = exercise.questions[currentQuestionIndex];
-    const answer = answers[currentQuestionIndex];
+    const questionAnswers = answers[currentQuestionIndex];
 
-    if (!answer.trim()) return;
+    if (questionAnswers.some(a => !a.trim())) return;
+
+    let fullSentence = "";
+    if (exercise.type === ExerciseType.FILL_GAP_TEXT) {
+      const parts = currentQuestion.prompt.split(/_+/);
+      fullSentence = parts.reduce((acc, part, i) => {
+        if (i < questionAnswers.length) {
+          return acc + part + questionAnswers[i];
+        }
+        return acc + part;
+      }, "");
+    } else {
+      fullSentence = questionAnswers[0].trim();
+    }
 
     setIsSubmitting(true);
     try {
@@ -105,7 +127,7 @@ export default function PracticePage({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           questionId: currentQuestion.id,
-          answer: answer.trim(),
+          answer: fullSentence.trim(),
         }),
       });
 
@@ -201,10 +223,12 @@ export default function PracticePage({
   const currentQuestion = exercise.questions[currentQuestionIndex];
   const isSubmitted = results[currentQuestionIndex] !== null;
 
-  const handleAnswerChange = (value: string) => {
+  const handleAnswerChange = (value: string, gapIndex: number = 0) => {
     if (isSubmitted) return;
     const newAnswers = [...answers];
-    newAnswers[currentQuestionIndex] = value;
+    const questionAnswers = [...newAnswers[currentQuestionIndex]];
+    questionAnswers[gapIndex] = value;
+    newAnswers[currentQuestionIndex] = questionAnswers;
     setAnswers(newAnswers);
   };
 
@@ -224,7 +248,7 @@ export default function PracticePage({
         <QuestionRenderer
           question={currentQuestion}
           type={exercise.type}
-          value={answers[currentQuestionIndex]}
+          values={answers[currentQuestionIndex]}
           onChange={handleAnswerChange}
           isSubmitted={isSubmitted}
           isCorrect={results[currentQuestionIndex]}
@@ -248,7 +272,7 @@ export default function PracticePage({
           {!isSubmitted ? (
             <button
               onClick={handleSubmitAnswer}
-              disabled={isSubmitting || !answers[currentQuestionIndex]?.trim()}
+              disabled={isSubmitting || !answers[currentQuestionIndex]?.every(a => a.trim())}
               className="bg-green-600 text-white py-2 px-6 rounded-md hover:bg-green-700 transition-colors disabled:bg-green-300"
             >
               {isSubmitting ? "..." : t("submit")}
@@ -270,15 +294,15 @@ export default function PracticePage({
 function QuestionRenderer({
   question,
   type,
-  value,
+  values,
   onChange,
   isSubmitted,
   isCorrect,
 }: {
   question: Question;
   type: ExerciseType;
-  value: string;
-  onChange: (val: string) => void;
+  values: string[];
+  onChange: (val: string, index: number) => void;
   isSubmitted: boolean;
   isCorrect: boolean | null;
 }) {
@@ -308,15 +332,15 @@ function QuestionRenderer({
               {index < parts.length - 1 && (
                 <input
                   type="text"
-                  value={value}
-                  onChange={(e) => onChange(e.target.value)}
+                  value={values[index] || ""}
+                  onChange={(e) => onChange(e.target.value, index)}
                   disabled={isSubmitted}
                   className={`mx-2 p-1 border-b-2 outline-none w-32 text-center transition-colors ${
                     isSubmitted 
                       ? (isCorrect ? "border-green-500 bg-green-50" : "border-red-500 bg-red-50") 
                       : "border-gray-300 focus:border-blue-500"
                   }`}
-                  autoFocus
+                  autoFocus={index === 0}
                 />
               )}
             </span>
@@ -332,8 +356,8 @@ function QuestionRenderer({
       <p className="text-lg">{question.prompt}</p>
       <input
         type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+        value={values[0] || ""}
+        onChange={(e) => onChange(e.target.value, 0)}
         disabled={isSubmitted}
         className={`w-full p-2 border rounded-md transition-colors ${
           isSubmitted 
