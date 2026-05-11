@@ -3,6 +3,7 @@ export enum ExerciseType {
 }
 
 export interface Question {
+  id?: string;
   prompt: string;
   correctAnswer: string;
 }
