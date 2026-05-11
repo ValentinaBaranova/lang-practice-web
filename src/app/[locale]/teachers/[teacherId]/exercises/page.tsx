@@ -1,6 +1,7 @@
 import { Link } from "@/routing";
 import { use } from "react";
 import { ExerciseType } from "@/app/types/exercise";
+import { useTranslations } from "next-intl";
 
 interface ExerciseSetResponse {
   id: string;
@@ -8,6 +9,7 @@ interface ExerciseSetResponse {
   teacherName: string;
   title: string;
   type: ExerciseType;
+  shareSlug: string;
   createdAt: string;
 }
 
@@ -35,6 +37,7 @@ export default function ExercisesPage({
 }) {
   const { teacherId, locale } = use(params);
   const exercises = use(getExercises(teacherId));
+  const t = useTranslations("Practice");
 
   return (
     <div className="p-8">
@@ -59,12 +62,23 @@ export default function ExercisesPage({
                 <p className="text-sm text-gray-500">Type: {exercise.type}</p>
                 <p className="text-xs text-gray-400">Created: {new Date(exercise.createdAt).toLocaleDateString()}</p>
               </div>
-              <Link 
-                href={`/teachers/${teacherId}/exercises/${exercise.id}/edit`}
-                className="text-blue-600 hover:text-blue-800 font-medium"
-              >
-                Edit
-              </Link>
+              <div className="flex items-center gap-4">
+                {exercise.shareSlug && (
+                  <Link
+                    href={`/practice/${exercise.shareSlug}`}
+                    className="text-green-600 hover:text-green-800 font-medium"
+                    target="_blank"
+                  >
+                    {t("studentLink")}
+                  </Link>
+                )}
+                <Link 
+                  href={`/teachers/${teacherId}/exercises/${exercise.id}/edit`}
+                  className="text-blue-600 hover:text-blue-800 font-medium"
+                >
+                  Edit
+                </Link>
+              </div>
             </div>
           ))}
         </div>

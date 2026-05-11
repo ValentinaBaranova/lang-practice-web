@@ -25,5 +25,16 @@
     "failedToLoad": "Failed to load exercise",
     "failedToUpdate": "Failed to update exercise",
     "somethingWentWrong": "Something went wrong"
+  },
+  "Practice": {
+    "enterName": "Enter your name to start",
+    "namePlaceholder": "Your name",
+    "start": "Start Exercise",
+    "next": "Next",
+    "finish": "Finish",
+    "questionProgress": "Question {current} of {total}",
+    "exerciseCompleted": "Exercise completed!",
+    "wellDone": "Well done, {name}!",
+    "studentLink": "Student link"
   }
 }

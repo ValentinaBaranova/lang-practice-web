@@ -25,5 +25,16 @@
     "failedToLoad": "Error al cargar el ejercicio",
     "failedToUpdate": "Error al actualizar el ejercicio",
     "somethingWentWrong": "Algo salió mal"
+  },
+  "Practice": {
+    "enterName": "Ingresa tu nombre para comenzar",
+    "namePlaceholder": "Tu nombre",
+    "start": "Comenzar Ejercicio",
+    "next": "Siguiente",
+    "finish": "Finalizar",
+    "questionProgress": "Pregunta {current} de {total}",
+    "exerciseCompleted": "¡Ejercicio completado!",
+    "wellDone": "¡Bien hecho, {name}!",
+    "studentLink": "Enlace para el alumno"
   }
 }
