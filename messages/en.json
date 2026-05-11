@@ -1,0 +1,29 @@
+{
+  "HomePage": {
+    "title": "Welcome to Language Practice",
+    "description": "Improve your language skills with our exercises."
+  },
+  "Navigation": {
+    "home": "Home",
+    "teachers": "Teachers"
+  },
+  "EditExercise": {
+    "title": "Edit Exercise",
+    "teacherId": "Teacher ID",
+    "exerciseTitle": "Exercise Title",
+    "exerciseTitlePlaceholder": "e.g. Present Simple Practice",
+    "questions": "Questions",
+    "addQuestion": "+ Add Question",
+    "question": "Question",
+    "remove": "Remove",
+    "promptLabel": "Prompt (e.g. \"The cat is on the ____.\")",
+    "answerLabel": "Correct Answer",
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "validationError": "Please fill in all questions and answers.",
+    "failedToLoad": "Failed to load exercise",
+    "failedToUpdate": "Failed to update exercise",
+    "somethingWentWrong": "Something went wrong"
+  }
+}

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/routing";
 import { use } from "react";
 import { ExerciseType } from "@/app/types/exercise";
 
@@ -31,9 +31,9 @@ async function getExercises(teacherId: string): Promise<ExerciseSetResponse[]> {
 export default function ExercisesPage({
   params,
 }: {
-  params: Promise<{ teacherId: string }>;
+  params: Promise<{ teacherId: string; locale: string }>;
 }) {
-  const { teacherId } = use(params);
+  const { teacherId, locale } = use(params);
   const exercises = use(getExercises(teacherId));
 
   return (

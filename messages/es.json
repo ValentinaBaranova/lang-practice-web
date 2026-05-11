@@ -1,0 +1,29 @@
+{
+  "HomePage": {
+    "title": "Bienvenido a Práctica de Idiomas",
+    "description": "Mejora tus habilidades lingüísticas con nuestros ejercicios."
+  },
+  "Navigation": {
+    "home": "Inicio",
+    "teachers": "Profesores"
+  },
+  "EditExercise": {
+    "title": "Editar Ejercicio",
+    "teacherId": "ID del Profesor",
+    "exerciseTitle": "Título del Ejercicio",
+    "exerciseTitlePlaceholder": "ej. Práctica de Presente Simple",
+    "questions": "Preguntas",
+    "addQuestion": "+ Añadir Pregunta",
+    "question": "Pregunta",
+    "remove": "Eliminar",
+    "promptLabel": "Enunciado (ej. \"El gato está en el ____.\")",
+    "answerLabel": "Respuesta Correcta",
+    "save": "Guardar Cambios",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "validationError": "Por favor, complete todas las preguntas y respuestas.",
+    "failedToLoad": "Error al cargar el ejercicio",
+    "failedToUpdate": "Error al actualizar el ejercicio",
+    "somethingWentWrong": "Algo salió mal"
+  }
+}
