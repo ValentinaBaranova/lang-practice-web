@@ -73,6 +73,12 @@ export default function ExercisesPage({
                   </Link>
                 )}
                 <Link 
+                  href={`/teachers/${teacherId}/exercises/${exercise.id}/results`}
+                  className="text-purple-600 hover:text-purple-800 font-medium"
+                >
+                  Results
+                </Link>
+                <Link 
                   href={`/teachers/${teacherId}/exercises/${exercise.id}/edit`}
                   className="text-blue-600 hover:text-blue-800 font-medium"
                 >
