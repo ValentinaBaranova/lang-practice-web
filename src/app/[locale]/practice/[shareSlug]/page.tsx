@@ -155,17 +155,21 @@ export default function PracticePage({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-50/50 flex justify-center pt-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      <div className="page-container">
+        <div className="content-wrapper flex justify-center pt-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+        </div>
       </div>
     );
   }
 
   if (error || !exercise) {
     return (
-      <div className="min-h-screen bg-slate-50/50 p-8 text-center">
-        <div className="max-w-5xl mx-auto bg-white rounded-2xl border border-red-100 p-8 shadow-sm">
-          <p className="text-red-600 mb-4 font-medium">{error || tEdit("somethingWentWrong")}</p>
+      <div className="page-container">
+        <div className="content-wrapper text-center">
+          <div className="card border-red-100 p-8">
+            <p className="text-red-600 mb-4 font-medium">{error || tEdit("somethingWentWrong")}</p>
+          </div>
         </div>
       </div>
     );
@@ -173,9 +177,9 @@ export default function PracticePage({
 
   if (!isStarted) {
     return (
-      <div className="min-h-screen bg-slate-50/50 pb-12">
-        <div className="p-4 md:p-8 max-w-xl mx-auto pt-12">
-          <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8 md:p-10">
+      <div className="page-container">
+      <div className="p-4 md:p-8 max-w-xl mx-auto pt-12">
+        <div className="card p-8 md:p-10">
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-slate-900 mb-3">{exercise.title}</h1>
               <p className="text-slate-500">{t("enterName")}</p>
@@ -188,14 +192,14 @@ export default function PracticePage({
                   value={studentName}
                   onChange={(e) => setStudentName(e.target.value)}
                   placeholder={t("namePlaceholder")}
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-medium"
+                  className="input-field font-medium"
                   required
                 />
               </div>
               <button
                 type="submit"
                 disabled={isSubmitting || !studentName.trim()}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-6 rounded-xl font-bold transition-all shadow-sm shadow-indigo-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full btn-primary"
               >
                 {isSubmitting ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -210,10 +214,10 @@ export default function PracticePage({
 
   if (isFinished) {
     return (
-      <div className="min-h-screen bg-slate-50/50 pb-12">
-        <div className="p-4 md:p-8 max-w-2xl mx-auto pt-12 text-center">
-          <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-10 md:p-12">
-            <div className="w-20 h-20 bg-emerald-50 rounded-[1.25rem] flex items-center justify-center mx-auto mb-6">
+      <div className="page-container">
+      <div className="p-4 md:p-8 max-w-2xl mx-auto pt-12 text-center">
+        <div className="card p-10 md:p-12">
+            <div className="w-20 h-20 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M20 6L9 17L4 12" stroke="#10B981" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -246,12 +250,12 @@ export default function PracticePage({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 pb-12">
+    <div className="page-container">
       <div className="p-4 md:p-8 max-w-3xl mx-auto">
-        <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
+        <div className="card overflow-hidden">
           <div className="px-6 py-6 border-b border-slate-50 bg-slate-50/30 flex justify-between items-center">
             <h1 className="font-bold text-slate-900 truncate max-w-[70%]">{exercise.title}</h1>
-            <span className="text-xs font-bold text-slate-500 bg-white px-3 py-1.5 rounded-full border border-slate-100 shadow-sm whitespace-nowrap">
+            <span className="text-xs font-bold text-slate-500 bg-white px-3 py-1.5 rounded-lg border border-slate-100 shadow-sm whitespace-nowrap">
               {t("questionProgress", {
                 current: currentQuestionIndex + 1,
                 total: exercise.questions.length,
@@ -334,7 +338,7 @@ function QuestionRenderer({
         : "bg-red-50/50 border-red-100 text-red-900"
     }`}>
       <div className="flex items-center gap-3 mb-2">
-        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
           isCorrect ? "bg-emerald-100" : "bg-red-100"
         }`}>
           {isCorrect ? (
@@ -399,7 +403,7 @@ function QuestionRenderer({
         value={values[0] || ""}
         onChange={(e) => onChange(e.target.value, 0)}
         disabled={isSubmitted}
-        className={`w-full px-6 py-4 border-2 rounded-2xl transition-all outline-none text-xl font-bold ${
+        className={`w-full px-6 py-4 border-2 rounded-xl transition-all outline-none text-xl font-bold ${
           isSubmitted 
             ? (isCorrect ? "border-emerald-500 text-emerald-600 bg-emerald-50/30" : "border-red-500 text-red-600 bg-red-50/30") 
             : "border-slate-100 focus:border-indigo-500 text-indigo-600 bg-slate-50/50 focus:bg-white shadow-sm"

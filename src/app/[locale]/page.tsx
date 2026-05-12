@@ -5,7 +5,7 @@ export default function Home({params}: {params: Promise<{locale: string}>}) {
   const exerciseParams = params.then(p => ({ teacherId: defaultTeacherId, locale: p.locale }));
 
   return (
-    <div className="bg-[#F9F9FB] min-h-screen">
+    <div className="page-container">
       <ExercisesPage params={exerciseParams} />
     </div>
   );

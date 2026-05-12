@@ -1,5 +1,35 @@
 @import "tailwindcss";
 
+@layer components {
+  .page-container {
+    @apply flex-grow bg-slate-50/50 pb-8;
+  }
+
+  .content-wrapper {
+    @apply p-4 md:py-6 max-w-5xl mx-auto;
+  }
+
+  .card {
+    @apply bg-white rounded-none border border-slate-100 shadow-sm;
+  }
+
+  .btn-primary {
+    @apply bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl transition-all flex items-center justify-center gap-2 font-semibold shadow-sm shadow-indigo-200;
+  }
+
+  .btn-secondary {
+    @apply flex items-center justify-center px-8 py-3 bg-white border border-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 transition-all;
+  }
+
+  .alert-error {
+    @apply bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-none mb-6;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

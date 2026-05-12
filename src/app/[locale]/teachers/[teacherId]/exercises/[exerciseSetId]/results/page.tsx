@@ -65,31 +65,35 @@ export default function ResultsPage({
 
   if (isLoading) {
     return (
-      <div className="p-8 max-w-5xl mx-auto flex justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      <div className="page-container">
+        <div className="content-wrapper flex justify-center pt-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-50/50 p-8 text-center">
-        <div className="max-w-5xl mx-auto bg-white rounded-2xl border border-red-100 p-8">
-          <p className="text-red-600 mb-4 font-medium">{error}</p>
-          <Link
-            href={`/teachers/${teacherId}/exercises`}
-            className="text-indigo-600 hover:text-indigo-700 font-semibold"
-          >
-            {tEdit("back")}
-          </Link>
+      <div className="page-container">
+        <div className="content-wrapper text-center">
+          <div className="card border-red-100 p-8">
+            <p className="text-red-600 mb-4 font-medium">{error}</p>
+            <Link
+              href={`/teachers/${teacherId}/exercises`}
+              className="text-indigo-600 hover:text-indigo-700 font-semibold"
+            >
+              {tEdit("back")}
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50/50 pb-12">
-      <div className="p-4 md:p-8 max-w-5xl mx-auto">
+    <div className="page-container">
+      <div className="content-wrapper pb-12">
         <Link
           href={`/teachers/${teacherId}/exercises`}
           className="flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium mb-8 transition-colors"
@@ -106,13 +110,13 @@ export default function ResultsPage({
         </div>
 
         {attempts.length === 0 ? (
-          <div className="bg-white rounded-2xl p-12 text-center border border-slate-100 shadow-sm">
+          <div className="card p-12 text-center">
             <p className="text-slate-400 text-lg font-medium">
               {t("noAttempts")}
             </p>
           </div>
         ) : (
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          <div className="card overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-slate-100">
                 <thead className="bg-slate-50/50">
