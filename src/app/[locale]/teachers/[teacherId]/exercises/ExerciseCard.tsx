@@ -99,10 +99,6 @@ export function ExerciseCard({ exercise, teacherId }: ExerciseCardProps) {
           </span>
           <span className="text-slate-200 text-xs">•</span>
           <span className="text-slate-400 text-xs whitespace-nowrap">{t('questionsCount', { count: exercise.questions?.length || 0 })}</span>
-          <span className="hidden sm:inline text-slate-200 text-xs">•</span>
-          <span className="hidden sm:inline text-slate-400 text-xs">
-             {t('studentsCompleted', { count: exercise.title.toLowerCase().includes('shopping') ? 7 : exercise.title.toLowerCase().includes('article') ? 5 : 3 })}
-          </span>
         </div>
 
         {/* Third Row: Example Sentence */}

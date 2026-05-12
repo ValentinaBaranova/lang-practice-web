@@ -67,7 +67,6 @@
     "questionsCount": "{count, plural, =1 {1 pregunta} other {# preguntas}}",
     "createFirstQuestion": "Crea tu primera pregunta...",
     "createdAgo": "Creado hace {time}",
-    "studentsCompleted": "{count, plural, =1 {1 alumno completó} other {# alumnos completaron}}",
     "shareLink": "Compartir",
     "results": "Resultados",
     "edit": "Editar",

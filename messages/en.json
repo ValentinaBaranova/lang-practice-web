@@ -67,7 +67,6 @@
     "questionsCount": "{count, plural, =1 {1 question} other {# questions}}",
     "createFirstQuestion": "Create your first question...",
     "createdAgo": "Created {time} ago",
-    "studentsCompleted": "{count, plural, =1 {1 student completed} other {# students completed}}",
     "shareLink": "Share link",
     "results": "Results",
     "edit": "Edit",
