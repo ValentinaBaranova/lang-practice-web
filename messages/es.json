@@ -1,7 +1,8 @@
 {
   "HomePage": {
-    "title": "Bienvenido a Práctica de Idiomas",
-    "description": "Mejora tus habilidades lingüísticas con nuestros ejercicios."
+    "title": "Ejercicios Públicos",
+    "description": "Explora y practica con nuestros ejercicios de idiomas públicos.",
+    "noExercises": "Aún no hay ejercicios públicos disponibles."
   },
   "Navigation": {
     "home": "Inicio",
@@ -16,6 +17,9 @@
     "exerciseTitleHelper": "Dale a tu ejercicio un título claro y descriptivo.",
     "exerciseTitle": "Título del Ejercicio",
     "exerciseTitlePlaceholder": "ej. Práctica de Presente Simple",
+    "visibility": "Visibilidad",
+    "visibilityPublic": "Público (visible en la página de inicio)",
+    "visibilityPrivate": "Privado (solo accesible mediante enlace)",
     "questions": "Preguntas",
     "addQuestion": "+ Añadir Pregunta",
     "question": "Pregunta",

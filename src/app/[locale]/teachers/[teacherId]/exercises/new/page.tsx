@@ -2,7 +2,7 @@
 
 import { use, useState } from "react";
 import { useRouter, Link } from "@/routing";
-import { ExerciseType } from "@/app/types/exercise";
+import { ExerciseType, ExerciseVisibility } from "@/app/types/exercise";
 import { useTranslations } from "next-intl";
 import { Save, ArrowLeft } from "lucide-react";
 
@@ -17,6 +17,7 @@ export default function NewExercisePage({
 
   const [title, setTitle] = useState("");
   const [type, setType] = useState<ExerciseType>(ExerciseType.FILL_GAP_TEXT);
+  const [visibility, setVisibility] = useState<ExerciseVisibility>(ExerciseVisibility.PRIVATE);
   const [bulkInput, setBulkInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,6 +40,7 @@ export default function NewExercisePage({
       teacherId,
       title,
       type,
+      visibility,
       bulkInput,
     };
 
@@ -146,6 +148,28 @@ export default function NewExercisePage({
                   </option>
                   <option value={ExerciseType.MULTIPLE_CHOICE}>
                     {t("typeMultipleChoice")}
+                  </option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="visibility"
+                  className="block text-sm font-semibold text-slate-900 mb-2"
+                >
+                  {t("visibility")}
+                </label>
+                <select
+                  id="visibility"
+                  className="input-field"
+                  value={visibility}
+                  onChange={(e) => setVisibility(e.target.value as ExerciseVisibility)}
+                >
+                  <option value={ExerciseVisibility.PRIVATE}>
+                    {t("visibilityPrivate")}
+                  </option>
+                  <option value={ExerciseVisibility.PUBLIC}>
+                    {t("visibilityPublic")}
                   </option>
                 </select>
               </div>

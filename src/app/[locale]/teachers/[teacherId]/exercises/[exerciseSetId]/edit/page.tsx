@@ -3,7 +3,7 @@
 import { use, useState, useEffect } from "react";
 import { useRouter, Link } from "@/routing";
 import { useTranslations } from "next-intl";
-import { Question, ExerciseType } from "@/app/types/exercise";
+import { Question, ExerciseType, ExerciseVisibility } from "@/app/types/exercise";
 import { Save, ArrowLeft } from "lucide-react";
 
 
@@ -18,6 +18,7 @@ export default function EditExerciseSetPage({
 
   const [title, setTitle] = useState("");
   const [type, setType] = useState<ExerciseType>(ExerciseType.FILL_GAP_TEXT);
+  const [visibility, setVisibility] = useState<ExerciseVisibility>(ExerciseVisibility.PRIVATE);
   const [bulkInput, setBulkInput] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,6 +35,7 @@ export default function EditExerciseSetPage({
         const data = await response.json();
         setTitle(data.title);
         setType(data.type);
+        setVisibility(data.visibility || ExerciseVisibility.PRIVATE);
         const reconstructedInput = (data.questions || [])
           .map((q: Question) => q.sourceText)
           .join("\n");
@@ -63,6 +65,7 @@ export default function EditExerciseSetPage({
 
     const dto = {
       title,
+      visibility,
       bulkInput,
     };
 
@@ -179,6 +182,28 @@ export default function EditExerciseSetPage({
                   </option>
                   <option value={ExerciseType.MULTIPLE_CHOICE}>
                     {t("typeMultipleChoice")}
+                  </option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="visibility"
+                  className="block text-sm font-semibold text-slate-900 mb-2"
+                >
+                  {t("visibility")}
+                </label>
+                <select
+                  id="visibility"
+                  className="input-field"
+                  value={visibility}
+                  onChange={(e) => setVisibility(e.target.value as ExerciseVisibility)}
+                >
+                  <option value={ExerciseVisibility.PRIVATE}>
+                    {t("visibilityPrivate")}
+                  </option>
+                  <option value={ExerciseVisibility.PUBLIC}>
+                    {t("visibilityPublic")}
                   </option>
                 </select>
               </div>

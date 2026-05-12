@@ -14,10 +14,11 @@ interface ExerciseCardProps {
     createdAt: string;
     questions?: { prompt: string }[];
   };
-  teacherId: string;
+  teacherId?: string;
+  isPublic?: boolean;
 }
 
-export function ExerciseCard({ exercise, teacherId }: ExerciseCardProps) {
+export function ExerciseCard({ exercise, teacherId, isPublic = false }: ExerciseCardProps) {
   const t = useTranslations("TeacherExercises");
   const router = useRouter();
 
@@ -39,7 +40,11 @@ export function ExerciseCard({ exercise, teacherId }: ExerciseCardProps) {
   };
 
   const handleCardClick = () => {
-    router.push(`/teachers/${teacherId}/exercises/${exercise.id}/edit`);
+    if (isPublic) {
+      router.push(`/practice/${exercise.shareSlug}`);
+    } else {
+      router.push(`/teachers/${teacherId}/exercises/${exercise.id}/edit`);
+    }
   };
 
   return (
@@ -81,13 +86,15 @@ export function ExerciseCard({ exercise, teacherId }: ExerciseCardProps) {
                   <LinkIcon className="w-4 h-4" />
                 </Link>
               )}
-              <Link 
-                href={`/teachers/${teacherId}/exercises/${exercise.id}/results`}
-                className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <BarChart2 className="w-4 h-4" />
-              </Link>
+              {!isPublic && (
+                <Link 
+                  href={`/teachers/${teacherId}/exercises/${exercise.id}/results`}
+                  className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <BarChart2 className="w-4 h-4" />
+                </Link>
+              )}
             </div>
           </div>
 
@@ -102,10 +109,14 @@ export function ExerciseCard({ exercise, teacherId }: ExerciseCardProps) {
             </span>
             <span className="text-slate-300 text-[10px]">•</span>
             <span className="text-slate-500 text-sm whitespace-nowrap font-medium">{t('questionsCount', { count: exercise.questions?.length || 0 })}</span>
-            <span className="text-slate-300 text-[10px]">•</span>
-            <span className="text-slate-500 text-sm whitespace-nowrap font-medium">
-              {t('createdAgo', { time: formatDistanceToNow(new Date(exercise.createdAt)) })}
-            </span>
+            {!isPublic && (
+              <>
+                <span className="text-slate-300 text-[10px]">•</span>
+                <span className="text-slate-500 text-sm whitespace-nowrap font-medium">
+                  {t('createdAgo', { time: formatDistanceToNow(new Date(exercise.createdAt)) })}
+                </span>
+              </>
+            )}
           </div>
 
           {/* Third Row: Example Sentence */}

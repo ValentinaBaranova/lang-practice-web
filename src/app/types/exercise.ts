@@ -3,6 +3,11 @@ export enum ExerciseType {
   MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
 }
 
+export enum ExerciseVisibility {
+  PUBLIC = "PUBLIC",
+  PRIVATE = "PRIVATE",
+}
+
 export interface Question {
   id?: string;
   prompt: string;
@@ -15,5 +20,6 @@ export interface ExerciseSetDto {
   teacherId: string;
   title: string;
   type: ExerciseType;
+  visibility: ExerciseVisibility;
   questions: Question[];
 }

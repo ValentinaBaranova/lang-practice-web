@@ -1,7 +1,8 @@
 {
   "HomePage": {
-    "title": "Welcome to Language Practice",
-    "description": "Improve your language skills with our exercises."
+    "title": "Public Exercises",
+    "description": "Explore and practice with our public language exercises.",
+    "noExercises": "No public exercises available yet."
   },
   "Navigation": {
     "home": "Home",
@@ -16,6 +17,9 @@
     "exerciseTitleHelper": "Give your exercise a clear and descriptive title.",
     "exerciseTitle": "Exercise Title",
     "exerciseTitlePlaceholder": "e.g. Present Simple Practice",
+    "visibility": "Visibility",
+    "visibilityPublic": "Public (visible on home page)",
+    "visibilityPrivate": "Private (only accessible via link)",
     "questions": "Questions",
     "addQuestion": "+ Add Question",
     "question": "Question",

@@ -48,8 +48,8 @@ export default function MenuBar() {
           }
         }
       } else if (routing.locales.includes(pathname.replace(/^\//, '') as (typeof routing.locales)[number]) || pathname === '/') {
-        // Default teacher name for home page
-        setTeacherName('Default Teacher');
+        // No default teacher name for home page
+        setTeacherName(null);
       }
     };
 
