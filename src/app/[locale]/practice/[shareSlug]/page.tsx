@@ -1,8 +1,10 @@
 "use client";
 
 import { use, useState, useEffect, useRef, useCallback } from "react";
+import { Link } from "@/routing";
 import { useTranslations } from "next-intl";
 import { ExerciseType, Question, ExerciseSetDto } from "@/app/types/exercise";
+import { ArrowLeft } from "lucide-react";
 
 interface ExerciseResponse extends Omit<ExerciseSetDto, 'teacherAccessCode'> {
     id: string;
@@ -195,8 +197,14 @@ export default function PracticePage({
   if (isLoading) {
     return (
       <div className="page-container">
-        <div className="content-wrapper flex justify-center pt-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+        <div className="content-wrapper flex flex-col pt-8">
+          <Link href="/" className="back-link mb-6">
+            <ArrowLeft className="w-4 h-4" />
+            {t("backToHome")}
+          </Link>
+          <div className="flex justify-center pt-4">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+          </div>
         </div>
       </div>
     );
@@ -205,9 +213,15 @@ export default function PracticePage({
   if (error || !exercise || (isStarted && !isFinished && !currentQuestion)) {
     return (
       <div className="page-container">
-        <div className="content-wrapper text-center">
-          <div className="card border-red-100 p-8">
-            <p className="text-red-600 mb-4 font-medium">{error || tEdit("somethingWentWrong")}</p>
+        <div className="content-wrapper">
+          <Link href="/" className="back-link mb-6">
+            <ArrowLeft className="w-4 h-4" />
+            {t("backToHome")}
+          </Link>
+          <div className="text-center">
+            <div className="card border-red-100 p-8">
+              <p className="text-red-600 mb-4 font-medium">{error || tEdit("somethingWentWrong")}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -218,6 +232,10 @@ export default function PracticePage({
     return (
       <div className="page-container">
         <div className="page-content-narrow">
+          <Link href="/" className="back-link">
+            <ArrowLeft className="w-4 h-4" />
+            {t("backToHome")}
+          </Link>
           <div className="card p-6 md:p-10">
             <div className="mb-6 md:mb-8">
               <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2 md:mb-3">{exercise.title}</h1>
@@ -255,6 +273,10 @@ export default function PracticePage({
     return (
       <div className="page-container">
         <div className="page-content-centered">
+          <Link href="/" className="back-link justify-center">
+            <ArrowLeft className="w-4 h-4" />
+            {t("backToHome")}
+          </Link>
           <div className="card p-8 md:p-12">
             <div className="w-16 h-16 md:w-20 md:h-20 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-4 md:mb-6">
               <svg width="32" height="32" md-width="40" md-height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 md:w-10 md:h-10">
@@ -278,6 +300,10 @@ export default function PracticePage({
   return (
     <div className="page-container">
       <div className="page-content-narrow">
+        <Link href="/" className="back-link">
+          <ArrowLeft className="w-4 h-4" />
+          {t("backToHome")}
+        </Link>
         <div className="card overflow-hidden">
           <div className="px-4 py-4 md:px-6 md:py-6 border-b border-slate-50 bg-slate-50/30 flex justify-between items-center">
             <h1 className="font-bold text-slate-900 truncate max-w-[70%]">{exercise.title}</h1>

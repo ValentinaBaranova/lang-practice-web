@@ -96,66 +96,24 @@ export default function Home() {
     <div className="page-container">
       <div className="content-wrapper">
         {/* Hero Section */}
-        <div className="text-center py-12 px-4">
-          <div className="flex justify-center mb-6">
-            <div className="bg-indigo-600 p-3 rounded-2xl shadow-lg shadow-indigo-200">
-              <BookOpen className="w-10 h-10 text-white" />
+        <div className="text-center py-8 px-4">
+          <div className="flex justify-center mb-4">
+            <div className="bg-indigo-600 p-2.5 rounded-xl shadow-lg shadow-indigo-200">
+              <BookOpen className="w-8 h-8 text-white" />
             </div>
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3 tracking-tight max-w-xl mx-auto">
             {t("title")}
           </h1>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+          <p className="text-base text-slate-500 max-w-lg mx-auto">
             {t("subtitle")}
           </p>
         </div>
 
-        {/* Action Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-          <div className="card p-6 flex flex-col items-start gap-4">
-            <div className="bg-indigo-50 p-3 rounded-xl">
-              <PlusCircle className="w-8 h-8 text-indigo-600" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-slate-900 mb-1">{t("createWorkspace")}</h2>
-              <p className="text-slate-500 text-sm mb-6">{t("createWorkspaceDesc")}</p>
-            </div>
-            <button 
-              onClick={() => setShowCreateModal(true)}
-              className="btn-primary w-full sm:w-auto"
-            >
-              {t("createWorkspace")}
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div className="card p-6 flex flex-col items-start gap-4">
-            <div className="bg-amber-50 p-3 rounded-xl">
-              <Key className="w-8 h-8 text-amber-600" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-slate-900 mb-1">{t("alreadyHaveCode")}</h2>
-              <p className="text-slate-500 text-sm mb-4">{t("enterCode")}</p>
-            </div>
-            <form onSubmit={handleAccessCodeSubmit} className="w-full flex gap-2">
-              <input
-                type="text"
-                value={accessCode}
-                onChange={(e) => setAccessCode(e.target.value)}
-                placeholder="Access Code"
-                className="input-field py-2 px-3 text-sm"
-              />
-              <button type="submit" className="btn-secondary py-2 px-4 text-sm whitespace-nowrap">
-                {t("submitCode")}
-              </button>
-            </form>
-          </div>
-        </div>
-
         {/* Public Exercises */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-            <span className="w-1.5 h-8 bg-indigo-600 rounded-full"></span>
+        <div className="mt-4 mb-10">
+          <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <span className="w-1 h-6 bg-indigo-600 rounded-full"></span>
             {t("publicExercises")}
           </h2>
           
@@ -180,6 +138,48 @@ export default function Home() {
               ))}
             </div>
           )}
+        </div>
+
+        {/* Action Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10 opacity-90 scale-[0.98] origin-top">
+          <div className="card p-5 flex flex-col items-start gap-3">
+            <div className="bg-indigo-50 p-2.5 rounded-lg">
+              <PlusCircle className="w-6 h-6 text-indigo-600" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-slate-900 mb-0.5">{t("createWorkspace")}</h2>
+              <p className="text-slate-500 text-xs mb-4">{t("createWorkspaceDesc")}</p>
+            </div>
+            <button 
+              onClick={() => setShowCreateModal(true)}
+              className="btn-primary w-full sm:w-auto py-2 px-6 text-sm"
+            >
+              {t("createWorkspace")}
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="card p-5 flex flex-col items-start gap-3">
+            <div className="bg-amber-50 p-2.5 rounded-lg">
+              <Key className="w-6 h-6 text-amber-600" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-slate-900 mb-0.5">{t("alreadyHaveCode")}</h2>
+              <p className="text-slate-500 text-xs mb-4">{t("enterCode")}</p>
+            </div>
+            <form onSubmit={handleAccessCodeSubmit} className="w-full flex gap-2">
+              <input
+                type="text"
+                value={accessCode}
+                onChange={(e) => setAccessCode(e.target.value)}
+                placeholder="Access Code"
+                className="input-field py-1.5 px-3 text-sm"
+              />
+              <button type="submit" className="btn-secondary py-1.5 px-4 text-sm whitespace-nowrap">
+                {t("submitCode")}
+              </button>
+            </form>
+          </div>
         </div>
       </div>
 
