@@ -4,6 +4,7 @@ import { ExerciseType } from "@/app/types/exercise";
 import { useTranslations } from "next-intl";
 import { Plus, BookOpen } from 'lucide-react';
 import { ExerciseCard } from "./ExerciseCard";
+import { getApiUrl } from "@/lib/api";
 
 interface ExerciseSetResponse {
   id: string;
@@ -17,7 +18,7 @@ interface ExerciseSetResponse {
 }
 
 async function getExercises(teacherId: string): Promise<ExerciseSetResponse[]> {
-  const res = await fetch(`http://localhost:8080/api/exercise-sets?teacherId=${teacherId}`, {
+  const res = await fetch(getApiUrl(`/api/exercise-sets?teacherId=${teacherId}`), {
     cache: 'no-store'
   });
   
