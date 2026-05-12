@@ -1,8 +1,22 @@
 {
   "HomePage": {
-    "title": "Ejercicios Públicos",
-    "description": "Explora y practica con nuestros ejercicios de idiomas públicos.",
-    "noExercises": "Aún no hay ejercicios públicos disponibles."
+    "title": "Practica español con breves ejercicios interactivos",
+    "subtitle": "Prueba los ejercicios públicos o crea tu propio espacio de trabajo privado.",
+    "createWorkspace": "Crear ejercicios privados",
+    "createWorkspaceDesc": "Crea un nuevo espacio de trabajo para profesores.",
+    "alreadyHaveCode": "¿Ya tienes un código?",
+    "enterCode": "Introduce el código de acceso del profesor",
+    "submitCode": "Ir al espacio de trabajo",
+    "publicExercises": "Ejercicios Públicos",
+    "noExercises": "Aún no hay ejercicios públicos disponibles.",
+    "enterTeacherName": "Ingresa tu nombre para crear un espacio de trabajo",
+    "teacherNamePlaceholder": "Tu nombre (ej. Sr. García)",
+    "workspaceCreated": "¡Espacio de trabajo creado!",
+    "workspaceCreatedDesc": "Copia y guarda tu código de acceso. Lo necesitarás para gestionar tus ejercicios más tarde.",
+    "yourAccessCode": "Tu código de acceso:",
+    "copyCode": "Copiar código",
+    "copied": "¡Copiado!",
+    "goToWorkspace": "Ir al espacio de trabajo"
   },
   "Navigation": {
     "home": "Inicio",

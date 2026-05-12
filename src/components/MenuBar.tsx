@@ -3,58 +3,20 @@
 import { useState, useRef, useEffect } from 'react';
 import {useLocale} from 'next-intl';
 import {Link, usePathname, useRouter, routing} from '@/routing';
-import { useParams } from 'next/navigation';
 import { Globe, MessageSquare, ChevronDown, Check } from 'lucide-react';
 
 export default function MenuBar() {
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
-  const params = useParams();
-  const accessCode = params?.accessCode as string;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [teacherName, setTeacherName] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const switchLocale = (newLocale: string) => {
     router.replace(pathname, {locale: newLocale as (typeof routing.locales)[number]});
     setIsOpen(false);
   };
-
-  useEffect(() => {
-    const fetchTeacherName = async () => {
-      if (accessCode) {
-        try {
-          const res = await fetch(`/api/teachers/${accessCode}`);
-          if (res.ok) {
-            const data = await res.json();
-            setTeacherName(data.name);
-          }
-        } catch (error) {
-          console.error('Failed to fetch teacher name:', error);
-        }
-      } else if (pathname.includes('/practice/')) {
-        const shareSlug = pathname.split('/practice/')[1]?.split('/')[0];
-        if (shareSlug) {
-          try {
-            const res = await fetch(`/api/exercise-sets/share/${shareSlug}`);
-            if (res.ok) {
-              const data = await res.json();
-              setTeacherName(data.teacherName);
-            }
-          } catch (error) {
-            console.error('Failed to fetch teacher name from exercise:', error);
-          }
-        }
-      } else if (routing.locales.includes(pathname.replace(/^\//, '') as (typeof routing.locales)[number]) || pathname === '/') {
-        // No default teacher name for home page
-        setTeacherName(null);
-      }
-    };
-
-    fetchTeacherName();
-  }, [accessCode, pathname]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -110,11 +72,6 @@ export default function MenuBar() {
                 </div>
               )}
             </div>
-            {teacherName && (
-              <div className="text-sm font-medium text-slate-700 hidden sm:block">
-                {teacherName}
-              </div>
-            )}
           </div>
         </div>
       </div>

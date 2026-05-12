@@ -75,18 +75,18 @@ export function ExerciseCard({ exercise, accessCode, isPublic = false }: Exercis
           <div className="flex items-start justify-between">
             <h3 className="font-bold text-lg text-slate-900 leading-snug">{exercise.title}</h3>
             
-            <div className="flex items-center gap-1 -mt-1">
-              {exercise.shareSlug && (
-                <Link
-                  href={`/practice/${exercise.shareSlug}`}
-                  target="_blank"
-                  className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <LinkIcon className="w-4 h-4" />
-                </Link>
-              )}
-              {!isPublic && (
+            {!isPublic && (
+              <div className="flex items-center gap-1 -mt-1">
+                {exercise.shareSlug && (
+                  <Link
+                    href={`/practice/${exercise.shareSlug}`}
+                    target="_blank"
+                    className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <LinkIcon className="w-4 h-4" />
+                  </Link>
+                )}
                 <Link 
                   href={`/teachers/${accessCode}/exercises/${exercise.id}/results`}
                   className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors"
@@ -94,8 +94,8 @@ export function ExerciseCard({ exercise, accessCode, isPublic = false }: Exercis
                 >
                   <BarChart2 className="w-4 h-4" />
                 </Link>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* Combined Metadata Row: Type + Questions Count + Created Date */}

@@ -1,8 +1,22 @@
 {
   "HomePage": {
-    "title": "Public Exercises",
-    "description": "Explore and practice with our public language exercises.",
-    "noExercises": "No public exercises available yet."
+    "title": "Practice Spanish with short interactive exercises",
+    "subtitle": "Try public exercises or create your own private workspace.",
+    "createWorkspace": "Create private exercises",
+    "createWorkspaceDesc": "Creates a new teacher workspace.",
+    "alreadyHaveCode": "Already have a code?",
+    "enterCode": "Enter teacher access code",
+    "submitCode": "Go to workspace",
+    "publicExercises": "Public Exercises",
+    "noExercises": "No public exercises available yet.",
+    "enterTeacherName": "Enter your name to create a workspace",
+    "teacherNamePlaceholder": "Your name (e.g. Mr. Smith)",
+    "workspaceCreated": "Workspace Created!",
+    "workspaceCreatedDesc": "Copy and save your access code. You will need it to manage your exercises later.",
+    "yourAccessCode": "Your Access Code:",
+    "copyCode": "Copy Code",
+    "copied": "Copied!",
+    "goToWorkspace": "Go to workspace"
   },
   "Navigation": {
     "home": "Home",
