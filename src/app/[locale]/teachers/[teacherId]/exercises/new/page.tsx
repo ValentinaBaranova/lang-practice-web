@@ -19,11 +19,13 @@ export default function NewExercisePage({
   const [bulkInput, setBulkInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
+    setErrors([]);
 
     // Basic validation
     if (!bulkInput.trim()) {
@@ -49,7 +51,13 @@ export default function NewExercisePage({
       });
 
       if (!response.ok) {
-        throw new Error(t("failedToCreate"));
+        const errorData = await response.json().catch(() => ({}));
+        if (errorData.errors && Array.isArray(errorData.errors)) {
+          setErrors(errorData.errors);
+        } else {
+          setError(errorData.message || t("failedToCreate"));
+        }
+        throw new Error(errorData.message || t("failedToCreate"));
       }
 
       router.push(`/teachers/${teacherId}/exercises`);
@@ -79,9 +87,19 @@ export default function NewExercisePage({
           <p className="text-slate-500">{t("createSubtitle")}</p>
         </div>
 
-        {error && (
+        {error && !errors.length && (
           <div className="alert-error">
             {error}
+          </div>
+        )}
+
+        {errors.length > 0 && (
+          <div className="flex flex-col gap-2 mb-6">
+            {errors.map((err, index) => (
+              <div key={index} className="alert-error mb-0">
+                {err}
+              </div>
+            ))}
           </div>
         )}
 

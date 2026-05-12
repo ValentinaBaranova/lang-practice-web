@@ -21,6 +21,7 @@ export default function EditExerciseSetPage({
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchExercise = async () => {
@@ -49,6 +50,7 @@ export default function EditExerciseSetPage({
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
+    setErrors([]);
 
     // Basic validation
     if (!bulkInput.trim()) {
@@ -72,7 +74,13 @@ export default function EditExerciseSetPage({
       });
 
       if (!response.ok) {
-        throw new Error(t("failedToUpdate"));
+        const errorData = await response.json().catch(() => ({}));
+        if (errorData.errors && Array.isArray(errorData.errors)) {
+          setErrors(errorData.errors);
+        } else {
+          setError(errorData.message || t("failedToUpdate"));
+        }
+        throw new Error(errorData.message || t("failedToUpdate"));
       }
 
       router.push(`/teachers/${teacherId}/exercises`);
@@ -110,9 +118,19 @@ export default function EditExerciseSetPage({
           <p className="text-slate-500">{t("editSubtitle")}</p>
         </div>
 
-        {error && (
+        {error && !errors.length && (
           <div className="alert-error">
             {error}
+          </div>
+        )}
+
+        {errors.length > 0 && (
+          <div className="flex flex-col gap-2 mb-6">
+            {errors.map((err, index) => (
+              <div key={index} className="alert-error mb-0">
+                {err}
+              </div>
+            ))}
           </div>
         )}
 
