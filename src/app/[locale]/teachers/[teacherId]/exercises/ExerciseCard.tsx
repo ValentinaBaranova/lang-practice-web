@@ -1,7 +1,7 @@
 'use client';
 
 import { Link, useRouter } from "@/routing";
-import { Link as LinkIcon, BarChart2, Edit3 } from 'lucide-react';
+import { Link as LinkIcon, BarChart2 } from 'lucide-react';
 
 import { useTranslations } from "next-intl";
 
@@ -98,7 +98,7 @@ export function ExerciseCard({ exercise, teacherId }: ExerciseCardProps) {
                   ? 'badge-amber' 
                   : 'badge-primary'
             }>
-              {exercise.type === 'FILL_GAP_TEXT' ? t('fillInGaps') : exercise.type}
+              {exercise.type === 'FILL_GAP_TEXT' ? t('fillInGaps') : (exercise.type === 'MULTIPLE_CHOICE' ? t('multipleChoice') : exercise.type)}
             </span>
             <span className="text-slate-300 text-[10px]">•</span>
             <span className="text-slate-500 text-sm whitespace-nowrap font-medium">{t('questionsCount', { count: exercise.questions?.length || 0 })}</span>

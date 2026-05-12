@@ -432,6 +432,48 @@ function QuestionRenderer({
     );
   }
 
+  if (type === ExerciseType.MULTIPLE_CHOICE) {
+    return (
+      <div className="space-y-6 md:space-y-8">
+        <p className="text-xl md:text-2xl font-medium text-slate-800 leading-relaxed">
+          {question.prompt}
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+          {(question.options || []).map((option, index) => {
+            const isSelected = values[0] === option;
+            let buttonClass = "w-full px-4 md:px-6 py-3 md:py-4 border-2 rounded-xl transition-all text-left font-semibold text-lg ";
+            
+            if (isSubmitted) {
+              if (option === question.correctAnswer) {
+                buttonClass += "border-emerald-500 bg-emerald-50 text-emerald-700 ";
+              } else if (isSelected && !isCorrect) {
+                buttonClass += "border-red-500 bg-red-50 text-red-700 ";
+              } else {
+                buttonClass += "border-slate-100 text-slate-400 ";
+              }
+            } else {
+              buttonClass += isSelected 
+                ? "border-indigo-600 bg-indigo-50 text-indigo-700 shadow-sm " 
+                : "border-slate-100 hover:border-indigo-200 hover:bg-slate-50 text-slate-700 ";
+            }
+
+            return (
+              <button
+                key={index}
+                onClick={() => !isSubmitted && onChange(option, 0)}
+                disabled={isSubmitted}
+                className={buttonClass}
+              >
+                {option}
+              </button>
+            );
+          })}
+        </div>
+        {feedback}
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4 md:space-y-8">
       <p className="text-xl md:text-2xl font-medium text-slate-800 leading-relaxed">{question.prompt}</p>

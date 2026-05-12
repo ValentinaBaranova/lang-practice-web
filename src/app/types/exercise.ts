@@ -1,5 +1,6 @@
 export enum ExerciseType {
   FILL_GAP_TEXT = "FILL_GAP_TEXT",
+  MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
 }
 
 export interface Question {
@@ -7,6 +8,7 @@ export interface Question {
   prompt: string;
   correctAnswer: string;
   sourceText: string;
+  options?: string[];
 }
 
 export interface ExerciseSetDto {

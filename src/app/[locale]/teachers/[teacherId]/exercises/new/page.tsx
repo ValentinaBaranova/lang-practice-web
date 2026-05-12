@@ -16,6 +16,7 @@ export default function NewExercisePage({
   const t = useTranslations("EditExercise");
 
   const [title, setTitle] = useState("");
+  const [type, setType] = useState<ExerciseType>(ExerciseType.FILL_GAP_TEXT);
   const [bulkInput, setBulkInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +38,7 @@ export default function NewExercisePage({
     const dto = {
       teacherId,
       title,
-      type: ExerciseType.FILL_GAP_TEXT,
+      type,
       bulkInput,
     };
 
@@ -127,6 +128,28 @@ export default function NewExercisePage({
                 </p>
               </div>
 
+              <div>
+                <label
+                  htmlFor="type"
+                  className="block text-sm font-semibold text-slate-900 mb-2"
+                >
+                  {t("exerciseType")}
+                </label>
+                <select
+                  id="type"
+                  className="input-field"
+                  value={type}
+                  onChange={(e) => setType(e.target.value as ExerciseType)}
+                >
+                  <option value={ExerciseType.FILL_GAP_TEXT}>
+                    {t("typeFillInBlank")}
+                  </option>
+                  <option value={ExerciseType.MULTIPLE_CHOICE}>
+                    {t("typeMultipleChoice")}
+                  </option>
+                </select>
+              </div>
+
               <div className="pt-4">
                 <label
                   htmlFor="bulkInput"
@@ -146,7 +169,9 @@ export default function NewExercisePage({
                   />
                 </div>
                 <p className="mt-2 text-sm text-slate-500">
-                  {t("bulkInputHelper")}
+                  {type === ExerciseType.MULTIPLE_CHOICE 
+                    ? t("bulkInputHelperMultipleChoice") 
+                    : t("bulkInputHelper")}
                 </p>
               </div>
             </div>

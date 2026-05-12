@@ -3,7 +3,7 @@
 import { use, useState, useEffect } from "react";
 import { useRouter, Link } from "@/routing";
 import { useTranslations } from "next-intl";
-import { Question } from "@/app/types/exercise";
+import { Question, ExerciseType } from "@/app/types/exercise";
 import { Save, ArrowLeft } from "lucide-react";
 
 
@@ -17,6 +17,7 @@ export default function EditExerciseSetPage({
   const t = useTranslations("EditExercise");
 
   const [title, setTitle] = useState("");
+  const [type, setType] = useState<ExerciseType>(ExerciseType.FILL_GAP_TEXT);
   const [bulkInput, setBulkInput] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,6 +33,7 @@ export default function EditExerciseSetPage({
         }
         const data = await response.json();
         setTitle(data.title);
+        setType(data.type);
         const reconstructedInput = (data.questions || [])
           .map((q: Question) => q.sourceText)
           .join("\n");
@@ -158,6 +160,29 @@ export default function EditExerciseSetPage({
                 </p>
               </div>
 
+              <div>
+                <label
+                  htmlFor="type"
+                  className="block text-sm font-semibold text-slate-900 mb-2"
+                >
+                  {t("exerciseType")}
+                </label>
+                <select
+                  id="type"
+                  className="input-field opacity-60 cursor-not-allowed"
+                  disabled
+                  value={type}
+                  onChange={(e) => setType(e.target.value as ExerciseType)}
+                >
+                  <option value={ExerciseType.FILL_GAP_TEXT}>
+                    {t("typeFillInBlank")}
+                  </option>
+                  <option value={ExerciseType.MULTIPLE_CHOICE}>
+                    {t("typeMultipleChoice")}
+                  </option>
+                </select>
+              </div>
+
               <div className="pt-4">
                 <label
                   htmlFor="bulkInput"
@@ -177,7 +202,9 @@ export default function EditExerciseSetPage({
                   />
                 </div>
                 <p className="mt-2 text-sm text-slate-500">
-                  {t("bulkInputHelper")}
+                  {type === ExerciseType.MULTIPLE_CHOICE 
+                    ? t("bulkInputHelperMultipleChoice") 
+                    : t("bulkInputHelper")}
                 </p>
               </div>
             </div>
