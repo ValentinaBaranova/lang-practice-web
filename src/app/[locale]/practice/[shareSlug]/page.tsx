@@ -218,13 +218,13 @@ export default function PracticePage({
     return (
       <div className="page-container">
         <div className="page-content-narrow">
-          <div className="card p-8 md:p-10">
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-slate-900 mb-3">{exercise.title}</h1>
+          <div className="card p-6 md:p-10">
+            <div className="mb-6 md:mb-8">
+              <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2 md:mb-3">{exercise.title}</h1>
               <p className="text-slate-500">{t("enterName")}</p>
             </div>
-            
-            <form onSubmit={handleStart} className="space-y-6">
+          
+            <form onSubmit={handleStart} className="space-y-4 md:space-y-6">
               <div>
                 <input
                   type="text"
@@ -255,19 +255,19 @@ export default function PracticePage({
     return (
       <div className="page-container">
         <div className="page-content-centered">
-          <div className="card p-10 md:p-12">
-            <div className="w-20 h-20 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div className="card p-8 md:p-12">
+            <div className="w-16 h-16 md:w-20 md:h-20 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-4 md:mb-6">
+              <svg width="32" height="32" md-width="40" md-height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 md:w-10 md:h-10">
                 <path d="M20 6L9 17L4 12" stroke="#10B981" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">{t("exerciseCompleted")}</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">{t("exerciseCompleted")}</h1>
             
-            <div className="bg-slate-50/80 rounded-2xl p-8 mb-8 border border-slate-100">
-              <p className="text-5xl font-bold text-slate-900 mb-2">
-                {correctAnswersCount} <span className="text-2xl text-slate-400">/ {exercise.questions.length}</span>
+            <div className="bg-slate-50/80 rounded-2xl p-6 md:p-8 mb-6 md:mb-8 border border-slate-100">
+              <p className="text-4xl md:text-5xl font-bold text-slate-900 mb-1 md:mb-2">
+                {correctAnswersCount} <span className="text-xl md:text-2xl text-slate-400">/ {exercise.questions.length}</span>
               </p>
-              <p className="text-slate-500 font-bold uppercase tracking-wider text-sm">{t("correct")}</p>
+              <p className="text-slate-500 font-bold uppercase tracking-wider text-xs md:text-sm">{t("correct")}</p>
             </div>
           </div>
         </div>
@@ -279,9 +279,9 @@ export default function PracticePage({
     <div className="page-container">
       <div className="page-content-narrow">
         <div className="card overflow-hidden">
-          <div className="px-6 py-6 border-b border-slate-50 bg-slate-50/30 flex justify-between items-center">
+          <div className="px-4 py-4 md:px-6 md:py-6 border-b border-slate-50 bg-slate-50/30 flex justify-between items-center">
             <h1 className="font-bold text-slate-900 truncate max-w-[70%]">{exercise.title}</h1>
-            <span className="text-xs font-bold text-slate-500 bg-white px-3 py-1.5 rounded-lg border border-slate-100 shadow-sm whitespace-nowrap">
+            <span className="text-[10px] md:text-xs font-bold text-slate-500 bg-white px-2 py-1 md:px-3 md:py-1.5 rounded-lg border border-slate-100 shadow-sm whitespace-nowrap">
               {t("questionProgress", {
                 current: currentQuestionIndex + 1,
                 total: exercise.questions.length,
@@ -289,7 +289,7 @@ export default function PracticePage({
             </span>
           </div>
 
-          <div className="p-8 md:p-10">
+          <div className="p-4 md:p-10">
             <QuestionRenderer
               question={currentQuestion!}
               type={exercise.type}
@@ -307,7 +307,7 @@ export default function PracticePage({
             />
           </div>
 
-          <div className="px-8 py-6 bg-slate-50/30 border-t border-slate-50 flex justify-between items-center">
+          <div className="px-4 py-4 md:px-8 md:py-6 bg-slate-50/30 border-t border-slate-50 flex justify-between items-center">
             <button
               onClick={handlePrevious}
               disabled={currentQuestionIndex === 0}
@@ -316,12 +316,12 @@ export default function PracticePage({
               {t("previous")}
             </button>
             
-            <div className="flex gap-4">
+            <div className="flex gap-2 md:gap-4">
               {!isSubmitted ? (
                 <button
                   onClick={handleSubmitAnswer}
                   disabled={isSubmitting || !answers[currentQuestionIndex]?.every(a => a.trim())}
-                  className="btn-primary px-8"
+                  className="btn-primary px-4 md:px-8"
                 >
                   {isSubmitting ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -330,7 +330,7 @@ export default function PracticePage({
               ) : (
                 <button
                   onClick={handleNext}
-                  className="btn-primary px-8"
+                  className="btn-primary px-4 md:px-8"
                 >
                   {currentQuestionIndex === exercise.questions.length - 1 ? t("finish") : t("next")}
                 </button>
@@ -368,12 +368,12 @@ function QuestionRenderer({
   }, [question.id, isSubmitted]);
 
   const feedback = isSubmitted && (
-    <div className={`mt-8 p-6 rounded-2xl border ${
+    <div className={`mt-4 md:mt-8 p-4 md:p-6 rounded-2xl border ${
       isCorrect 
         ? "bg-emerald-50/50 border-emerald-100 text-emerald-900" 
         : "bg-red-50/50 border-red-100 text-red-900"
     }`}>
-      <div className="flex items-center gap-3 mb-2">
+      <div className="flex items-center gap-3 mb-1 md:mb-2">
         <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
           isCorrect ? "bg-emerald-100" : "bg-red-100"
         }`}>
@@ -387,12 +387,12 @@ function QuestionRenderer({
             </svg>
           )}
         </div>
-        <p className="font-bold">
+        <p className="font-bold text-sm md:text-base">
           {isCorrect ? t("correct") : t("incorrect")}
         </p>
       </div>
       {!isCorrect && question.correctAnswer && (
-        <p className="text-slate-600 ml-11">
+        <p className="text-slate-600 ml-11 text-sm md:text-base">
           {t("correctAnswer", { answer: question.correctAnswer })}
         </p>
       )}
@@ -404,8 +404,8 @@ function QuestionRenderer({
     const parts = question.prompt.split(/_+/);
     
     return (
-      <div className="space-y-6">
-        <div className="text-xl md:text-2xl leading-relaxed text-slate-800 flex flex-wrap items-baseline gap-x-1 gap-y-4">
+      <div className="space-y-4 md:space-y-6">
+        <div className="text-lg md:text-2xl leading-relaxed text-slate-800 flex flex-wrap items-baseline gap-x-1 gap-y-2 md:gap-y-4">
           {parts.map((part, index) => (
             <span key={index} className="inline-flex items-baseline">
               <span>{part}</span>
@@ -416,7 +416,7 @@ function QuestionRenderer({
                   value={values[index] || ""}
                   onChange={(e) => onChange(e.target.value, index)}
                   disabled={isSubmitted}
-                  className={`mx-2 px-4 py-1 border-b-2 outline-none w-40 text-center transition-all font-bold ${
+                  className={`mx-1 md:mx-2 px-2 md:px-4 py-0.5 md:py-1 border-b-2 outline-none w-32 md:w-40 text-center transition-all font-bold ${
                     isSubmitted 
                       ? (isCorrect ? "border-emerald-500 text-emerald-600 bg-emerald-50/30" : "border-red-500 text-red-600 bg-red-50/30") 
                       : "border-slate-200 focus:border-indigo-500 text-indigo-600 placeholder:text-slate-300"
@@ -433,15 +433,15 @@ function QuestionRenderer({
   }
 
   return (
-    <div className="space-y-8">
-      <p className="text-2xl font-medium text-slate-800 leading-relaxed">{question.prompt}</p>
+    <div className="space-y-4 md:space-y-8">
+      <p className="text-xl md:text-2xl font-medium text-slate-800 leading-relaxed">{question.prompt}</p>
       <input
         ref={firstInputRef}
         type="text"
         value={values[0] || ""}
         onChange={(e) => onChange(e.target.value, 0)}
         disabled={isSubmitted}
-        className={`w-full px-6 py-4 border-2 rounded-xl transition-all outline-none text-xl font-bold ${
+        className={`w-full px-4 md:px-6 py-3 md:py-4 border-2 rounded-xl transition-all outline-none text-lg md:text-xl font-bold ${
           isSubmitted 
             ? (isCorrect ? "border-emerald-500 text-emerald-600 bg-emerald-50/30" : "border-red-500 text-red-600 bg-red-50/30") 
             : "border-slate-100 focus:border-indigo-500 text-indigo-600 bg-slate-50/50 focus:bg-white shadow-sm"
