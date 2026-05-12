@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState, useEffect, useRef } from "react";
+import { use, useState, useEffect, useRef, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { ExerciseType, Question, ExerciseSetDto } from "@/app/types/exercise";
 
@@ -19,7 +19,12 @@ export default function PracticePage({
   const t = useTranslations("Practice");
   const tEdit = useTranslations("EditExercise");
 
-  const [studentName, setStudentName] = useState("");
+  const [studentName, setStudentName] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("studentName") || "";
+    }
+    return "";
+  });
   const [isStarted, setIsStarted] = useState(false);
   const [exercise, setExercise] = useState<ExerciseResponse | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -63,9 +68,10 @@ export default function PracticePage({
     fetchExercise();
   }, [shareSlug, tEdit]);
 
-  const handleStart = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!studentName.trim() || !exercise) return;
+  const handleStart = async (e?: React.FormEvent, nameOverride?: string) => {
+    e?.preventDefault();
+    const nameToUse = nameOverride || studentName;
+    if (!nameToUse.trim() || !exercise) return;
 
     setIsSubmitting(true);
     try {
@@ -74,7 +80,7 @@ export default function PracticePage({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           exerciseSetId: exercise.id,
-          studentName: studentName.trim(),
+          studentName: nameToUse.trim(),
         }),
       });
 
@@ -83,6 +89,7 @@ export default function PracticePage({
       }
 
       const data = await response.json();
+      localStorage.setItem("studentName", nameToUse.trim());
       setAttemptId(data.id);
       setIsStarted(true);
     } catch (err) {
@@ -92,7 +99,17 @@ export default function PracticePage({
     }
   };
 
-  const handleSubmitAnswer = async () => {
+  useEffect(() => {
+    if (exercise && studentName && !isStarted && !isLoading && !isSubmitting && !error) {
+       const timer = setTimeout(() => {
+         handleStart(undefined, studentName);
+       }, 0);
+       return () => clearTimeout(timer);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [exercise, isLoading]);
+
+  const handleSubmitAnswer = useCallback(async () => {
     if (!attemptId || !exercise || isSubmitting) return;
 
     const currentQuestion = exercise.questions[currentQuestionIndex];
@@ -137,15 +154,15 @@ export default function PracticePage({
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [attemptId, exercise, isSubmitting, currentQuestionIndex, answers, results, tEdit]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (exercise && currentQuestionIndex < exercise.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       setIsFinished(true);
     }
-  };
+  }, [exercise, currentQuestionIndex]);
 
   const handlePrevious = () => {
     if (currentQuestionIndex > 0) {
@@ -185,7 +202,7 @@ export default function PracticePage({
     );
   }
 
-  if (error || !exercise) {
+  if (error || !exercise || (isStarted && !isFinished && !currentQuestion)) {
     return (
       <div className="page-container">
         <div className="content-wrapper text-center">
@@ -245,7 +262,6 @@ export default function PracticePage({
               </svg>
             </div>
             <h1 className="text-3xl font-bold text-slate-900 mb-2">{t("exerciseCompleted")}</h1>
-            <p className="text-xl text-slate-500 mb-8 font-medium">{t("wellDone", { name: studentName })}</p>
             
             <div className="bg-slate-50/80 rounded-2xl p-8 mb-8 border border-slate-100">
               <p className="text-5xl font-bold text-slate-900 mb-2">
@@ -275,7 +291,7 @@ export default function PracticePage({
 
           <div className="p-8 md:p-10">
             <QuestionRenderer
-              question={currentQuestion}
+              question={currentQuestion!}
               type={exercise.type}
               values={answers[currentQuestionIndex]}
               onChange={(value, gapIndex = 0) => {
