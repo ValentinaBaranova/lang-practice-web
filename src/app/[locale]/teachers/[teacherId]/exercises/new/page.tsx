@@ -1,50 +1,19 @@
 "use client";
 
 import { use, useState } from "react";
-import { useRouter } from "@/routing";
-import { ExerciseType, Question } from "@/app/types/exercise";
-
-const translations = {
-  en: {
-    title: "Create New Exercise",
-    teacherId: "Teacher ID",
-    exerciseTitle: "Exercise Title",
-    exerciseTitlePlaceholder: "e.g. Present Simple Practice",
-    bulkInputLabel: "Questions",
-    bulkInputPlaceholder: "I [went] to [school] yesterday.\nI have an [apple].",
-    bulkInputHelper: "Format: Text with [answers] in brackets. One question per line.",
-    create: "Create Exercise",
-    creating: "Creating...",
-    cancel: "Cancel",
-    validationError: "Please check your input. Each line must contain at least one answer in [].",
-    failedToCreate: "Failed to create exercise",
-    somethingWentWrong: "Something went wrong",
-  },
-  es: {
-    title: "Crear Nuevo Ejercicio",
-    teacherId: "ID del Profesor",
-    exerciseTitle: "Título del Ejercicio",
-    exerciseTitlePlaceholder: "ej. Práctica de Presente Simple",
-    bulkInputLabel: "Preguntas",
-    bulkInputPlaceholder: "Yo [fui] a la [escuela] ayer.\nTengo una [manzana].",
-    bulkInputHelper: "Formato: Texto con [respuestas] entre corchetes. Una pregunta por línea.",
-    create: "Crear Ejercicio",
-    creating: "Creando...",
-    cancel: "Cancelar",
-    validationError: "Por favor, verifique su entrada. Cada línea debe contener al menos una respuesta entre [].",
-    failedToCreate: "Error al crear el ejercicio",
-    somethingWentWrong: "Algo salió mal",
-  },
-};
+import { useRouter, Link } from "@/routing";
+import { ExerciseType } from "@/app/types/exercise";
+import { useTranslations } from "next-intl";
+import { Save, ArrowLeft } from "lucide-react";
 
 export default function NewExercisePage({
   params,
 }: {
   params: Promise<{ teacherId: string; locale: string }>;
 }) {
-  const { teacherId, locale } = use(params);
+  const { teacherId } = use(params);
   const router = useRouter();
-  const t = translations[locale as keyof typeof translations] || translations.en;
+  const t = useTranslations("EditExercise");
 
   const [title, setTitle] = useState("");
   const [bulkInput, setBulkInput] = useState("");
@@ -58,7 +27,7 @@ export default function NewExercisePage({
 
     // Basic validation
     if (!bulkInput.trim()) {
-      setError(t.validationError);
+      setError(t("validationError"));
       setIsSubmitting(false);
       return;
     }
@@ -80,88 +49,115 @@ export default function NewExercisePage({
       });
 
       if (!response.ok) {
-        throw new Error(t.failedToCreate);
+        throw new Error(t("failedToCreate"));
       }
 
       router.push(`/teachers/${teacherId}/exercises`);
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : t.somethingWentWrong);
+      setError(err instanceof Error ? err.message : t("somethingWentWrong"));
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="p-4 md:p-8 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">{t.title}</h1>
-      <p className="mb-6 text-gray-600">
-        {t.teacherId}: {teacherId}
-      </p>
+    <div className="min-h-screen bg-slate-50/50 pb-12">
+      <div className="p-4 md:p-8 max-w-5xl mx-auto">
+        <Link
+          href={`/teachers/${teacherId}/exercises`}
+          className="flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium mb-8 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          {t("back")}
+        </Link>
 
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label
-            htmlFor="title"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            {t.exerciseTitle}
-          </label>
-          <input
-            id="title"
-            type="text"
-            required
-            className="border border-gray-300 p-2 w-full rounded-md"
-            placeholder={t.exerciseTitlePlaceholder}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">
+            {t("createTitle")}
+          </h1>
+          <p className="text-slate-500">{t("createSubtitle")}</p>
         </div>
 
-        <div className="space-y-4">
-          <div>
-            <label
-              htmlFor="bulkInput"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              {t.bulkInputLabel}
-            </label>
-            <textarea
-              id="bulkInput"
-              required
-              rows={10}
-              className="border border-gray-300 p-2 w-full rounded-md font-mono text-sm"
-              placeholder={t.bulkInputPlaceholder}
-              value={bulkInput}
-              onChange={(e) => setBulkInput(e.target.value)}
-            />
-            <p className="mt-1 text-xs text-gray-500">{t.bulkInputHelper}</p>
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6">
+            {error}
           </div>
+        )}
+
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 md:p-8">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="space-y-4">
+              <div>
+                <label
+                  htmlFor="title"
+                  className="block text-sm font-semibold text-slate-900 mb-2"
+                >
+                  {t("exerciseTitle")}
+                </label>
+                <input
+                  id="title"
+                  type="text"
+                  required
+                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                  placeholder={t("exerciseTitlePlaceholder")}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+                <p className="mt-2 text-sm text-slate-500">
+                  {t("exerciseTitleHelper")}
+                </p>
+              </div>
+
+              <div className="pt-4">
+                <label
+                  htmlFor="bulkInput"
+                  className="block text-sm font-semibold text-slate-900 mb-2"
+                >
+                  {t("questions")}
+                </label>
+                <div className="relative">
+                  <textarea
+                    id="bulkInput"
+                    required
+                    rows={8}
+                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono text-sm leading-relaxed"
+                    placeholder={t("bulkInputPlaceholder")}
+                    value={bulkInput}
+                    onChange={(e) => setBulkInput(e.target.value)}
+                  />
+                </div>
+                <p className="mt-2 text-sm text-slate-500">
+                  {t("bulkInputHelper")}
+                </p>
+              </div>
+            </div>
+          </form>
         </div>
 
-        <div className="pt-4 flex flex-col sm:flex-row gap-4">
+        <div className="mt-8 flex flex-col sm:flex-row gap-4">
           <button
+            onClick={handleSubmit}
             type="submit"
             disabled={isSubmitting}
-            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition-colors disabled:bg-blue-300"
+            className="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm shadow-indigo-200"
           >
-            {isSubmitting ? t.creating : t.create}
+            {isSubmitting ? (
+              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              <Save className="w-4 h-4" />
+            )}
+            {isSubmitting ? t("creating") : t("save")}
           </button>
           <button
             type="button"
-            onClick={() => router.back()}
-            className="w-full sm:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 rounded-md transition-colors"
+            onClick={() => router.push(`/teachers/${teacherId}/exercises`)}
+            className="flex items-center justify-center px-8 py-3 bg-white border border-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 transition-all"
           >
-            {t.cancel}
+            {t("cancel")}
           </button>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

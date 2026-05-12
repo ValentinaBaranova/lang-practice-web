@@ -9,7 +9,11 @@
   },
   "EditExercise": {
     "title": "Edit Exercise",
-    "teacherId": "Teacher ID",
+    "back": "Back to exercises",
+    "editSubtitle": "Update your exercise content and save changes.",
+    "createSubtitle": "Fill in the details to create a new exercise set.",
+    "createTitle": "Create exercise",
+    "exerciseTitleHelper": "Give your exercise a clear and descriptive title.",
     "exerciseTitle": "Exercise Title",
     "exerciseTitlePlaceholder": "e.g. Present Simple Practice",
     "questions": "Questions",
@@ -18,7 +22,7 @@
     "remove": "Remove",
     "promptLabel": "Prompt (e.g. \"The cat is on the ____.\")",
     "answerLabel": "Correct Answer",
-    "save": "Save Changes",
+    "save": "Save changes",
     "saving": "Saving...",
     "cancel": "Cancel",
     "bulkInputLabel": "Questions",
@@ -28,6 +32,15 @@
     "failedToLoad": "Failed to load exercise",
     "failedToUpdate": "Failed to update exercise",
     "somethingWentWrong": "Something went wrong"
+  },
+  "Results": {
+    "title": "Results",
+    "subtitle": "View student performance for this exercise set.",
+    "noAttempts": "No attempts yet. Share the link with your students to see results here!",
+    "studentName": "Student Name",
+    "progress": "Progress",
+    "score": "Score",
+    "accuracy": "Accuracy"
   },
   "Practice": {
     "enterName": "Enter your name to start",
@@ -44,5 +57,28 @@
     "exerciseCompleted": "Exercise completed!",
     "wellDone": "Well done, {name}!",
     "studentLink": "Student link"
+  },
+  "TeacherExercises": {
+    "title": "My exercises",
+    "description": "Create and share language practice with your students.",
+    "newPractice": "New practice",
+    "noExercises": "No exercises found for this teacher.",
+    "fillInGaps": "FILL IN THE GAPS",
+    "questionsCount": "{count, plural, =1 {1 question} other {# questions}}",
+    "createFirstQuestion": "Create your first question...",
+    "createdAgo": "Created {time} ago",
+    "studentsCompleted": "{count, plural, =1 {1 student completed} other {# students completed}}",
+    "shareLink": "Share link",
+    "results": "Results",
+    "edit": "Edit",
+    "footerDescription": "Share your exercises with students and track their progress.",
+    "time": {
+      "justNow": "just now",
+      "m": "{count}m",
+      "h": "{count}h",
+      "d": "{count}d",
+      "w": "{count}w",
+      "mo": "{count}mo"
+    }
   }
 }

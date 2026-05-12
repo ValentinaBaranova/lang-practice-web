@@ -31,14 +31,7 @@ export default function PracticePage({
   const [attemptId, setAttemptId] = useState<string | null>(null);
   const [isFinished, setIsFinished] = useState(false);
 
-  const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
-
-  useEffect(() => {
-    if (isFinished) {
-      const correct = results.filter((r) => r === true).length;
-      setCorrectAnswersCount(correct);
-    }
-  }, [isFinished, results]);
+  const correctAnswersCount = results.filter((r) => r === true).length;
 
   useEffect(() => {
     const fetchExercise = async () => {
@@ -162,59 +155,79 @@ export default function PracticePage({
 
   if (isLoading) {
     return (
-      <div className="p-8 max-w-2xl mx-auto flex justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-slate-50/50 flex justify-center pt-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
 
   if (error || !exercise) {
     return (
-      <div className="p-8 max-w-2xl mx-auto text-center">
-        <p className="text-red-600 mb-4">{error || tEdit("somethingWentWrong")}</p>
+      <div className="min-h-screen bg-slate-50/50 p-8 text-center">
+        <div className="max-w-5xl mx-auto bg-white rounded-2xl border border-red-100 p-8 shadow-sm">
+          <p className="text-red-600 mb-4 font-medium">{error || tEdit("somethingWentWrong")}</p>
+        </div>
       </div>
     );
   }
 
   if (!isStarted) {
     return (
-      <div className="p-8 max-w-md mx-auto bg-white rounded-xl shadow-md space-y-4 mt-10">
-        <h1 className="text-2xl font-bold text-gray-900">{exercise.title}</h1>
-        <form onSubmit={handleStart} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("enterName")}
-            </label>
-            <input
-              type="text"
-              value={studentName}
-              onChange={(e) => setStudentName(e.target.value)}
-              placeholder={t("namePlaceholder")}
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
+      <div className="min-h-screen bg-slate-50/50 pb-12">
+        <div className="p-4 md:p-8 max-w-xl mx-auto pt-12">
+          <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8 md:p-10">
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-slate-900 mb-3">{exercise.title}</h1>
+              <p className="text-slate-500">{t("enterName")}</p>
+            </div>
+            
+            <form onSubmit={handleStart} className="space-y-6">
+              <div>
+                <input
+                  type="text"
+                  value={studentName}
+                  onChange={(e) => setStudentName(e.target.value)}
+                  placeholder={t("namePlaceholder")}
+                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-medium"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={isSubmitting || !studentName.trim()}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-6 rounded-xl font-bold transition-all shadow-sm shadow-indigo-200 flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {isSubmitting ? (
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : t("start")}
+              </button>
+            </form>
           </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
-          >
-            {t("start")}
-          </button>
-        </form>
+        </div>
       </div>
     );
   }
 
   if (isFinished) {
     return (
-      <div className="p-8 max-w-2xl mx-auto text-center bg-white rounded-xl shadow-md mt-10">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">{t("exerciseCompleted")}</h1>
-        <p className="text-xl text-gray-700 mb-6">{t("wellDone", { name: studentName })}</p>
-        <div className="bg-blue-50 p-6 rounded-lg inline-block">
-          <p className="text-2xl font-bold text-blue-800">
-            {correctAnswersCount} / {exercise.questions.length}
-          </p>
-          <p className="text-blue-600 font-medium">{t("correct")}</p>
+      <div className="min-h-screen bg-slate-50/50 pb-12">
+        <div className="p-4 md:p-8 max-w-2xl mx-auto pt-12 text-center">
+          <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-10 md:p-12">
+            <div className="w-20 h-20 bg-emerald-50 rounded-[1.25rem] flex items-center justify-center mx-auto mb-6">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="#10B981" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">{t("exerciseCompleted")}</h1>
+            <p className="text-xl text-slate-500 mb-8 font-medium">{t("wellDone", { name: studentName })}</p>
+            
+            <div className="bg-slate-50/80 rounded-2xl p-8 mb-8 border border-slate-100">
+              <p className="text-5xl font-bold text-slate-900 mb-2">
+                {correctAnswersCount} <span className="text-2xl text-slate-400">/ {exercise.questions.length}</span>
+              </p>
+              <p className="text-slate-500 font-bold uppercase tracking-wider text-sm">{t("correct")}</p>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -233,58 +246,64 @@ export default function PracticePage({
   };
 
   return (
-    <div className="p-8 max-w-2xl mx-auto bg-white rounded-xl shadow-md mt-10">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl font-bold text-gray-900">{exercise.title}</h1>
-        <span className="text-sm text-gray-500">
-          {t("questionProgress", {
-            current: currentQuestionIndex + 1,
-            total: exercise.questions.length,
-          })}
-        </span>
-      </div>
+    <div className="min-h-screen bg-slate-50/50 pb-12">
+      <div className="p-4 md:p-8 max-w-3xl mx-auto">
+        <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
+          <div className="px-6 py-6 border-b border-slate-50 bg-slate-50/30 flex justify-between items-center">
+            <h1 className="font-bold text-slate-900 truncate max-w-[70%]">{exercise.title}</h1>
+            <span className="text-xs font-bold text-slate-500 bg-white px-3 py-1.5 rounded-full border border-slate-100 shadow-sm whitespace-nowrap">
+              {t("questionProgress", {
+                current: currentQuestionIndex + 1,
+                total: exercise.questions.length,
+              })}
+            </span>
+          </div>
 
-      <div className="mb-8">
-        <QuestionRenderer
-          question={currentQuestion}
-          type={exercise.type}
-          values={answers[currentQuestionIndex]}
-          onChange={handleAnswerChange}
-          isSubmitted={isSubmitted}
-          isCorrect={results[currentQuestionIndex]}
-        />
-      </div>
+          <div className="p-8 md:p-10">
+            <QuestionRenderer
+              question={currentQuestion}
+              type={exercise.type}
+              values={answers[currentQuestionIndex]}
+              onChange={handleAnswerChange}
+              isSubmitted={isSubmitted}
+              isCorrect={results[currentQuestionIndex]}
+            />
+          </div>
 
-      <div className="flex justify-between">
-        <button
-          onClick={handlePrevious}
-          disabled={currentQuestionIndex === 0}
-          className={`py-2 px-6 rounded-md transition-colors ${
-            currentQuestionIndex === 0
-              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-          }`}
-        >
-          {t("previous")}
-        </button>
-        
-        <div className="flex gap-4">
-          {!isSubmitted ? (
+          <div className="px-8 py-6 bg-slate-50/30 border-t border-slate-50 flex justify-between items-center">
             <button
-              onClick={handleSubmitAnswer}
-              disabled={isSubmitting || !answers[currentQuestionIndex]?.every(a => a.trim())}
-              className="bg-green-600 text-white py-2 px-6 rounded-md hover:bg-green-700 transition-colors disabled:bg-green-300"
+              onClick={handlePrevious}
+              disabled={currentQuestionIndex === 0}
+              className={`flex items-center gap-2 font-bold px-5 py-2.5 rounded-xl transition-all ${
+                currentQuestionIndex === 0
+                  ? "text-slate-300 cursor-not-allowed"
+                  : "text-slate-600 hover:bg-white hover:text-indigo-600 border border-transparent hover:border-slate-100"
+              }`}
             >
-              {isSubmitting ? "..." : t("submit")}
+              {t("previous")}
             </button>
-          ) : (
-            <button
-              onClick={handleNext}
-              className="bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700 transition-colors"
-            >
-              {currentQuestionIndex === exercise.questions.length - 1 ? t("finish") : t("next")}
-            </button>
-          )}
+            
+            <div className="flex gap-4">
+              {!isSubmitted ? (
+                <button
+                  onClick={handleSubmitAnswer}
+                  disabled={isSubmitting || !answers[currentQuestionIndex]?.every(a => a.trim())}
+                  className="bg-indigo-600 text-white py-2.5 px-8 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-sm shadow-indigo-100 disabled:opacity-50"
+                >
+                  {isSubmitting ? (
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : t("submit")}
+                </button>
+              ) : (
+                <button
+                  onClick={handleNext}
+                  className="bg-indigo-600 text-white py-2.5 px-8 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-sm shadow-indigo-100"
+                >
+                  {currentQuestionIndex === exercise.questions.length - 1 ? t("finish") : t("next")}
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -309,12 +328,33 @@ function QuestionRenderer({
   const t = useTranslations("Practice");
 
   const feedback = isSubmitted && (
-    <div className={`mt-4 p-3 rounded-md ${isCorrect ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
-      <p className="font-medium">
-        {isCorrect ? t("correct") : t("incorrect")}
-      </p>
+    <div className={`mt-8 p-6 rounded-2xl border ${
+      isCorrect 
+        ? "bg-emerald-50/50 border-emerald-100 text-emerald-900" 
+        : "bg-red-50/50 border-red-100 text-red-900"
+    }`}>
+      <div className="flex items-center gap-3 mb-2">
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+          isCorrect ? "bg-emerald-100" : "bg-red-100"
+        }`}>
+          {isCorrect ? (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 6L9 17L4 12" stroke="#059669" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          ) : (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 6L6 18M6 6L18 18" stroke="#DC2626" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          )}
+        </div>
+        <p className="font-bold">
+          {isCorrect ? t("correct") : t("incorrect")}
+        </p>
+      </div>
       {!isCorrect && question.correctAnswer && (
-        <p className="text-sm">{t("correctAnswer", { answer: question.correctAnswer })}</p>
+        <p className="text-slate-600 ml-11">
+          {t("correctAnswer", { answer: question.correctAnswer })}
+        </p>
       )}
     </div>
   );
@@ -324,10 +364,10 @@ function QuestionRenderer({
     const parts = question.prompt.split(/_+/);
     
     return (
-      <div>
-        <div className="text-lg leading-relaxed flex flex-wrap items-baseline gap-y-2">
+      <div className="space-y-6">
+        <div className="text-xl md:text-2xl leading-relaxed text-slate-800 flex flex-wrap items-baseline gap-x-1 gap-y-4">
           {parts.map((part, index) => (
-            <span key={index} className="flex items-baseline">
+            <span key={index} className="inline-flex items-baseline">
               <span>{part}</span>
               {index < parts.length - 1 && (
                 <input
@@ -335,10 +375,10 @@ function QuestionRenderer({
                   value={values[index] || ""}
                   onChange={(e) => onChange(e.target.value, index)}
                   disabled={isSubmitted}
-                  className={`mx-2 p-1 border-b-2 outline-none w-32 text-center transition-colors ${
+                  className={`mx-2 px-4 py-1 border-b-2 outline-none w-40 text-center transition-all font-bold ${
                     isSubmitted 
-                      ? (isCorrect ? "border-green-500 bg-green-50" : "border-red-500 bg-red-50") 
-                      : "border-gray-300 focus:border-blue-500"
+                      ? (isCorrect ? "border-emerald-500 text-emerald-600 bg-emerald-50/30" : "border-red-500 text-red-600 bg-red-50/30") 
+                      : "border-slate-200 focus:border-indigo-500 text-indigo-600 placeholder:text-slate-300"
                   }`}
                   autoFocus={index === 0}
                 />
@@ -352,17 +392,17 @@ function QuestionRenderer({
   }
 
   return (
-    <div className="space-y-4">
-      <p className="text-lg">{question.prompt}</p>
+    <div className="space-y-8">
+      <p className="text-2xl font-medium text-slate-800 leading-relaxed">{question.prompt}</p>
       <input
         type="text"
         value={values[0] || ""}
         onChange={(e) => onChange(e.target.value, 0)}
         disabled={isSubmitted}
-        className={`w-full p-2 border rounded-md transition-colors ${
+        className={`w-full px-6 py-4 border-2 rounded-2xl transition-all outline-none text-xl font-bold ${
           isSubmitted 
-            ? (isCorrect ? "border-green-500 bg-green-50" : "border-red-500 bg-red-50") 
-            : "border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+            ? (isCorrect ? "border-emerald-500 text-emerald-600 bg-emerald-50/30" : "border-red-500 text-red-600 bg-red-50/30") 
+            : "border-slate-100 focus:border-indigo-500 text-indigo-600 bg-slate-50/50 focus:bg-white shadow-sm"
         }`}
       />
       {feedback}

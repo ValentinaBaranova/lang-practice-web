@@ -9,7 +9,11 @@
   },
   "EditExercise": {
     "title": "Editar Ejercicio",
-    "teacherId": "ID del Profesor",
+    "back": "Volver a ejercicios",
+    "editSubtitle": "Actualiza el contenido de tu ejercicio y guarda los cambios.",
+    "createSubtitle": "Completa los detalles para crear un nuevo conjunto de ejercicios.",
+    "createTitle": "Crear ejercicio",
+    "exerciseTitleHelper": "Dale a tu ejercicio un título claro y descriptivo.",
     "exerciseTitle": "Título del Ejercicio",
     "exerciseTitlePlaceholder": "ej. Práctica de Presente Simple",
     "questions": "Preguntas",
@@ -29,6 +33,15 @@
     "failedToUpdate": "Error al actualizar el ejercicio",
     "somethingWentWrong": "Algo salió mal"
   },
+  "Results": {
+    "title": "Resultados",
+    "subtitle": "Ver el rendimiento de los estudiantes para este conjunto de ejercicios.",
+    "noAttempts": "Aún no hay intentos. ¡Comparte el enlace con tus alumnos para ver los resultados aquí!",
+    "studentName": "Nombre del Estudiante",
+    "progress": "Progreso",
+    "score": "Puntuación",
+    "accuracy": "Precisión"
+  },
   "Practice": {
     "enterName": "Ingresa tu nombre para comenzar",
     "namePlaceholder": "Tu nombre",
@@ -44,5 +57,28 @@
     "exerciseCompleted": "¡Ejercicio completado!",
     "wellDone": "¡Bien hecho, {name}!",
     "studentLink": "Enlace para el alumno"
+  },
+  "TeacherExercises": {
+    "title": "Mis ejercicios",
+    "description": "Crea y comparte prácticas de idiomas con tus alumnos.",
+    "newPractice": "Nueva práctica",
+    "noExercises": "No se encontraron ejercicios para este profesor.",
+    "fillInGaps": "COMPLETA LOS HUECOS",
+    "questionsCount": "{count, plural, =1 {1 pregunta} other {# preguntas}}",
+    "createFirstQuestion": "Crea tu primera pregunta...",
+    "createdAgo": "Creado hace {time}",
+    "studentsCompleted": "{count, plural, =1 {1 alumno completó} other {# alumnos completaron}}",
+    "shareLink": "Compartir",
+    "results": "Resultados",
+    "edit": "Editar",
+    "footerDescription": "Comparte tus ejercicios con los alumnos y sigue su progreso.",
+    "time": {
+      "justNow": "recién",
+      "m": "{count}m",
+      "h": "{count}h",
+      "d": "{count}d",
+      "w": "{count}w",
+      "mo": "{count}mo"
+    }
   }
 }
