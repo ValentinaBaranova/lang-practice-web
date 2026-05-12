@@ -17,7 +17,7 @@ export interface Question {
 }
 
 export interface ExerciseSetDto {
-  teacherId: string;
+  teacherAccessCode: string;
   title: string;
   type: ExerciseType;
   visibility: ExerciseVisibility;

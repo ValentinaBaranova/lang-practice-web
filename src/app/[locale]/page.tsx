@@ -1,13 +1,13 @@
 import { use } from "react";
 import { useTranslations } from "next-intl";
 import { BookOpen } from 'lucide-react';
-import { ExerciseCard } from "./teachers/[teacherId]/exercises/ExerciseCard";
+import { ExerciseCard } from "./teachers/[accessCode]/exercises/ExerciseCard";
 import { getApiUrl } from "@/lib/api";
 import { ExerciseType } from "@/app/types/exercise";
 
 interface ExerciseSetResponse {
   id: string;
-  teacherId: string;
+  teacherAccessCode: string;
   teacherName: string;
   title: string;
   type: ExerciseType;

@@ -10,9 +10,9 @@ import ExerciseForm from "@/components/ExerciseForm";
 export default function EditExerciseSetPage({
   params,
 }: {
-  params: Promise<{ teacherId: string; exerciseSetId: string; locale: string }>;
+  params: Promise<{ accessCode: string; exerciseSetId: string; locale: string }>;
 }) {
-  const { teacherId, exerciseSetId } = use(params);
+  const { accessCode, exerciseSetId } = use(params);
   const router = useRouter();
   const t = useTranslations("EditExercise");
 
@@ -90,7 +90,7 @@ export default function EditExerciseSetPage({
         throw new Error(errorData.message || t("failedToUpdate"));
       }
 
-      router.push(`/teachers/${teacherId}/exercises`);
+      router.push(`/teachers/${accessCode}/exercises`);
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : t("somethingWentWrong"));
@@ -111,7 +111,7 @@ export default function EditExerciseSetPage({
     <div className="page-container">
       <div className="content-wrapper pb-12">
         <Link
-          href={`/teachers/${teacherId}/exercises`}
+          href={`/teachers/${accessCode}/exercises`}
           className="back-link"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -135,7 +135,7 @@ export default function EditExerciseSetPage({
             isSubmitting={isSubmitting}
             submitButtonText={t("save")}
             submittingButtonText={t("saving")}
-            onCancel={() => router.push(`/teachers/${teacherId}/exercises`)}
+            onCancel={() => router.push(`/teachers/${accessCode}/exercises`)}
             isEditMode={true}
             externalError={error}
             externalErrors={errors}

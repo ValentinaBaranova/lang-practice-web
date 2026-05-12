@@ -14,11 +14,11 @@ interface ExerciseCardProps {
     createdAt: string;
     questions?: { prompt: string }[];
   };
-  teacherId?: string;
+  accessCode?: string;
   isPublic?: boolean;
 }
 
-export function ExerciseCard({ exercise, teacherId, isPublic = false }: ExerciseCardProps) {
+export function ExerciseCard({ exercise, accessCode, isPublic = false }: ExerciseCardProps) {
   const t = useTranslations("TeacherExercises");
   const router = useRouter();
 
@@ -43,7 +43,7 @@ export function ExerciseCard({ exercise, teacherId, isPublic = false }: Exercise
     if (isPublic) {
       router.push(`/practice/${exercise.shareSlug}`);
     } else {
-      router.push(`/teachers/${teacherId}/exercises/${exercise.id}/edit`);
+      router.push(`/teachers/${accessCode}/exercises/${exercise.id}/edit`);
     }
   };
 
@@ -88,7 +88,7 @@ export function ExerciseCard({ exercise, teacherId, isPublic = false }: Exercise
               )}
               {!isPublic && (
                 <Link 
-                  href={`/teachers/${teacherId}/exercises/${exercise.id}/results`}
+                  href={`/teachers/${accessCode}/exercises/${exercise.id}/results`}
                   className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors"
                   onClick={(e) => e.stopPropagation()}
                 >

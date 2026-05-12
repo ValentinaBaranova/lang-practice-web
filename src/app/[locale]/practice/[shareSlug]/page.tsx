@@ -4,7 +4,7 @@ import { use, useState, useEffect, useRef, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { ExerciseType, Question, ExerciseSetDto } from "@/app/types/exercise";
 
-interface ExerciseResponse extends Omit<ExerciseSetDto, 'teacherId'> {
+interface ExerciseResponse extends Omit<ExerciseSetDto, 'teacherAccessCode'> {
     id: string;
     teacherName: string;
     shareSlug: string;

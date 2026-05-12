@@ -23,9 +23,9 @@ interface ExerciseSetResponse {
 export default function ResultsPage({
   params,
 }: {
-  params: Promise<{ teacherId: string; exerciseSetId: string; locale: string }>;
+  params: Promise<{ accessCode: string; exerciseSetId: string; locale: string }>;
 }) {
-  const { teacherId, exerciseSetId } = use(params);
+  const { accessCode, exerciseSetId } = use(params);
   const t = useTranslations("Results");
   const tEdit = useTranslations("EditExercise");
 
@@ -80,7 +80,7 @@ export default function ResultsPage({
           <div className="card border-red-100 p-8">
             <p className="text-red-600 mb-4 font-medium">{error}</p>
             <Link
-              href={`/teachers/${teacherId}/exercises`}
+              href={`/teachers/${accessCode}/exercises`}
               className="text-indigo-600 hover:text-indigo-700 font-semibold"
             >
               {tEdit("back")}
@@ -95,7 +95,7 @@ export default function ResultsPage({
     <div className="page-container">
       <div className="content-wrapper pb-12">
         <Link
-          href={`/teachers/${teacherId}/exercises`}
+          href={`/teachers/${accessCode}/exercises`}
           className="back-link"
         >
           <ArrowLeft className="w-4 h-4" />

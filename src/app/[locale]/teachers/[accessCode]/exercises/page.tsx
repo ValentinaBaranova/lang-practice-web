@@ -8,7 +8,7 @@ import { getApiUrl } from "@/lib/api";
 
 interface ExerciseSetResponse {
   id: string;
-  teacherId: string;
+  teacherAccessCode: string;
   teacherName: string;
   title: string;
   type: ExerciseType;
@@ -17,8 +17,8 @@ interface ExerciseSetResponse {
   questions?: { prompt: string }[];
 }
 
-async function getExercises(teacherId: string): Promise<ExerciseSetResponse[]> {
-  const res = await fetch(getApiUrl(`/api/exercise-sets?teacherId=${teacherId}`), {
+async function getExercises(accessCode: string): Promise<ExerciseSetResponse[]> {
+  const res = await fetch(getApiUrl(`/api/exercise-sets?accessCode=${accessCode}`), {
     cache: 'no-store'
   });
   
@@ -32,10 +32,10 @@ async function getExercises(teacherId: string): Promise<ExerciseSetResponse[]> {
 export default function ExercisesPage({
   params,
 }: {
-  params: Promise<{ teacherId: string; locale: string }>;
+  params: Promise<{ accessCode: string; locale: string }>;
 }) {
-  const { teacherId } = use(params);
-  const exercises = use(getExercises(teacherId));
+  const { accessCode } = use(params);
+  const exercises = use(getExercises(accessCode));
   const t = useTranslations("TeacherExercises");
 
   return (
@@ -50,7 +50,7 @@ export default function ExercisesPage({
             <p className="text-slate-500 text-base">{t('description')}</p>
           </div>
             <Link
-            href={`/teachers/${teacherId}/exercises/new`}
+            href={`/teachers/${accessCode}/exercises/new`}
             className="w-full sm:w-auto btn-primary"
           >
             <Plus className="w-5 h-5" />
@@ -68,7 +68,7 @@ export default function ExercisesPage({
               <ExerciseCard
                 key={exercise.id}
                 exercise={exercise}
-                teacherId={teacherId}
+                accessCode={accessCode}
               />
             ))}
         </div>

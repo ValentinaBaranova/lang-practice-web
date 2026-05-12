@@ -11,7 +11,7 @@ export default function MenuBar() {
   const pathname = usePathname();
   const router = useRouter();
   const params = useParams();
-  const teacherId = params?.teacherId as string;
+  const accessCode = params?.accessCode as string;
 
   const [isOpen, setIsOpen] = useState(false);
   const [teacherName, setTeacherName] = useState<string | null>(null);
@@ -24,9 +24,9 @@ export default function MenuBar() {
 
   useEffect(() => {
     const fetchTeacherName = async () => {
-      if (teacherId) {
+      if (accessCode) {
         try {
-          const res = await fetch(`/api/teachers/${teacherId}`);
+          const res = await fetch(`/api/teachers/${accessCode}`);
           if (res.ok) {
             const data = await res.json();
             setTeacherName(data.name);
@@ -54,7 +54,7 @@ export default function MenuBar() {
     };
 
     fetchTeacherName();
-  }, [teacherId, pathname]);
+  }, [accessCode, pathname]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
