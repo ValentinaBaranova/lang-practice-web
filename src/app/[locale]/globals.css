@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+@utility card {
+  @apply bg-white rounded-none border border-slate-100 shadow-sm;
+}
+
+@utility badge {
+  @apply text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider;
+}
+
+@utility icon-box {
+  @apply p-2 rounded-lg transition-colors w-10 h-10 flex items-center justify-center;
+}
+
 @layer components {
   .page-container {
     @apply flex-grow bg-slate-50/50 pb-8;
@@ -9,8 +21,34 @@
     @apply p-4 md:py-6 max-w-5xl mx-auto;
   }
 
-  .card {
-    @apply bg-white rounded-none border border-slate-100 shadow-sm;
+  .card-interactive {
+    @apply card transition-all hover:shadow-md overflow-hidden relative cursor-pointer;
+  }
+
+  .badge-primary {
+    @apply badge bg-indigo-50 text-indigo-600;
+  }
+
+  .badge-amber {
+    @apply badge bg-amber-50 text-amber-600;
+  }
+
+  .icon-box-indigo {
+    @apply icon-box bg-indigo-50;
+    &:hover {
+      @apply bg-indigo-100;
+    }
+  }
+
+  .icon-box-amber {
+    @apply icon-box bg-amber-50;
+    &:hover {
+      @apply bg-amber-100;
+    }
+  }
+
+  .back-link {
+    @apply flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium mb-8 transition-colors;
   }
 
   .btn-primary {
@@ -19,6 +57,22 @@
 
   .btn-secondary {
     @apply flex items-center justify-center px-8 py-3 bg-white border border-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 transition-all;
+  }
+
+  .btn-ghost {
+    @apply flex items-center justify-center gap-2 font-bold px-5 py-2.5 rounded-xl transition-all text-slate-600 hover:bg-white hover:text-indigo-600 border border-transparent hover:border-slate-100 disabled:text-slate-300 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-transparent;
+  }
+
+  .btn-outline {
+    @apply flex items-center gap-2 px-3 py-1.5 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 cursor-pointer hover:bg-slate-50 transition-colors bg-white;
+  }
+
+  .page-content-narrow {
+    @apply p-4 md:p-8 max-w-3xl mx-auto;
+  }
+
+  .page-content-centered {
+    @apply p-4 md:p-8 max-w-2xl mx-auto pt-12 text-center;
   }
 
   .alert-error {

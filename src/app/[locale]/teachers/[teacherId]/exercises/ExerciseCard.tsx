@@ -44,7 +44,7 @@ export function ExerciseCard({ exercise, teacherId }: ExerciseCardProps) {
 
   return (
     <div 
-      className="card group transition-all hover:shadow-md overflow-hidden relative cursor-pointer"
+      className="card-interactive group"
       onClick={handleCardClick}
     >
       <div className="p-5 flex flex-col gap-3">
@@ -53,13 +53,13 @@ export function ExerciseCard({ exercise, teacherId }: ExerciseCardProps) {
           <div className="flex items-center gap-3">
             <div className="flex-shrink-0">
               {exercise.id.includes('star') || exercise.title.toLowerCase().includes('article') ? (
-                <div className="bg-amber-50 p-2 rounded-lg group-hover:bg-amber-100 transition-colors w-10 h-10 flex items-center justify-center">
+                <div className="icon-box-amber">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
               ) : (
-                <div className="bg-indigo-50 p-2 rounded-lg group-hover:bg-indigo-100 transition-colors w-10 h-10 flex items-center justify-center">
+                <div className="icon-box-indigo">
                   <Edit3 className="w-5 h-5 text-indigo-500" />
                 </div>
               )}
@@ -90,11 +90,11 @@ export function ExerciseCard({ exercise, teacherId }: ExerciseCardProps) {
 
         {/* Second Row: Type + Questions Count */}
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider ${
+          <span className={
             (exercise.id.includes('star') || exercise.title.toLowerCase().includes('article')) 
-                ? 'bg-amber-50 text-amber-600' 
-                : 'bg-indigo-50 text-indigo-600'
-          }`}>
+                ? 'badge-amber' 
+                : 'badge-primary'
+          }>
             {exercise.type === 'FILL_GAP_TEXT' ? t('fillInGaps') : exercise.type}
           </span>
           <span className="text-slate-200 text-xs">•</span>

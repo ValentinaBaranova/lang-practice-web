@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState, useEffect } from "react";
+import { use, useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { ExerciseType, Question, ExerciseSetDto } from "@/app/types/exercise";
 
@@ -153,6 +153,28 @@ export default function PracticePage({
     }
   };
 
+  const currentQuestion = exercise?.questions[currentQuestionIndex];
+  const isSubmitted = results[currentQuestionIndex] !== null;
+
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter" && isStarted && !isFinished && !isSubmitting) {
+        // If not submitted, and all inputs filled, submit
+        if (!isSubmitted) {
+          if (answers[currentQuestionIndex]?.every(a => a.trim())) {
+            handleSubmitAnswer();
+          }
+        } else {
+          // If submitted, go to next
+          handleNext();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleGlobalKeyDown);
+    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+  }, [isStarted, isFinished, isSubmitting, isSubmitted, answers, currentQuestionIndex, handleSubmitAnswer, handleNext]);
+
   if (isLoading) {
     return (
       <div className="page-container">
@@ -178,8 +200,8 @@ export default function PracticePage({
   if (!isStarted) {
     return (
       <div className="page-container">
-      <div className="p-4 md:p-8 max-w-xl mx-auto pt-12">
-        <div className="card p-8 md:p-10">
+        <div className="page-content-narrow">
+          <div className="card p-8 md:p-10">
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-slate-900 mb-3">{exercise.title}</h1>
               <p className="text-slate-500">{t("enterName")}</p>
@@ -215,8 +237,8 @@ export default function PracticePage({
   if (isFinished) {
     return (
       <div className="page-container">
-      <div className="p-4 md:p-8 max-w-2xl mx-auto pt-12 text-center">
-        <div className="card p-10 md:p-12">
+        <div className="page-content-centered">
+          <div className="card p-10 md:p-12">
             <div className="w-20 h-20 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M20 6L9 17L4 12" stroke="#10B981" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
@@ -237,21 +259,9 @@ export default function PracticePage({
     );
   }
 
-  const currentQuestion = exercise.questions[currentQuestionIndex];
-  const isSubmitted = results[currentQuestionIndex] !== null;
-
-  const handleAnswerChange = (value: string, gapIndex: number = 0) => {
-    if (isSubmitted) return;
-    const newAnswers = [...answers];
-    const questionAnswers = [...newAnswers[currentQuestionIndex]];
-    questionAnswers[gapIndex] = value;
-    newAnswers[currentQuestionIndex] = questionAnswers;
-    setAnswers(newAnswers);
-  };
-
   return (
     <div className="page-container">
-      <div className="p-4 md:p-8 max-w-3xl mx-auto">
+      <div className="page-content-narrow">
         <div className="card overflow-hidden">
           <div className="px-6 py-6 border-b border-slate-50 bg-slate-50/30 flex justify-between items-center">
             <h1 className="font-bold text-slate-900 truncate max-w-[70%]">{exercise.title}</h1>
@@ -268,7 +278,14 @@ export default function PracticePage({
               question={currentQuestion}
               type={exercise.type}
               values={answers[currentQuestionIndex]}
-              onChange={handleAnswerChange}
+              onChange={(value, gapIndex = 0) => {
+                if (isSubmitted) return;
+                const newAnswers = [...answers];
+                const questionAnswers = [...newAnswers[currentQuestionIndex]];
+                questionAnswers[gapIndex] = value;
+                newAnswers[currentQuestionIndex] = questionAnswers;
+                setAnswers(newAnswers);
+              }}
               isSubmitted={isSubmitted}
               isCorrect={results[currentQuestionIndex]}
             />
@@ -278,11 +295,7 @@ export default function PracticePage({
             <button
               onClick={handlePrevious}
               disabled={currentQuestionIndex === 0}
-              className={`flex items-center gap-2 font-bold px-5 py-2.5 rounded-xl transition-all ${
-                currentQuestionIndex === 0
-                  ? "text-slate-300 cursor-not-allowed"
-                  : "text-slate-600 hover:bg-white hover:text-indigo-600 border border-transparent hover:border-slate-100"
-              }`}
+              className="btn-ghost"
             >
               {t("previous")}
             </button>
@@ -292,7 +305,7 @@ export default function PracticePage({
                 <button
                   onClick={handleSubmitAnswer}
                   disabled={isSubmitting || !answers[currentQuestionIndex]?.every(a => a.trim())}
-                  className="bg-indigo-600 text-white py-2.5 px-8 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-sm shadow-indigo-100 disabled:opacity-50"
+                  className="btn-primary px-8"
                 >
                   {isSubmitting ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -301,7 +314,7 @@ export default function PracticePage({
               ) : (
                 <button
                   onClick={handleNext}
-                  className="bg-indigo-600 text-white py-2.5 px-8 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-sm shadow-indigo-100"
+                  className="btn-primary px-8"
                 >
                   {currentQuestionIndex === exercise.questions.length - 1 ? t("finish") : t("next")}
                 </button>
@@ -330,6 +343,13 @@ function QuestionRenderer({
   isCorrect: boolean | null;
 }) {
   const t = useTranslations("Practice");
+  const firstInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!isSubmitted) {
+      firstInputRef.current?.focus();
+    }
+  }, [question.id, isSubmitted]);
 
   const feedback = isSubmitted && (
     <div className={`mt-8 p-6 rounded-2xl border ${
@@ -375,6 +395,7 @@ function QuestionRenderer({
               <span>{part}</span>
               {index < parts.length - 1 && (
                 <input
+                  ref={index === 0 ? firstInputRef : null}
                   type="text"
                   value={values[index] || ""}
                   onChange={(e) => onChange(e.target.value, index)}
@@ -399,6 +420,7 @@ function QuestionRenderer({
     <div className="space-y-8">
       <p className="text-2xl font-medium text-slate-800 leading-relaxed">{question.prompt}</p>
       <input
+        ref={firstInputRef}
         type="text"
         value={values[0] || ""}
         onChange={(e) => onChange(e.target.value, 0)}

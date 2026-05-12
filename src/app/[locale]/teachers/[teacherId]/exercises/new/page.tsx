@@ -66,7 +66,7 @@ export default function NewExercisePage({
       <div className="content-wrapper pb-12">
         <Link
           href={`/teachers/${teacherId}/exercises`}
-          className="flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium mb-8 transition-colors"
+          className="back-link"
         >
           <ArrowLeft className="w-4 h-4" />
           {t("back")}

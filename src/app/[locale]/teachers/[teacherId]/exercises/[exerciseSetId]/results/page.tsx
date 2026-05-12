@@ -96,7 +96,7 @@ export default function ResultsPage({
       <div className="content-wrapper pb-12">
         <Link
           href={`/teachers/${teacherId}/exercises`}
-          className="flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium mb-8 transition-colors"
+          className="back-link"
         >
           <ArrowLeft className="w-4 h-4" />
           {tEdit("back")}
@@ -157,24 +157,8 @@ export default function ResultsPage({
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
                           {attempt.correctAnswers} / {attempt.answeredQuestions}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center gap-3">
-                            <span className="text-sm font-bold text-slate-900 w-10">
-                              {accuracy}%
-                            </span>
-                            <div className="w-24 bg-slate-100 rounded-full h-2">
-                              <div
-                                className={`h-2 rounded-full transition-all ${
-                                  accuracy >= 80
-                                    ? "bg-emerald-500"
-                                    : accuracy >= 50
-                                    ? "bg-amber-500"
-                                    : "bg-red-500"
-                                }`}
-                                style={{ width: `${accuracy}%` }}
-                              ></div>
-                            </div>
-                          </div>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900">
+                          {accuracy}%
                         </td>
                       </tr>
                     );

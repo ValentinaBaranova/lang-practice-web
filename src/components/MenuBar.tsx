@@ -87,7 +87,7 @@ export default function MenuBar() {
             <div className="relative" ref={dropdownRef}>
               <button 
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-2 px-3 py-1.5 border border-gray-200 rounded-lg text-sm font-medium text-slate-700 cursor-pointer hover:bg-gray-50 transition-colors bg-white"
+                className="btn-outline"
               >
                 <Globe className="w-4 h-4 text-indigo-500" />
                 <span className="hidden sm:inline">{locale === 'en' ? 'English' : 'Español'}</span>
