@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @utility card {
-  @apply bg-white rounded-none border border-slate-100 shadow-sm;
+  @apply bg-white rounded-xl border border-slate-100 shadow-sm;
 }
 
 @utility badge {
