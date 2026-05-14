@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Language Practice Web
 
-## Getting Started
+A web application for creating and completing interactive Spanish language exercises.
 
-First, run the development server:
+Teachers can create exercises manually or generate them with AI, while students can practice through simple shareable links without registration.
+
+---
+
+## 💡 Why I Built This
+
+I built this project while learning Spanish in Argentina.
+
+Most existing language practice websites either:
+- don't support Argentine Spanish well,
+- are uncomfortable for quick custom grammar practice,
+- or rely on AI chat interfaces that are not ideal for repetitive tense exercises.
+
+I wanted a faster way to generate and practice focused grammar exercises, especially for Spanish verb tenses used in everyday Argentine Spanish.
+
+---
+
+## 🌟 Features
+
+- Teacher dashboard for creating and managing exercises
+- AI-powered Spanish exercise generation
+- Multiple exercise formats
+- Instant feedback for students
+- Mobile-friendly responsive UI
+- Multilingual support (English, Spanish)
+
+---
+
+## 📸 Screenshots
+
+### Teacher Dashboard
+![Teacher Dashboard](./docs/dashboard.png)
+
+### Teacher Dashboard
+![Edit Exercise](./docs/edit-exercise.png)
+
+### Student Practice
+![Student Practice](./docs/student-view.png)
+
+---
+
+## 🚀 Tech Stack
+
+- Next.js 15
+- TypeScript
+- Tailwind CSS
+- next-intl
+
+---
+
+## ⚙️ Getting Started
+
+### Installation
+
+```bash
+cd web
+npm install
+```
+
+### Configuration
+
+Create `.env.local`:
+
+```properties
+NEXT_PUBLIC_API_URL=http://localhost:8080
+```
+
+### Run
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🏗 Architecture Notes
 
-## Learn More
+- App Router architecture
+- Shared typed API client
+- Dynamic routes for teacher/student flows
+- Internationalized routing with next-intl
+- Responsive Tailwind UI
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📂 Related Repositories
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [API Backend](https://github.com/ValentinaBaranova/lang-practice-api)
