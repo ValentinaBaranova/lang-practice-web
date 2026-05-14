@@ -20,7 +20,8 @@
   },
   "Navigation": {
     "home": "Home",
-    "teachers": "Teachers"
+    "teachers": "Teachers",
+    "teacher": "Teacher"
   },
   "EditExercise": {
     "title": "Edit Exercise",

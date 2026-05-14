@@ -1,17 +1,22 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import {useLocale} from 'next-intl';
+import {useLocale, useTranslations} from 'next-intl';
 import {Link, usePathname, useRouter, routing} from '@/routing';
-import { Globe, MessageSquare, ChevronDown, Check } from 'lucide-react';
+import { Globe, MessageSquare, ChevronDown, Check, User } from 'lucide-react';
+import { useParams } from 'next/navigation';
 
 export default function MenuBar() {
   const locale = useLocale();
+  const t = useTranslations('Navigation');
   const pathname = usePathname();
   const router = useRouter();
+  const params = useParams();
+  const accessCode = params?.accessCode as string | undefined;
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [teacherName, setTeacherName] = useState<string | null>(null);
 
   const switchLocale = (newLocale: string) => {
     router.replace(pathname, {locale: newLocale as (typeof routing.locales)[number]});
@@ -27,6 +32,31 @@ export default function MenuBar() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (accessCode) {
+      const abortController = new AbortController();
+      fetch(`/api/teachers/${accessCode}`, { signal: abortController.signal })
+        .then(res => {
+          if (!res.ok) throw new Error('Teacher not found');
+          return res.json();
+        })
+        .then(data => {
+          if (data.name) {
+            setTeacherName(data.name);
+          }
+        })
+        .catch(err => {
+          if (err.name !== 'AbortError') {
+            console.error('Failed to fetch teacher info', err);
+            setTeacherName(null);
+          }
+        });
+      return () => abortController.abort();
+    } else {
+      setTeacherName(null);
+    }
+  }, [accessCode]);
 
   const languages = [
     { code: 'en', label: 'English' },
@@ -46,6 +76,14 @@ export default function MenuBar() {
             </Link>
           </div>
           <div className="flex items-center gap-4 sm:gap-6">
+            {teacherName && (
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-full border border-slate-100">
+                <User className="w-4 h-4 text-slate-400" />
+                <span className="text-sm font-medium text-slate-600 hidden md:inline">
+                  {t('teacher')}: {teacherName}
+                </span>
+              </div>
+            )}
             <div className="relative" ref={dropdownRef}>
               <button 
                 onClick={() => setIsOpen(!isOpen)}

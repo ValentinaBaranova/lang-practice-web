@@ -20,7 +20,8 @@
   },
   "Navigation": {
     "home": "Inicio",
-    "teachers": "Profesores"
+    "teachers": "Profesores",
+    "teacher": "Profesor/a"
   },
   "EditExercise": {
     "title": "Editar Ejercicio",
