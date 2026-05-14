@@ -54,6 +54,7 @@ export default function ExerciseForm({
   const [aiAmount, setAiAmount] = useState(10);
   const [isCopying, setIsCopying] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
+  const SUGGESTED_TOPICS = ["Presente", "Indefinido", "Imperfecto", "Imperativo", "Subjuntivo"];
 
   const handleCopyPrompt = async () => {
     setIsCopying(true);
@@ -237,6 +238,22 @@ export default function ExerciseForm({
                         value={aiTopic}
                         onChange={(e) => setAiTopic(e.target.value)}
                       />
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        {SUGGESTED_TOPICS.map((topic) => (
+                          <button
+                            key={topic}
+                            type="button"
+                            onClick={() => setAiTopic(topic)}
+                            className={`px-2 py-0.5 rounded-full text-[10px] font-medium transition-all border ${
+                              aiTopic === topic
+                                ? "bg-indigo-100 text-indigo-700 border-indigo-200"
+                                : "bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                            }`}
+                          >
+                            {topic}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                     <div>
                       <label htmlFor="aiAmount" className="block text-xs font-semibold text-slate-700 mb-1">
