@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ExerciseType, ExerciseVisibility } from "@/app/types/exercise";
 import { useTranslations } from "next-intl";
-import { Save } from "lucide-react";
+import { Save, Copy, Check } from "lucide-react";
 
 interface ExerciseFormProps {
   initialTitle?: string;
@@ -45,6 +45,17 @@ export default function ExerciseForm({
   const [visibility, setVisibility] = useState<ExerciseVisibility>(initialVisibility);
   const [bulkInput, setBulkInput] = useState(initialBulkInput);
   const [localError, setLocalError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyPrompt = () => {
+    const prompt = type === ExerciseType.MULTIPLE_CHOICE 
+      ? t("aiPromptMultipleChoice") 
+      : t("aiPromptFillGap");
+    
+    navigator.clipboard.writeText(prompt);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +64,22 @@ export default function ExerciseForm({
     if (!bulkInput.trim()) {
       setLocalError(t("validationError"));
       return;
+    }
+
+    // Basic frontend validation to catch obvious format errors
+    const lines = bulkInput.split("\n").filter(l => l.trim());
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line.includes("[") || !line.includes("]")) {
+        setLocalError(t("validationErrorLine", { line: i + 1 }));
+        return;
+      }
+      if (type === ExerciseType.MULTIPLE_CHOICE) {
+        if (!line.includes("{") || !line.includes("}")) {
+          setLocalError(t("validationErrorMultipleChoice", { line: i + 1 }));
+          return;
+        }
+      }
     }
 
     await onSubmit({ title, type, visibility, bulkInput });
@@ -130,22 +157,42 @@ export default function ExerciseForm({
               <label htmlFor="bulkInput" className="block text-sm font-semibold text-slate-900 mb-2">
                 {t("questions")}
               </label>
+              <div className="flex flex-col gap-3 mb-3">
+                <p className="text-sm text-slate-500 whitespace-pre-line">
+                  {type === ExerciseType.MULTIPLE_CHOICE
+                    ? t("bulkInputHelperMultipleChoice")
+                    : t("bulkInputHelper")}
+                </p>
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="text-xs text-slate-400 italic">
+                    {t("generateWithAI")}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleCopyPrompt}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-all"
+                  >
+                    {copied ? <Check className="w-3.5 h-3.5 text-green-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    {t("copyAIPrompt")}
+                  </button>
+                </div>
+              </div>
+
               <div className="relative">
                 <textarea
                   id="bulkInput"
                   required
                   rows={8}
                   className="input-field font-mono text-sm leading-relaxed"
-                  placeholder={t("bulkInputPlaceholder")}
+                  placeholder={
+                    type === ExerciseType.MULTIPLE_CHOICE
+                      ? t("bulkInputPlaceholderMultipleChoice")
+                      : t("bulkInputPlaceholder")
+                  }
                   value={bulkInput}
                   onChange={(e) => setBulkInput(e.target.value)}
                 />
               </div>
-              <p className="mt-2 text-sm text-slate-500">
-                {type === ExerciseType.MULTIPLE_CHOICE
-                  ? t("bulkInputHelperMultipleChoice")
-                  : t("bulkInputHelper")}
-              </p>
             </div>
           </div>
         </form>
