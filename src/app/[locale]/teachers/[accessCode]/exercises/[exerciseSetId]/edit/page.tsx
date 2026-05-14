@@ -131,6 +131,7 @@ export default function EditExerciseSetPage({
             initialType={initialData.type}
             initialVisibility={initialData.visibility}
             initialBulkInput={initialData.bulkInput}
+            teacherAccessCode={accessCode}
             onSubmit={handleSubmit}
             isSubmitting={isSubmitting}
             submitButtonText={t("save")}

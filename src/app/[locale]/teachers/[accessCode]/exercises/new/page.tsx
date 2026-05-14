@@ -82,6 +82,7 @@ export default function NewExercisePage({
         </div>
 
         <ExerciseForm
+          teacherAccessCode={accessCode}
           onSubmit={handleSubmit}
           isSubmitting={isSubmitting}
           submitButtonText={t("save")}

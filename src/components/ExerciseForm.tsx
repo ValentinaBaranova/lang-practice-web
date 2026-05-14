@@ -11,6 +11,7 @@ interface ExerciseFormProps {
   initialType?: ExerciseType;
   initialVisibility?: ExerciseVisibility;
   initialBulkInput?: string;
+  teacherAccessCode: string;
   onSubmit: (data: {
     title: string;
     type: ExerciseType;
@@ -31,6 +32,7 @@ export default function ExerciseForm({
   initialType = ExerciseType.FILL_GAP_TEXT,
   initialVisibility = ExerciseVisibility.PRIVATE,
   initialBulkInput = "",
+  teacherAccessCode,
   onSubmit,
   isSubmitting,
   submitButtonText,
@@ -90,6 +92,7 @@ export default function ExerciseForm({
           type,
           topic: aiTopic || title,
           amount: aiAmount,
+          teacherAccessCode,
         }),
       });
 
@@ -99,7 +102,11 @@ export default function ExerciseForm({
 
       const data = await response.json();
       if (data.content.startsWith("ERROR:")) {
-        setAiError(t("aiGenerationFailed"));
+        if (data.content.includes("limit")) {
+          setAiError(data.content.replace("ERROR: ", ""));
+        } else {
+          setAiError(t("aiGenerationFailed"));
+        }
       } else {
         setBulkInput(data.content);
       }
