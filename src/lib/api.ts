@@ -1,9 +1,10 @@
+export const DEFAULT_API_URL = "http://localhost:8080";
 export function getApiUrl(path: string): string {
     const normalizedPath = path.startsWith('/') ? path : `/${path}`;
     
     // Server-side: need absolute URL
     if (typeof window === 'undefined') {
-        const apiUrl = process.env.API_URL || "http://localhost:8080";
+        const apiUrl = process.env.API_URL || DEFAULT_API_URL;
         // If it already starts with /api, don't duplicate it if apiUrl includes /api
         const cleanPath = normalizedPath.startsWith('/api') ? normalizedPath.substring(4) : normalizedPath;
         const baseApiUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;

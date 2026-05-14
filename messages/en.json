@@ -50,10 +50,13 @@
     "bulkInputPlaceholderMultipleChoice": "No [hables] '{'hablas|hables|hablar'}' tan rápido.\nMañana [iremos] '{'vamos|iremos|fuimos'}' al cine.",
     "bulkInputHelper": "One exercise per line: Text with [answers] (optional hints)",
     "bulkInputHelperMultipleChoice": "One exercise per line: Text with [correct answer] '{'option1|option2|option3'}'",
-    "generateWithAI": "Or generate them with AI. Edit the topic after pasting.",
+    "generateWithAI": "Generate exercises with AI. Enter a topic in the title for better results.",
+    "generateAI": "Generate with AI",
+    "generatingAI": "Generating...",
     "copyAIPrompt": "Copy AI prompt",
-    "aiPromptFillGap": "Generate 10 Argentine Spanish sentences about [TOPIC] for language practice where students fill in the blanks. \nUse the format: Sentence with [answer] (base_verb_or_hint). \nExample: Mañana [iremos] (nosotros, ir) al cine.\nFocus on common daily situations and Argentine vocabulary.",
-    "aiPromptMultipleChoice": "Generate 10 Argentine Spanish sentences about [TOPIC] for multiple choice practice. \nUse the format: Sentence with [correct answer] '{'option1|option2|option3'}'. \nExample: No [hables] '{'hablas|hables|hablar'}' tan rápido.\nFocus on common daily situations and Argentine vocabulary.",
+    "aiTopicLabel": "Topic (optional)",
+    "aiTopicPlaceholder": "e.g. preterito indefinido",
+    "aiAmountLabel": "Amount of sentences",
     "exerciseType": "Exercise Type",
     "typeFillInBlank": "Fill in the gaps",
     "typeMultipleChoice": "Multiple Choice",
@@ -62,7 +65,8 @@
     "validationErrorMultipleChoice": "Line {line}: Multiple choice exercise must have options in {}.",
     "failedToLoad": "Failed to load exercise",
     "failedToUpdate": "Failed to update exercise",
-    "somethingWentWrong": "Something went wrong"
+    "somethingWentWrong": "Something went wrong",
+    "aiGenerationFailed": "We couldn't generate the exercises right now. Please try again or use the manual prompt copy."
   },
   "Results": {
     "title": "Results",

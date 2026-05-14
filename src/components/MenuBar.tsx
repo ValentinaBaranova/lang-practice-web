@@ -18,6 +18,10 @@ export default function MenuBar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [teacherName, setTeacherName] = useState<string | null>(null);
 
+  if (!accessCode && teacherName !== null) {
+    setTeacherName(null);
+  }
+
   const switchLocale = (newLocale: string) => {
     router.replace(pathname, {locale: newLocale as (typeof routing.locales)[number]});
     setIsOpen(false);
@@ -53,10 +57,9 @@ export default function MenuBar() {
           }
         });
       return () => abortController.abort();
-    } else {
-      setTeacherName(null);
     }
   }, [accessCode]);
+
 
   const languages = [
     { code: 'en', label: 'English' },

@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { ExerciseType, ExerciseVisibility } from "@/app/types/exercise";
 import { useTranslations } from "next-intl";
-import { Save, Copy, Check } from "lucide-react";
+import { Save, Sparkles, Copy, Check } from "lucide-react";
+import { getApiUrl } from "@/lib/api";
 
 interface ExerciseFormProps {
   initialTitle?: string;
@@ -45,16 +46,68 @@ export default function ExerciseForm({
   const [visibility, setVisibility] = useState<ExerciseVisibility>(initialVisibility);
   const [bulkInput, setBulkInput] = useState(initialBulkInput);
   const [localError, setLocalError] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [aiTopic, setAiTopic] = useState("");
+  const [aiAmount, setAiAmount] = useState(10);
+  const [isCopying, setIsCopying] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
 
-  const handleCopyPrompt = () => {
-    const prompt = type === ExerciseType.MULTIPLE_CHOICE 
-      ? t("aiPromptMultipleChoice") 
-      : t("aiPromptFillGap");
-    
-    navigator.clipboard.writeText(prompt);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopyPrompt = async () => {
+    setIsCopying(true);
+    setAiError(null);
+    try {
+      const topicParam = aiTopic || title || "preterito indefinido";
+      const response = await fetch(
+        getApiUrl(`/api/ai/build-exercise-prompt?type=${type}&topic=${encodeURIComponent(topicParam)}&amount=${aiAmount}`)
+      );
+      if (!response.ok) throw new Error();
+      const data = await response.json();
+      
+      const prompt = data.prompt;
+
+      await navigator.clipboard.writeText(prompt);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setAiError(t("somethingWentWrong"));
+    } finally {
+      setIsCopying(false);
+    }
+  };
+
+  const handleGenerateAI = async () => {
+    setIsGenerating(true);
+    setLocalError(null);
+    setAiError(null);
+    try {
+      const response = await fetch(getApiUrl("/api/ai/generate"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type,
+          topic: aiTopic || title,
+          amount: aiAmount,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(t("somethingWentWrong"));
+      }
+
+      const data = await response.json();
+      if (data.content.startsWith("ERROR:")) {
+        setAiError(t("aiGenerationFailed"));
+      } else {
+        setBulkInput(data.content);
+      }
+    } catch {
+      setAiError(t("somethingWentWrong"));
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -163,18 +216,71 @@ export default function ExerciseForm({
                     ? t("bulkInputHelperMultipleChoice")
                     : t("bulkInputHelper")}
                 </p>
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="text-xs text-slate-400 italic">
-                    {t("generateWithAI")}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={handleCopyPrompt}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-all"
-                  >
-                    {copied ? <Check className="w-3.5 h-3.5 text-green-600" /> : <Copy className="w-3.5 h-3.5" />}
-                    {t("copyAIPrompt")}
-                  </button>
+                <div className="flex flex-col gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="aiTopic" className="block text-xs font-semibold text-slate-700 mb-1">
+                        {t("aiTopicLabel")}
+                      </label>
+                      <input
+                        id="aiTopic"
+                        type="text"
+                        className="input-field py-1.5 text-xs"
+                        placeholder={t("aiTopicPlaceholder")}
+                        value={aiTopic}
+                        onChange={(e) => setAiTopic(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="aiAmount" className="block text-xs font-semibold text-slate-700 mb-1">
+                        {t("aiAmountLabel")}
+                      </label>
+                      <input
+                        id="aiAmount"
+                        type="number"
+                        min="1"
+                        max="50"
+                        className="input-field py-1.5 text-xs"
+                        value={aiAmount}
+                        onChange={(e) => setAiAmount(parseInt(e.target.value) || 0)}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={handleGenerateAI}
+                      disabled={isGenerating}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                    >
+                      {isGenerating ? (
+                        <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      ) : (
+                        <Sparkles className="w-3.5 h-3.5" />
+                      )}
+                      {isGenerating ? t("generatingAI") : t("generateAI")}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleCopyPrompt}
+                      disabled={isCopying}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200 transition-all shadow-sm disabled:opacity-50"
+                    >
+                      {isCopying ? (
+                        <div className="w-3.5 h-3.5 border-2 border-slate-300 border-t-slate-600 rounded-full animate-spin" />
+                      ) : copied ? (
+                        <Check className="w-3.5 h-3.5 text-green-600" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
+                      {t("copyAIPrompt")}
+                    </button>
+                  </div>
+                  {aiError && (
+                    <div className="text-xs text-red-600 font-medium bg-red-50 p-2 rounded-lg border border-red-100 animate-in fade-in slide-in-from-top-1 duration-200">
+                      {aiError}
+                    </div>
+                  )}
                 </div>
               </div>
 

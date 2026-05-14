@@ -50,10 +50,13 @@
     "bulkInputPlaceholderMultipleChoice": "No [hables] '{'hablas|hables|hablar'}' tan rápido.\nMañana [iremos] '{'vamos|iremos|fuimos'}' al cine.",
     "bulkInputHelper": "Un ejercicio por línea: Texto con [respuestas] (pistas opcionales)",
     "bulkInputHelperMultipleChoice": "Un ejercicio por línea: Texto con [respuesta correcta] '{'opción1|opción2|opción3'}'",
-    "generateWithAI": "O genérelos con IA. Edite el tema después de pegar.",
+    "generateWithAI": "Genera ejercicios con IA. Indica un tema en el título para mejores resultados.",
+    "generateAI": "Generar con IA",
+    "generatingAI": "Generando...",
     "copyAIPrompt": "Copiar prompt de IA",
-    "aiPromptFillGap": "Genera 10 oraciones en español argentino sobre [TOPIC] para practicar el idioma donde los estudiantes completen los espacios en blanco. \nUsa el formato: Oración con [respuesta] (verbo_en_infinitivo_o_pista). \nEjemplo: Mañana [iremos] (nosotros, ir) al cine.\nEnfócate en situaciones cotidianas comunes y vocabulario argentino.",
-    "aiPromptMultipleChoice": "Genera 10 oraciones en español argentino sobre [TOPIC] para practicar la opción múltiple. \nUsa el formato: Oración con [respuesta correcta] '{'opción1|opción2|opción3'}'. \nEjemplo: No [hables] '{'opción1|opción2|opción3'}'. \nEnfócate en situaciones cotidianas comunes y vocabulario argentino.",
+    "aiTopicLabel": "Tema (opcional)",
+    "aiTopicPlaceholder": "ej. preterito indefinido",
+    "aiAmountLabel": "Cantidad de oraciones",
     "exerciseType": "Tipo de Ejercicio",
     "typeFillInBlank": "Completar los huecos",
     "typeMultipleChoice": "Opción Múltiple",
@@ -62,7 +65,8 @@
     "validationErrorMultipleChoice": "Línea {line}: El ejercicio de opción múltiple debe tener opciones entre {}.",
     "failedToLoad": "Error al cargar el ejercicio",
     "failedToUpdate": "Error al actualizar el ejercicio",
-    "somethingWentWrong": "Algo salió mal"
+    "somethingWentWrong": "Algo salió mal",
+    "aiGenerationFailed": "No pudimos generar los ejercicios en este momento. Por favor, intenta de nuevo o usa la copia manual del prompt."
   },
   "Results": {
     "title": "Resultados",
