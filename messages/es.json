@@ -108,6 +108,9 @@
     "results": "Resultados",
     "edit": "Editar",
     "footerDescription": "Comparte tus ejercicios con los alumnos y sigue su progreso.",
+    "teacherNotFound": "Profesor no encontrado",
+    "checkAccessCode": "El código de acceso que utilizaste no es válido o ya no existe. Por favor, compruébalo e inténtalo de nuevo.",
+    "backToHome": "Volver al inicio",
     "time": {
       "justNow": "recién",
       "m": "{count}m",

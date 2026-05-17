@@ -108,6 +108,9 @@
     "results": "Results",
     "edit": "Edit",
     "footerDescription": "Share your exercises with students and track their progress.",
+    "teacherNotFound": "Teacher not found",
+    "checkAccessCode": "The access code you used is invalid or no longer exists. Please check it and try again.",
+    "backToHome": "Back to home",
     "time": {
       "justNow": "just now",
       "m": "{count}m",

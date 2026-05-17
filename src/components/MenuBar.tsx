@@ -5,6 +5,7 @@ import {useLocale, useTranslations} from 'next-intl';
 import {Link, usePathname, useRouter, routing} from '@/routing';
 import { Globe, MessageSquare, ChevronDown, Check, User } from 'lucide-react';
 import { useParams } from 'next/navigation';
+import { getApiUrl } from '@/lib/api';
 
 export default function MenuBar() {
   const locale = useLocale();
@@ -40,19 +41,25 @@ export default function MenuBar() {
   useEffect(() => {
     if (accessCode) {
       const abortController = new AbortController();
-      fetch(`/api/teachers/${accessCode}`, { signal: abortController.signal })
+      fetch(getApiUrl(`/api/teachers/${accessCode}`), { signal: abortController.signal })
         .then(res => {
-          if (!res.ok) throw new Error('Teacher not found');
+          if (res.status === 404) return null;
+          if (!res.ok) throw new Error('Failed to fetch teacher');
           return res.json();
         })
         .then(data => {
-          if (data.name) {
+          if (data && data.name) {
             setTeacherName(data.name);
+          } else {
+            setTeacherName(null);
           }
         })
         .catch(err => {
           if (err.name !== 'AbortError') {
-            console.error('Failed to fetch teacher info', err);
+            // Only log actual errors, not 404s
+            if (err.message !== 'Failed to fetch teacher') {
+               console.error('Failed to fetch teacher info', err);
+            }
             setTeacherName(null);
           }
         });
