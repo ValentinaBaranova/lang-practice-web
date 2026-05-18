@@ -19,8 +19,31 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Language Practice",
-  description: "Improve your language skills",
+  title: "Language Exercises",
+  description: "Create and share interactive Argentine Spanish grammar exercises.",
+  metadataBase: new URL("https://language-exercises.com"),
+  openGraph: {
+    title: "Language Exercises",
+    description: "Create and share interactive Argentine Spanish grammar exercises.",
+    url: "https://language-exercises.com",
+    siteName: "Language Exercises",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1731,
+        height: 909,
+        alt: "Language Exercises",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Language Exercises",
+    description: "Create and share interactive Argentine Spanish grammar exercises.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default async function RootLayout({
