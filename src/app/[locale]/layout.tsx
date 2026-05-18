@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     siteName: "Language Exercises",
     images: [
       {
-        url: "/og-image.png",
+        url: "https://language-exercises.com/og-image.png",
         width: 1731,
         height: 909,
         alt: "Language Exercises",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Language Exercises",
     description: "Create and share interactive Argentine Spanish grammar exercises.",
-    images: ["/og-image.png"],
+    images: ["https://language-exercises.com/og-image.png"],
   },
 };
 
