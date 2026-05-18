@@ -85,7 +85,7 @@ export default function Home() {
     <div className="page-container">
       <div className="content-wrapper">
         {/* Hero Section */}
-        <div className="text-center py-8 px-4">
+        <div className="text-center py-4 md:py-6 px-4">
           <div className="flex justify-center mb-4">
             <div className="bg-indigo-600 p-2.5 rounded-xl shadow-lg shadow-indigo-200">
               <BookOpen className="w-8 h-8 text-white" />
@@ -100,7 +100,7 @@ export default function Home() {
         </div>
 
         {/* Public Exercises */}
-        <div className="mt-4 mb-10">
+        <div className="mt-4 mb-6">
           <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
             <span className="w-1 h-6 bg-indigo-600 rounded-full"></span>
             {t("publicExercises")}
@@ -130,7 +130,7 @@ export default function Home() {
         </div>
 
         {/* Action Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10 opacity-90 scale-[0.98] origin-top">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6 opacity-90 scale-[0.98] origin-top">
           <div className="card p-5 flex flex-col items-start gap-3">
             <div className="bg-indigo-50 p-2.5 rounded-lg">
               <PlusCircle className="w-6 h-6 text-indigo-600" />

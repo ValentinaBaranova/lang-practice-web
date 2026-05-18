@@ -14,7 +14,7 @@
 
 @layer components {
   .page-container {
-    @apply flex-grow bg-slate-50/50 pb-4 md:pb-8;
+    @apply flex-grow bg-slate-50/50;
   }
 
   .content-wrapper {
