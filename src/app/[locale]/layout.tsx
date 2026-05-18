@@ -20,11 +20,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Language Exercises",
-  description: "Create and share interactive Argentine Spanish grammar exercises.",
+  description: "Create and share interactive grammar exercises.",
   metadataBase: new URL("https://language-exercises.com"),
   openGraph: {
     title: "Language Exercises",
-    description: "Create and share interactive Argentine Spanish grammar exercises.",
+    description: "Create and share interactive grammar exercises.",
     url: "https://language-exercises.com",
     siteName: "Language Exercises",
     images: [
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Language Exercises",
-    description: "Create and share interactive Argentine Spanish grammar exercises.",
+    description: "Create and share interactive grammar exercises.",
     images: ["https://language-exercises.com/og-image.png"],
   },
 };

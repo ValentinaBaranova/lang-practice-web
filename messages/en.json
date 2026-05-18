@@ -1,6 +1,6 @@
 {
   "HomePage": {
-    "title": "Create interactive exercises to practice Argentine Spanish",
+    "title": "Create interactive exercises to practice any language",
     "subtitle": "Share them with students or practice with public exercises.",
     "createWorkspace": "Create exercises",
     "createWorkspaceTitle": "Create exercises and receive an access code",
@@ -20,6 +20,7 @@
     "goToWorkspace": "Enter"
   },
   "Navigation": {
+    "title": "Language Exercises",
     "home": "Home",
     "teachers": "Teachers",
     "teacher": "Teacher"

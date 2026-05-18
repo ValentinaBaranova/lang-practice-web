@@ -1,6 +1,6 @@
 {
   "HomePage": {
-    "title": "Crea ejercicios interactivos para practicar español argentino",
+    "title": "Crea ejercicios interactivos para practicar cualquier idioma",
     "subtitle": "Compártelos con estudiantes o practica con ejercicios públicos.",
     "createWorkspace": "Crear ejercicios",
     "createWorkspaceTitle": "Crear ejercicios y recibir un código de acceso",
@@ -20,6 +20,7 @@
     "goToWorkspace": "Entrar"
   },
   "Navigation": {
+    "title": "Ejercicios de idiomas",
     "home": "Inicio",
     "teachers": "Profesores",
     "teacher": "Profesor/a"

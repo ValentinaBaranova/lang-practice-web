@@ -82,7 +82,7 @@ export default function MenuBar() {
               <MessageSquare className="w-5 h-5 text-white fill-white" />
             </div>
             <Link href="/" className="text-xl font-extrabold text-slate-900">
-              LangPractice
+              {t('title')}
             </Link>
           </div>
           <div className="flex items-center gap-4 sm:gap-6">
