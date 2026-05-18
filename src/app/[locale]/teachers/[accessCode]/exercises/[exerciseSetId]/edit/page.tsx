@@ -3,7 +3,7 @@
 import { use, useState, useEffect } from "react";
 import { useRouter, Link } from "@/routing";
 import { useTranslations } from "next-intl";
-import { Question, ExerciseType, ExerciseVisibility, ExerciseFormData } from "@/app/types/exercise";
+import { Question, ExerciseVisibility, ExerciseFormData } from "@/app/types/exercise";
 import { ArrowLeft } from "lucide-react";
 import ExerciseForm from "@/components/ExerciseForm";
 

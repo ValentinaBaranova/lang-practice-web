@@ -2,7 +2,7 @@
 
 import { use, useState } from "react";
 import { useRouter, Link } from "@/routing";
-import { ExerciseType, ExerciseVisibility, ExerciseFormData } from "@/app/types/exercise";
+import { ExerciseFormData } from "@/app/types/exercise";
 import { useTranslations } from "next-intl";
 import { ArrowLeft } from "lucide-react";
 import ExerciseForm from "@/components/ExerciseForm";
