@@ -107,7 +107,7 @@ export default function PracticePage({
   }, [exercise, isLoading]);
 
   const handleSubmitAnswer = useCallback(async () => {
-    if (!attemptId || !exercise || isSubmitting) return;
+    if (!attemptId || !exercise || !exercise.questions || isSubmitting) return;
 
     const currentQuestion = exercise.questions[currentQuestionIndex];
     const questionAnswers = answers[currentQuestionIndex];
@@ -154,7 +154,7 @@ export default function PracticePage({
   }, [attemptId, exercise, isSubmitting, currentQuestionIndex, answers, results, tEdit]);
 
   const handleNext = useCallback(() => {
-    if (exercise && currentQuestionIndex < exercise.questions.length - 1) {
+    if (exercise && exercise.questions && currentQuestionIndex < exercise.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       setIsFinished(true);
@@ -167,7 +167,7 @@ export default function PracticePage({
     }
   };
 
-  const currentQuestion = exercise?.questions[currentQuestionIndex];
+  const currentQuestion = exercise?.questions?.[currentQuestionIndex];
   const isSubmitted = results[currentQuestionIndex] !== null;
 
   useEffect(() => {
@@ -282,7 +282,7 @@ export default function PracticePage({
             
             <div className="bg-slate-50/80 rounded-2xl p-6 md:p-8 mb-6 md:mb-8 border border-slate-100">
               <p className="text-4xl md:text-5xl font-bold text-slate-900 mb-1 md:mb-2">
-                {correctAnswersCount} <span className="text-xl md:text-2xl text-slate-400">/ {exercise.questions.length}</span>
+                {correctAnswersCount} <span className="text-xl md:text-2xl text-slate-400">/ {exercise.questions?.length || 0}</span>
               </p>
               <p className="text-slate-500 font-bold uppercase tracking-wider text-xs md:text-sm">{t("correct")}</p>
             </div>
@@ -305,7 +305,7 @@ export default function PracticePage({
             <span className="text-[10px] md:text-xs font-bold text-slate-500 bg-white px-2 py-1 md:px-3 md:py-1.5 rounded-lg border border-slate-100 shadow-sm whitespace-nowrap">
               {t("questionProgress", {
                 current: currentQuestionIndex + 1,
-                total: exercise.questions.length,
+                total: exercise.questions?.length || 0,
               })}
             </span>
           </div>
@@ -353,7 +353,7 @@ export default function PracticePage({
                   onClick={handleNext}
                   className="btn-primary px-4 md:px-8"
                 >
-                  {currentQuestionIndex === exercise.questions.length - 1 ? t("finish") : t("next")}
+                  {currentQuestionIndex === (exercise.questions?.length || 0) - 1 ? t("finish") : t("next")}
                 </button>
               )}
             </div>

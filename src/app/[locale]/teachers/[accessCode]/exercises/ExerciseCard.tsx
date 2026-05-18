@@ -4,16 +4,10 @@ import { Link, useRouter } from "@/routing";
 import { Link as LinkIcon, BarChart2 } from 'lucide-react';
 
 import { useTranslations } from "next-intl";
+import { ExerciseSetResponse } from "@/app/types/api";
 
 interface ExerciseCardProps {
-  exercise: {
-    id: string;
-    title: string;
-    type: string;
-    shareSlug: string;
-    createdAt: string;
-    questions?: { prompt: string }[];
-  };
+  exercise: ExerciseSetResponse;
   accessCode?: string;
   isPublic?: boolean;
 }
@@ -109,7 +103,7 @@ export function ExerciseCard({ exercise, accessCode, isPublic = false }: Exercis
             </span>
             <span className="text-slate-300 text-[10px]">•</span>
             <span className="text-slate-500 text-xs whitespace-nowrap font-medium">{t('questionsCount', { count: exercise.questions?.length || 0 })}</span>
-            {!isPublic && (
+            {!isPublic && exercise.createdAt && (
               <>
                 <span className="text-slate-300 text-[10px]">•</span>
                 <span className="text-slate-500 text-xs whitespace-nowrap font-medium">
