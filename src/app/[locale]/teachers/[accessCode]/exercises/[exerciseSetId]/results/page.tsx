@@ -4,21 +4,7 @@ import { use, useState, useEffect } from "react";
 import { Link } from "@/routing";
 import { useTranslations } from "next-intl";
 import { ArrowLeft } from "lucide-react";
-
-interface AttemptResponse {
-  id: string;
-  exerciseSetId: string;
-  studentName: string;
-  totalQuestions: number;
-  answeredQuestions: number;
-  correctAnswers: number;
-}
-
-interface ExerciseSetResponse {
-  id: string;
-  title: string;
-  type: string;
-}
+import { ExerciseSetResponse, AttemptResponse } from "@/app/types/api";
 
 export default function ResultsPage({
   params,

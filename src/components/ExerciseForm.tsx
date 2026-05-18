@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ExerciseType, ExerciseVisibility } from "@/app/types/exercise";
+import { ExerciseType, ExerciseVisibility, ExerciseFormData } from "@/app/types/exercise";
 import { useTranslations } from "next-intl";
 import { Save, Sparkles, Copy, Check } from "lucide-react";
 import { getApiUrl } from "@/lib/api";
@@ -12,12 +12,7 @@ interface ExerciseFormProps {
   initialVisibility?: ExerciseVisibility;
   initialBulkInput?: string;
   teacherAccessCode: string;
-  onSubmit: (data: {
-    title: string;
-    type: ExerciseType;
-    visibility: ExerciseVisibility;
-    bulkInput: string;
-  }) => Promise<void>;
+  onSubmit: (data: ExerciseFormData) => Promise<void>;
   isSubmitting: boolean;
   submitButtonText: string;
   submittingButtonText: string;

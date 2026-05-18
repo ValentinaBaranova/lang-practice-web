@@ -23,3 +23,10 @@ export interface ExerciseSetDto {
   visibility: ExerciseVisibility;
   questions: Question[];
 }
+
+export interface ExerciseFormData {
+  title: string;
+  type: ExerciseType;
+  visibility: ExerciseVisibility;
+  bulkInput: string;
+}

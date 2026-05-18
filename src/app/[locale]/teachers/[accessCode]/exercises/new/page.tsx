@@ -2,7 +2,7 @@
 
 import { use, useState } from "react";
 import { useRouter, Link } from "@/routing";
-import { ExerciseType, ExerciseVisibility } from "@/app/types/exercise";
+import { ExerciseType, ExerciseVisibility, ExerciseFormData } from "@/app/types/exercise";
 import { useTranslations } from "next-intl";
 import { ArrowLeft } from "lucide-react";
 import ExerciseForm from "@/components/ExerciseForm";
@@ -20,12 +20,7 @@ export default function NewExercisePage({
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
 
-  const handleSubmit = async (data: {
-    title: string;
-    type: ExerciseType;
-    visibility: ExerciseVisibility;
-    bulkInput: string;
-  }) => {
+  const handleSubmit = async (data: ExerciseFormData) => {
     setIsSubmitting(true);
     setError(null);
     setErrors([]);

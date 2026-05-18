@@ -5,21 +5,10 @@ import { useTranslations } from "next-intl";
 import { BookOpen, PlusCircle, Key, ArrowRight, Copy, Check, X } from 'lucide-react';
 import { ExerciseCard } from "./teachers/[accessCode]/exercises/ExerciseCard";
 import { getApiUrl } from "@/lib/api";
-import { ExerciseType } from "@/app/types/exercise";
+import { ExerciseSetResponse, PaginatedResponse } from "@/app/types/api";
 import { useRouter } from "@/routing";
 
-interface ExerciseSetResponse {
-  id: string;
-  teacherAccessCode: string;
-  teacherName: string;
-  title: string;
-  type: ExerciseType;
-  shareSlug: string;
-  createdAt: string;
-  questions?: { prompt: string }[];
-}
-
-async function getPublicExercises(): Promise<ExerciseSetResponse[]> {
+async function getPublicExercises(): Promise<PaginatedResponse<ExerciseSetResponse>> {
   const res = await fetch(getApiUrl(`/api/exercises/public`), {
     cache: 'no-store'
   });
@@ -48,7 +37,7 @@ export default function Home() {
 
   useEffect(() => {
     getPublicExercises()
-      .then(setExercises)
+      .then(res => setExercises(res.content))
       .catch(err => console.error(err))
       .finally(() => setIsLoading(false));
   }, []);

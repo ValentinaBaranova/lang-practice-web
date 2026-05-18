@@ -1,24 +1,13 @@
 import { Link } from "@/routing";
 import { use } from "react";
-import { ExerciseType } from "@/app/types/exercise";
 import { useTranslations } from "next-intl";
-import { Plus, BookOpen } from 'lucide-react';
+import { Plus, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ExerciseCard } from "./ExerciseCard";
 import { getApiUrl } from "@/lib/api";
+import { ExerciseSetResponse, PaginatedResponse } from "@/app/types/api";
 
-interface ExerciseSetResponse {
-  id: string;
-  teacherAccessCode: string;
-  teacherName: string;
-  title: string;
-  type: ExerciseType;
-  shareSlug: string;
-  createdAt: string;
-  questions?: { prompt: string }[];
-}
-
-async function getExercises(accessCode: string): Promise<ExerciseSetResponse[] | null> {
-  const res = await fetch(getApiUrl(`/api/exercise-sets?accessCode=${accessCode}`), {
+async function getExercises(accessCode: string, page: number = 0): Promise<PaginatedResponse<ExerciseSetResponse> | null> {
+  const res = await fetch(getApiUrl(`/api/exercise-sets?accessCode=${accessCode}&page=${page}&size=10`), {
     cache: 'no-store'
   });
   
@@ -34,14 +23,18 @@ async function getExercises(accessCode: string): Promise<ExerciseSetResponse[] |
 
 export default function ExercisesPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ accessCode: string; locale: string }>;
+  searchParams: Promise<{ page?: string }>;
 }) {
   const { accessCode } = use(params);
-  const exercises = use(getExercises(accessCode));
+  const { page } = use(searchParams);
+  const currentPage = parseInt(page || '0', 10);
+  const response = use(getExercises(accessCode, currentPage));
   const t = useTranslations("TeacherExercises");
 
-  if (exercises === null) {
+  if (response === null) {
     return (
       <div className="page-container">
         <div className="content-wrapper py-20 text-center">
@@ -77,20 +70,66 @@ export default function ExercisesPage({
           </Link>
         </div>
         
-        {exercises.length === 0 ? (
+        {response.content.length === 0 ? (
           <div className="card p-12 text-center">
              <p className="text-slate-400 text-lg font-medium">{t('noExercises')}</p>
           </div>
         ) : (
-          <div className="flex flex-col gap-4">
-            {exercises.map((exercise) => (
-              <ExerciseCard
-                key={exercise.id}
-                exercise={exercise}
-                accessCode={accessCode}
-              />
-            ))}
-        </div>
+          <>
+            <div className="flex flex-col gap-4">
+              {response.content.map((exercise) => (
+                <ExerciseCard
+                  key={exercise.id}
+                  exercise={exercise}
+                  accessCode={accessCode}
+                />
+              ))}
+            </div>
+
+            {response.totalPages > 1 && (
+              <div className="mt-8 flex justify-center items-center gap-2">
+                <Link
+                  href={`/teachers/${accessCode}/exercises?page=${currentPage - 1}`}
+                  className={`p-2 rounded-lg border border-slate-200 transition-colors ${
+                    currentPage === 0 
+                      ? 'pointer-events-none opacity-50 bg-slate-50' 
+                      : 'hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-600'
+                  }`}
+                  aria-disabled={currentPage === 0}
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </Link>
+                
+                <div className="flex items-center gap-1">
+                  {[...Array(response.totalPages)].map((_, i) => (
+                    <Link
+                      key={i}
+                      href={`/teachers/${accessCode}/exercises?page=${i}`}
+                      className={`w-10 h-10 flex items-center justify-center rounded-lg border transition-all ${
+                        currentPage === i
+                          ? 'bg-indigo-600 border-indigo-600 text-white font-bold shadow-sm'
+                          : 'border-slate-200 hover:bg-slate-50 text-slate-600'
+                      }`}
+                    >
+                      {i + 1}
+                    </Link>
+                  ))}
+                </div>
+
+                <Link
+                  href={`/teachers/${accessCode}/exercises?page=${currentPage + 1}`}
+                  className={`p-2 rounded-lg border border-slate-200 transition-colors ${
+                    currentPage >= response.totalPages - 1 
+                      ? 'pointer-events-none opacity-50 bg-slate-50' 
+                      : 'hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-600'
+                  }`}
+                  aria-disabled={currentPage >= response.totalPages - 1}
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </Link>
+              </div>
+            )}
+          </>
       )}
 
       <div className="mt-10 flex items-center justify-center gap-3">

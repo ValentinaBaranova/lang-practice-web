@@ -3,7 +3,7 @@
 import { use, useState, useEffect } from "react";
 import { useRouter, Link } from "@/routing";
 import { useTranslations } from "next-intl";
-import { Question, ExerciseType, ExerciseVisibility } from "@/app/types/exercise";
+import { Question, ExerciseType, ExerciseVisibility, ExerciseFormData } from "@/app/types/exercise";
 import { ArrowLeft } from "lucide-react";
 import ExerciseForm from "@/components/ExerciseForm";
 
@@ -16,12 +16,7 @@ export default function EditExerciseSetPage({
   const router = useRouter();
   const t = useTranslations("EditExercise");
 
-  const [initialData, setInitialData] = useState<{
-    title: string;
-    type: ExerciseType;
-    visibility: ExerciseVisibility;
-    bulkInput: string;
-  } | null>(null);
+  const [initialData, setInitialData] = useState<ExerciseFormData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -55,12 +50,7 @@ export default function EditExerciseSetPage({
     fetchExercise();
   }, [exerciseSetId, t]);
 
-  const handleSubmit = async (data: {
-    title: string;
-    type: ExerciseType;
-    visibility: ExerciseVisibility;
-    bulkInput: string;
-  }) => {
+  const handleSubmit = async (data: ExerciseFormData) => {
     setIsSubmitting(true);
     setError(null);
     setErrors([]);

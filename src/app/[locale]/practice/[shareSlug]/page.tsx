@@ -3,14 +3,9 @@
 import { use, useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "@/routing";
 import { useTranslations } from "next-intl";
-import { ExerciseType, Question, ExerciseSetDto } from "@/app/types/exercise";
+import { ExerciseType, Question } from "@/app/types/exercise";
+import { ExerciseSetResponse } from "@/app/types/api";
 import { ArrowLeft } from "lucide-react";
-
-interface ExerciseResponse extends Omit<ExerciseSetDto, 'teacherAccessCode'> {
-    id: string;
-    teacherName: string;
-    shareSlug: string;
-}
 
 export default function PracticePage({
   params,
@@ -28,7 +23,7 @@ export default function PracticePage({
     return "";
   });
   const [isStarted, setIsStarted] = useState(false);
-  const [exercise, setExercise] = useState<ExerciseResponse | null>(null);
+  const [exercise, setExercise] = useState<ExerciseSetResponse | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
