@@ -136,7 +136,7 @@ export default function Home() {
               <PlusCircle className="w-6 h-6 text-indigo-600" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-900 mb-0.5">{t("createWorkspace")}</h2>
+              <h2 className="text-lg font-bold text-slate-900 mb-0.5">{t("createWorkspaceTitle")}</h2>
               <p className="text-slate-500 text-xs mb-4">{t("createWorkspaceDesc")}</p>
             </div>
             <button 
@@ -180,7 +180,7 @@ export default function Home() {
             {!createdTeacher ? (
               <form onSubmit={handleCreateWorkspace} className="p-6">
                 <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-xl font-bold text-slate-900">{t("createWorkspace")}</h3>
+                  <h3 className="text-xl font-bold text-slate-900">{t("createWorkspaceTitle")}</h3>
                   <button 
                     type="button" 
                     onClick={() => setShowCreateModal(false)}
