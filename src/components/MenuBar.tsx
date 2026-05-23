@@ -18,6 +18,7 @@ export default function MenuBar() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [teacherName, setTeacherName] = useState<string | null>(null);
+  const [studentName, setStudentName] = useState<string | null>(null);
 
   if (!accessCode && teacherName !== null) {
     setTeacherName(null);
@@ -67,6 +68,37 @@ export default function MenuBar() {
     }
   }, [accessCode]);
 
+  // Load student's name from localStorage to display in the menu bar during practice
+  useEffect(() => {
+    const readName = () => {
+      try {
+        const name = typeof window !== 'undefined' ? localStorage.getItem('studentName') : null;
+        setStudentName(name && name.trim() ? name : null);
+      } catch {
+        setStudentName(null);
+      }
+    };
+
+    readName();
+
+    // Keep in sync across tabs/windows
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'studentName') {
+        readName();
+      }
+    };
+    window.addEventListener('storage', onStorage);
+
+    // Also listen for same-tab updates triggered explicitly after setting the name
+    const onSameTabUpdate = () => readName();
+    window.addEventListener('studentNameUpdated', onSameTabUpdate as EventListener);
+
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('studentNameUpdated', onSameTabUpdate as EventListener);
+    };
+  }, []);
+
 
   const languages = [
     { code: 'en', label: 'English' },
@@ -91,6 +123,17 @@ export default function MenuBar() {
                 <User className="w-4 h-4 text-slate-400" />
                 <span className="text-sm font-medium text-slate-600 hidden md:inline">
                   {t('teacher')}: {teacherName}
+                </span>
+              </div>
+            )}
+            {studentName && (
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-slate-100 shadow-sm">
+                <User className="w-4 h-4 text-slate-400" />
+                <span className="text-sm font-semibold text-slate-700 max-w-[40vw] truncate hidden sm:inline">
+                  {studentName}
+                </span>
+                <span className="text-sm font-semibold text-slate-700 sm:hidden truncate max-w-[24vw]">
+                  {studentName}
                 </span>
               </div>
             )}

@@ -16,12 +16,11 @@ export default function PracticePage({
   const t = useTranslations("Practice");
   const tEdit = useTranslations("EditExercise");
 
-  const [studentName, setStudentName] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("studentName") || "";
-    }
-    return "";
-  });
+  // Read once from localStorage on mount to know if we had a prefilled name
+  const initialStoredName = (typeof window !== "undefined" ? (localStorage.getItem("studentName") || "") : "");
+  const [studentName, setStudentName] = useState(initialStoredName);
+  // Track if the current session started with a stored name to avoid switching to the spinner while typing
+  const hadStoredNameOnLoadRef = useRef<boolean>(!!initialStoredName.trim());
   const [isStarted, setIsStarted] = useState(false);
   const [exercise, setExercise] = useState<ExerciseSetResponse | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -87,6 +86,12 @@ export default function PracticePage({
 
       const data = await response.json();
       localStorage.setItem("studentName", nameToUse.trim());
+      // Notify same-tab listeners (e.g., MenuBar) because 'storage' does not fire in the same document
+      try {
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new Event("studentNameUpdated"));
+        }
+      } catch {}
       setAttemptId(data.id);
       setIsStarted(true);
     } catch (err) {
@@ -97,11 +102,20 @@ export default function PracticePage({
   };
 
   useEffect(() => {
-    if (exercise && studentName && !isStarted && !isLoading && !isSubmitting && !error) {
-       const timer = setTimeout(() => {
-         handleStart(undefined, studentName);
-       }, 0);
-       return () => clearTimeout(timer);
+    // Auto-start only if we had a stored name on initial load
+    if (
+      exercise &&
+      hadStoredNameOnLoadRef.current &&
+      studentName &&
+      !isStarted &&
+      !isLoading &&
+      !isSubmitting &&
+      !error
+    ) {
+      const timer = setTimeout(() => {
+        handleStart(undefined, studentName);
+      }, 0);
+      return () => clearTimeout(timer);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [exercise, isLoading]);
@@ -224,6 +238,26 @@ export default function PracticePage({
   }
 
   if (!isStarted) {
+    // Only show the tiny spinner if we had a stored name on initial load
+    const showAutoStartSpinner = hadStoredNameOnLoadRef.current && !!studentName.trim();
+    // If we already have the student's name from storage, auto-start and show only a tiny spinner with no text
+    if (showAutoStartSpinner) {
+      return (
+        <div className="page-container">
+          <div className="content-wrapper flex flex-col pt-8">
+            <Link href="/" className="back-link mb-6">
+              <ArrowLeft className="w-4 h-4" />
+              {t("backToHome")}
+            </Link>
+            <div className="flex justify-center pt-4">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // No stored name: show the regular name entry form
     return (
       <div className="page-container">
         <div className="page-content-narrow">
@@ -236,7 +270,7 @@ export default function PracticePage({
               <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2 md:mb-3">{exercise.title}</h1>
               <p className="text-slate-500">{t("enterName")}</p>
             </div>
-          
+
             <form onSubmit={handleStart} className="space-y-4 md:space-y-6">
               <div>
                 <input
@@ -279,7 +313,12 @@ export default function PracticePage({
               </svg>
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">{t("exerciseCompleted")}</h1>
-            
+            {!!studentName?.trim() && (
+              <p className="text-slate-600 mb-4 md:mb-6 text-center font-medium">
+                {t("wellDone", { name: studentName })}
+              </p>
+            )}
+          
             <div className="bg-slate-50/80 rounded-2xl p-6 md:p-8 mb-6 md:mb-8 border border-slate-100">
               <p className="text-4xl md:text-5xl font-bold text-slate-900 mb-1 md:mb-2">
                 {correctAnswersCount} <span className="text-xl md:text-2xl text-slate-400">/ {exercise.questions?.length || 0}</span>
@@ -301,13 +340,15 @@ export default function PracticePage({
         </Link>
         <div className="card overflow-hidden">
           <div className="px-4 py-4 md:px-6 md:py-6 border-b border-slate-50 bg-slate-50/30 flex justify-between items-center">
-            <h1 className="font-bold text-slate-900 truncate max-w-[70%]">{exercise.title}</h1>
-            <span className="text-[10px] md:text-xs font-bold text-slate-500 bg-white px-2 py-1 md:px-3 md:py-1.5 rounded-lg border border-slate-100 shadow-sm whitespace-nowrap">
-              {t("questionProgress", {
-                current: currentQuestionIndex + 1,
-                total: exercise.questions?.length || 0,
-              })}
-            </span>
+            <h1 className="font-bold text-slate-900 truncate max-w-[60%] md:max-w-[70%]">{exercise.title}</h1>
+            <div className="flex items-center gap-2 md:gap-3">
+              <span className="text-[10px] md:text-xs font-bold text-slate-500 bg-white px-2 py-1 md:px-3 md:py-1.5 rounded-lg border border-slate-100 shadow-sm whitespace-nowrap">
+                {t("questionProgress", {
+                  current: currentQuestionIndex + 1,
+                  total: exercise.questions?.length || 0,
+                })}
+              </span>
+            </div>
           </div>
 
           <div className="p-4 md:p-10">
