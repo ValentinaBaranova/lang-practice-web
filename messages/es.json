@@ -17,7 +17,9 @@
     "yourAccessCode": "Tu código de acceso:",
     "copyCode": "Copiar código",
     "copied": "¡Copiado!",
-    "goToWorkspace": "Entrar"
+    "goToWorkspace": "Entrar",
+    "telegramBot": "Práctica diaria en Telegram",
+    "telegramBotDesc": "Recibe ejercicios diarios para practicar español."
   },
   "Navigation": {
     "title": "Ejercicios de idiomas",

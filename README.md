@@ -67,6 +67,7 @@ Create `.env.local`:
 
 ```properties
 NEXT_PUBLIC_API_URL=http://localhost:8080
+NEXT_PUBLIC_TELEGRAM_BOT_USERNAME=lang_practice_bot
 ```
 
 ### Run

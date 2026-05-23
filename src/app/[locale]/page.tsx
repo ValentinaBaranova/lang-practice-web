@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { BookOpen, PlusCircle, Key, ArrowRight, Copy, Check, X } from 'lucide-react';
+import { BookOpen, PlusCircle, Key, ArrowRight, Copy, Check, X, Send } from 'lucide-react';
 import { ExerciseCard } from "./teachers/[accessCode]/exercises/ExerciseCard";
 import { getApiUrl } from "@/lib/api";
 import { ExerciseSetResponse, PaginatedResponse } from "@/app/types/api";
@@ -130,7 +130,7 @@ export default function Home() {
         </div>
 
         {/* Action Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6 opacity-90 scale-[0.98] origin-top">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-6 opacity-90 scale-[0.98] origin-top">
           <div className="card p-5 flex flex-col items-start gap-3">
             <div className="bg-indigo-50 p-2.5 rounded-lg">
               <PlusCircle className="w-6 h-6 text-indigo-600" />
@@ -141,7 +141,7 @@ export default function Home() {
             </div>
             <button 
               onClick={() => setShowCreateModal(true)}
-              className="btn-primary w-full sm:w-auto py-2 px-6 text-sm"
+              className="btn-primary w-full sm:w-auto py-2 px-6 text-sm mt-auto"
             >
               {t("createWorkspace")}
               <ArrowRight className="w-4 h-4" />
@@ -156,7 +156,7 @@ export default function Home() {
               <h2 className="text-lg font-bold text-slate-900 mb-0.5">{t("alreadyHaveCode")}</h2>
               <p className="text-slate-500 text-xs mb-4">{t("enterCode")}</p>
             </div>
-            <form onSubmit={handleAccessCodeSubmit} className="w-full flex gap-2">
+            <form onSubmit={handleAccessCodeSubmit} className="w-full flex gap-2 mt-auto">
               <input
                 type="text"
                 value={accessCode}
@@ -168,6 +168,25 @@ export default function Home() {
                 {t("submitCode")}
               </button>
             </form>
+          </div>
+
+          <div className="card p-5 flex flex-col items-start gap-3">
+            <div className="bg-sky-50 p-2.5 rounded-lg">
+              <Send className="w-6 h-6 text-sky-600" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-slate-900 mb-0.5">{t("telegramBot")}</h2>
+              <p className="text-slate-500 text-xs mb-4">{t("telegramBotDesc")}</p>
+            </div>
+            <a 
+              href={`https://t.me/${process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || 'lang_practice_bot'}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary w-full sm:w-auto py-2 px-6 text-sm mt-auto"
+            >
+              {t("telegramBot")}
+              <ArrowRight className="w-4 h-4" />
+            </a>
           </div>
         </div>
       </div>
