@@ -98,7 +98,6 @@
     "backToHome": "Volver al inicio",
     "questionProgress": "{current} / {total}",
     "exerciseCompleted": "¡Ejercicio completado!",
-    "wellDone": "¡Bien hecho, {name}!",
     "studentLink": "Enlace para el alumno"
   },
   "TeacherExercises": {

@@ -312,12 +312,7 @@ export default function PracticePage({
                 <path d="M20 6L9 17L4 12" stroke="#10B981" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">{t("exerciseCompleted")}</h1>
-            {!!studentName?.trim() && (
-              <p className="text-slate-600 mb-3 md:mb-6 text-center font-medium">
-                {t("wellDone", { name: studentName })}
-              </p>
-            )}
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">{t("exerciseCompleted")}</h1>
           
             <div className="bg-slate-50/80 rounded-2xl p-4 md:p-8 mb-4 md:mb-8 border border-slate-100">
               <p className="text-4xl md:text-5xl font-bold text-slate-900 mb-1 md:mb-2">

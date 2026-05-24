@@ -98,7 +98,6 @@
     "backToHome": "Back to Home",
     "questionProgress": "{current} / {total}",
     "exerciseCompleted": "Exercise completed!",
-    "wellDone": "Well done, {name}!",
     "studentLink": "Student link"
   },
   "TeacherExercises": {
