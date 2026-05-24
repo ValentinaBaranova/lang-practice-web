@@ -52,15 +52,15 @@
   }
 
   .btn-primary {
-    @apply bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl transition-all flex items-center justify-center gap-2 font-semibold shadow-sm shadow-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-indigo-600 disabled:shadow-none;
+    @apply bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-2 md:py-3 rounded-xl transition-all flex items-center justify-center gap-2 font-semibold shadow-sm shadow-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-indigo-600 disabled:shadow-none;
   }
 
   .btn-secondary {
-    @apply flex items-center justify-center px-8 py-3 bg-white border border-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white;
+    @apply flex items-center justify-center px-8 py-2 md:py-3 bg-white border border-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white;
   }
 
   .btn-ghost {
-    @apply flex items-center justify-center gap-2 font-bold px-5 py-2.5 rounded-xl transition-all text-slate-600 hover:bg-white hover:text-indigo-600 border border-transparent hover:border-slate-100 disabled:text-slate-300 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-transparent;
+    @apply flex items-center justify-center gap-2 font-bold px-5 py-2 md:py-3 rounded-xl transition-all text-slate-500 bg-white/50 border border-slate-200/60 hover:bg-white hover:text-indigo-600 hover:border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white/50 disabled:hover:border-slate-200/60;
   }
 
   .btn-outline {

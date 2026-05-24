@@ -25,7 +25,8 @@
     "title": "Ejercicios de idiomas",
     "home": "Inicio",
     "teachers": "Profesores",
-    "teacher": "Profesor/a"
+    "teacher": "Profesor/a",
+    "shortTitle": "Ejercicios"
   },
   "EditExercise": {
     "title": "Editar Ejercicio",
@@ -93,7 +94,7 @@
     "correctAnswer": "Respuesta correcta: {answer}",
     "finish": "Finalizar",
     "backToHome": "Volver al inicio",
-    "questionProgress": "Pregunta {current} de {total}",
+    "questionProgress": "{current} / {total}",
     "exerciseCompleted": "¡Ejercicio completado!",
     "wellDone": "¡Bien hecho, {name}!",
     "studentLink": "Enlace para el alumno"

@@ -25,7 +25,8 @@
     "title": "Language Exercises",
     "home": "Home",
     "teachers": "Teachers",
-    "teacher": "Teacher"
+    "teacher": "Teacher",
+    "shortTitle": "Exercises"
   },
   "EditExercise": {
     "title": "Edit Exercise",
@@ -93,7 +94,7 @@
     "correctAnswer": "Correct answer: {answer}",
     "finish": "Finish",
     "backToHome": "Back to Home",
-    "questionProgress": "Question {current} of {total}",
+    "questionProgress": "{current} / {total}",
     "exerciseCompleted": "Exercise completed!",
     "wellDone": "Well done, {name}!",
     "studentLink": "Student link"

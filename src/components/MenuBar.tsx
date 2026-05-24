@@ -113,8 +113,10 @@ export default function MenuBar() {
             <div className="bg-indigo-600 p-1.5 rounded-lg">
               <MessageSquare className="w-5 h-5 text-white fill-white" />
             </div>
+            {/* Mobile: show only icon and i18n short title; Desktop: show full title */}
             <Link href="/" className="text-xl font-extrabold text-slate-900">
-              {t('title')}
+              <span className="hidden sm:inline">{t('title')}</span>
+              <span className="sm:hidden">{t('shortTitle')}</span>
             </Link>
           </div>
           <div className="flex items-center gap-4 sm:gap-6">
