@@ -19,6 +19,13 @@ export default function MenuBar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [teacherName, setTeacherName] = useState<string | null>(null);
   const [studentName, setStudentName] = useState<string | null>(null);
+  const [lastAccessCode, setLastAccessCode] = useState(accessCode);
+
+  // Reset teacher name when access code changes or is removed
+  if (accessCode !== lastAccessCode) {
+    setLastAccessCode(accessCode);
+    setTeacherName(null);
+  }
 
   const switchLocale = (newLocale: string) => {
     router.replace(pathname, {locale: newLocale as (typeof routing.locales)[number]});
@@ -36,10 +43,7 @@ export default function MenuBar() {
   }, []);
 
   useEffect(() => {
-    if (!accessCode) {
-      setTeacherName(null);
-      return;
-    }
+    if (!accessCode) return;
 
     const abortController = new AbortController();
     fetch(getApiUrl(`/api/teachers/${accessCode}`), { signal: abortController.signal })
@@ -122,8 +126,8 @@ export default function MenuBar() {
           </div>
           <div className="flex items-center gap-4 sm:gap-6">
             {displayName && (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-slate-100 shadow-sm">
-                <User className="w-4 h-4 text-slate-400" />
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-slate-200">
+                <User className="w-4 h-4 text-slate-400 hidden sm:block" />
                 <span className="text-sm font-semibold text-slate-700 max-w-[40vw] truncate hidden sm:inline">
                   {displayName}
                 </span>
@@ -139,7 +143,6 @@ export default function MenuBar() {
               >
                 <Globe className="w-4 h-4 text-indigo-500" />
                 <span className="hidden sm:inline">{locale === 'en' ? 'English' : 'Español'}</span>
-                <span className="sm:hidden uppercase">{locale}</span>
                 <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
               </button>
 

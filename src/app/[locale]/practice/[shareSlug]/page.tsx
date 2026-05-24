@@ -20,7 +20,7 @@ export default function PracticePage({
   const initialStoredName = (typeof window !== "undefined" ? (localStorage.getItem("studentName") || "") : "");
   const [studentName, setStudentName] = useState(initialStoredName);
   // Track if the current session started with a stored name to avoid switching to the spinner while typing
-  const hadStoredNameOnLoadRef = useRef<boolean>(!!initialStoredName.trim());
+  const [hadStoredNameOnLoad] = useState(!!initialStoredName.trim());
   const [isStarted, setIsStarted] = useState(false);
   const [exercise, setExercise] = useState<ExerciseSetResponse | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -105,7 +105,7 @@ export default function PracticePage({
     // Auto-start only if we had a stored name on initial load
     if (
       exercise &&
-      hadStoredNameOnLoadRef.current &&
+      hadStoredNameOnLoad &&
       studentName &&
       !isStarted &&
       !isLoading &&
@@ -239,7 +239,7 @@ export default function PracticePage({
 
   if (!isStarted) {
     // Only show the tiny spinner if we had a stored name on initial load
-    const showAutoStartSpinner = hadStoredNameOnLoadRef.current && !!studentName.trim();
+    const showAutoStartSpinner = hadStoredNameOnLoad && !!studentName.trim();
     // If we already have the student's name from storage, auto-start and show only a tiny spinner with no text
     if (showAutoStartSpinner) {
       return (
@@ -370,13 +370,14 @@ export default function PracticePage({
           </div>
 
           <div className="px-3 py-2.5 md:px-8 md:py-6 bg-slate-50/30 border-t border-slate-50 flex justify-between items-center">
-            <button
-              onClick={handlePrevious}
-              disabled={currentQuestionIndex === 0}
-              className="btn-ghost"
-            >
-              {t("previous")}
-            </button>
+            {currentQuestionIndex > 0 ? (
+              <button
+                onClick={handlePrevious}
+                className="btn-ghost"
+              >
+                {t("previous")}
+              </button>
+            ) : <div />}
             
             <div className="flex gap-2 md:gap-4">
               {!isSubmitted ? (
