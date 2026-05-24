@@ -206,7 +206,7 @@ export default function PracticePage({
   if (isLoading) {
     return (
       <div className="page-container">
-        <div className="content-wrapper flex flex-col pt-8">
+        <div className="page-content-narrow">
           <Link href="/" className="back-link">
             <ArrowLeft className="w-4 h-4" />
             {t("backToHome")}
@@ -222,7 +222,7 @@ export default function PracticePage({
   if (error || !exercise || (isStarted && !isFinished && !currentQuestion)) {
     return (
       <div className="page-container">
-        <div className="content-wrapper">
+        <div className="page-content-narrow">
           <Link href="/" className="back-link">
             <ArrowLeft className="w-4 h-4" />
             {t("backToHome")}
@@ -244,7 +244,7 @@ export default function PracticePage({
     if (showAutoStartSpinner) {
       return (
         <div className="page-container">
-          <div className="content-wrapper flex flex-col pt-8">
+          <div className="page-content-narrow">
             <Link href="/" className="back-link">
               <ArrowLeft className="w-4 h-4" />
               {t("backToHome")}
