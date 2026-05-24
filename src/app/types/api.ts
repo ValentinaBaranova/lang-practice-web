@@ -28,3 +28,10 @@ export interface AttemptResponse {
   answeredQuestions: number;
   correctAnswers: number;
 }
+
+export interface TeacherResponse {
+  accessCode: string;
+  name: string;
+  createdAt?: string;
+  updatedAt?: string;
+}

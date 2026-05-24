@@ -20,10 +20,6 @@ export default function MenuBar() {
   const [teacherName, setTeacherName] = useState<string | null>(null);
   const [studentName, setStudentName] = useState<string | null>(null);
 
-  if (!accessCode && teacherName !== null) {
-    setTeacherName(null);
-  }
-
   const switchLocale = (newLocale: string) => {
     router.replace(pathname, {locale: newLocale as (typeof routing.locales)[number]});
     setIsOpen(false);
@@ -40,32 +36,35 @@ export default function MenuBar() {
   }, []);
 
   useEffect(() => {
-    if (accessCode) {
-      const abortController = new AbortController();
-      fetch(getApiUrl(`/api/teachers/${accessCode}`), { signal: abortController.signal })
-        .then(res => {
-          if (res.status === 404) return null;
-          if (!res.ok) throw new Error('Failed to fetch teacher');
-          return res.json();
-        })
-        .then(data => {
-          if (data && data.name) {
-            setTeacherName(data.name);
-          } else {
-            setTeacherName(null);
-          }
-        })
-        .catch(err => {
-          if (err.name !== 'AbortError') {
-            // Only log actual errors, not 404s
-            if (err.message !== 'Failed to fetch teacher') {
-               console.error('Failed to fetch teacher info', err);
-            }
-            setTeacherName(null);
-          }
-        });
-      return () => abortController.abort();
+    if (!accessCode) {
+      setTeacherName(null);
+      return;
     }
+
+    const abortController = new AbortController();
+    fetch(getApiUrl(`/api/teachers/${accessCode}`), { signal: abortController.signal })
+      .then(res => {
+        if (res.status === 404) return null;
+        if (!res.ok) throw new Error('Failed to fetch teacher');
+        return res.json();
+      })
+      .then(data => {
+        if (data && data.name) {
+          setTeacherName(data.name);
+        } else {
+          setTeacherName(null);
+        }
+      })
+      .catch(err => {
+        if (err.name !== 'AbortError') {
+          // Only log actual errors, not 404s
+          if (err.message !== 'Failed to fetch teacher') {
+             console.error('Failed to fetch teacher info', err);
+          }
+          setTeacherName(null);
+        }
+      });
+    return () => abortController.abort();
   }, [accessCode]);
 
   // Load student's name from localStorage to display in the menu bar during practice
@@ -105,6 +104,8 @@ export default function MenuBar() {
     { code: 'es', label: 'Español' }
   ];
 
+  const displayName = teacherName || studentName;
+
   return (
     <nav className="bg-white border-b border-gray-100 relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -120,22 +121,14 @@ export default function MenuBar() {
             </Link>
           </div>
           <div className="flex items-center gap-4 sm:gap-6">
-            {teacherName && (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-full border border-slate-100">
-                <User className="w-4 h-4 text-slate-400" />
-                <span className="text-sm font-medium text-slate-600 hidden md:inline">
-                  {t('teacher')}: {teacherName}
-                </span>
-              </div>
-            )}
-            {studentName && (
+            {displayName && (
               <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-slate-100 shadow-sm">
                 <User className="w-4 h-4 text-slate-400" />
                 <span className="text-sm font-semibold text-slate-700 max-w-[40vw] truncate hidden sm:inline">
-                  {studentName}
+                  {displayName}
                 </span>
                 <span className="text-sm font-semibold text-slate-700 sm:hidden truncate max-w-[24vw]">
-                  {studentName}
+                  {displayName}
                 </span>
               </div>
             )}

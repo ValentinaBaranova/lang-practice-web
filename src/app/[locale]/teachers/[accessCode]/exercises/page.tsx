@@ -35,19 +35,7 @@ export default function ExercisesPage({
   const t = useTranslations("TeacherExercises");
 
   if (response === null) {
-    return (
-      <div className="page-container">
-        <div className="content-wrapper py-20 text-center">
-          <div className="bg-red-50 text-red-600 rounded-2xl p-8 max-w-md mx-auto border border-red-100 shadow-sm">
-            <h1 className="text-2xl font-bold mb-2">{t('teacherNotFound')}</h1>
-            <p className="text-red-500/80 mb-6">{t('checkAccessCode')}</p>
-            <Link href="/" className="btn-primary w-full justify-center">
-              {t('backToHome')}
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
+    throw new Error('Failed to fetch exercises');
   }
 
   return (
