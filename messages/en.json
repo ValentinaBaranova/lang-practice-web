@@ -66,10 +66,12 @@
     "typeFillInBlank": "Fill in the gaps",
     "typeMultipleChoice": "Multiple Choice",
     "validationError": "Please check your input.",
+    "validationErrorTitle": "Please enter a title for the exercise.",
     "validationErrorLine": "Line {line}: Each line must contain at least one answer in [].",
     "validationErrorMultipleChoice": "Line {line}: Multiple choice exercise must have options in {}.",
     "failedToLoad": "Failed to load exercise",
     "failedToUpdate": "Failed to update exercise",
+    "failedToCreate": "Failed to create exercise",
     "somethingWentWrong": "Something went wrong",
     "aiGenerationFailed": "We couldn't generate the exercises right now. Please try again or use the manual prompt copy."
   },

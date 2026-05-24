@@ -468,10 +468,10 @@ function QuestionRenderer({
     
     return (
       <div className="space-y-3 md:space-y-6">
-        <div className="text-lg md:text-2xl leading-relaxed text-slate-800 flex flex-wrap items-baseline gap-x-1 gap-y-1 md:gap-y-4">
+        <div className="text-lg md:text-2xl leading-relaxed text-slate-800">
           {parts.map((part, index) => (
-            <span key={index} className="inline-flex items-baseline">
-              <span>{part}</span>
+            <span key={index} className="inline">
+              <span className="whitespace-pre-wrap">{part}</span>
               {index < parts.length - 1 && (
                 <input
                   ref={index === 0 ? firstInputRef : null}
@@ -479,7 +479,7 @@ function QuestionRenderer({
                   value={values[index] || ""}
                   onChange={(e) => onChange(e.target.value, index)}
                   disabled={isSubmitted}
-                  className={`mx-0.5 md:mx-2 px-2 md:px-4 py-0.5 md:py-1 border-b-2 outline-none w-32 md:w-40 text-center transition-all font-bold ${
+                  className={`mx-0.5 md:mx-2 px-2 md:px-4 py-0 border-b-2 outline-none w-32 md:w-48 text-center transition-all font-bold inline-block align-baseline ${
                     isSubmitted 
                       ? (isCorrect ? "border-emerald-500 text-emerald-600 bg-emerald-50/30" : "border-red-500 text-red-600 bg-red-50/30") 
                       : "border-slate-200 focus:border-indigo-500 text-indigo-600 placeholder:text-slate-300"

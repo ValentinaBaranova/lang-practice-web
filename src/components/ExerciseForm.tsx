@@ -117,6 +117,11 @@ export default function ExerciseForm({
     e.preventDefault();
     setLocalError(null);
 
+    if (!title.trim()) {
+      setLocalError(t("validationErrorTitle"));
+      return;
+    }
+
     if (!bulkInput.trim()) {
       setLocalError(t("validationError"));
       return;

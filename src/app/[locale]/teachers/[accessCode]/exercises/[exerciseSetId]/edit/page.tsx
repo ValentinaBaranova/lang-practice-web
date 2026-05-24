@@ -73,7 +73,10 @@ export default function EditExerciseSetPage({
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         if (errorData.errors && Array.isArray(errorData.errors)) {
-          setErrors(errorData.errors);
+          const processedErrors = errorData.errors.map((err: any) => 
+            typeof err === 'string' ? err : (err.defaultMessage || JSON.stringify(err))
+          );
+          setErrors(processedErrors);
         } else {
           setError(errorData.message || t("failedToUpdate"));
         }
