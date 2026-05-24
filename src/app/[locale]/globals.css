@@ -48,7 +48,7 @@
   }
 
   .back-link {
-    @apply flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium mb-8 transition-colors;
+    @apply flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium mb-3 md:mb-8 transition-colors;
   }
 
   .btn-primary {

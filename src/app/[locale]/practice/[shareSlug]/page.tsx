@@ -207,7 +207,7 @@ export default function PracticePage({
     return (
       <div className="page-container">
         <div className="content-wrapper flex flex-col pt-8">
-          <Link href="/" className="back-link mb-6">
+          <Link href="/" className="back-link">
             <ArrowLeft className="w-4 h-4" />
             {t("backToHome")}
           </Link>
@@ -223,7 +223,7 @@ export default function PracticePage({
     return (
       <div className="page-container">
         <div className="content-wrapper">
-          <Link href="/" className="back-link mb-6">
+          <Link href="/" className="back-link">
             <ArrowLeft className="w-4 h-4" />
             {t("backToHome")}
           </Link>
@@ -245,7 +245,7 @@ export default function PracticePage({
       return (
         <div className="page-container">
           <div className="content-wrapper flex flex-col pt-8">
-            <Link href="/" className="back-link mb-6">
+            <Link href="/" className="back-link">
               <ArrowLeft className="w-4 h-4" />
               {t("backToHome")}
             </Link>
