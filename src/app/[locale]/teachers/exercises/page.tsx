@@ -1,42 +1,51 @@
+"use client";
+
 import { Link } from "@/routing";
-import { use } from "react";
+import { use, useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Plus, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ExerciseCard } from "./ExerciseCard";
-import { getApiUrl } from "@/lib/api";
 import { ExerciseSetResponse, PaginatedResponse } from "@/app/types/api";
-
-async function getExercises(accessCode: string, page: number = 0): Promise<PaginatedResponse<ExerciseSetResponse> | null> {
-  const res = await fetch(getApiUrl(`/api/exercise-sets?accessCode=${accessCode}&page=${page}&size=10`), {
-    cache: 'no-store'
-  });
-  
-  if (!res.ok) {
-    if (res.status === 404) {
-      return null;
-    }
-    throw new Error('Failed to fetch exercises');
-  }
-  
-  return res.json();
-}
+import { fetchWithAuth } from "@/lib/api";
 
 export default function ExercisesPage({
-  params,
   searchParams,
 }: {
-  params: Promise<{ accessCode: string; locale: string }>;
   searchParams: Promise<{ page?: string }>;
 }) {
-  const { accessCode } = use(params);
   const { page } = use(searchParams);
   const currentPage = parseInt(page || '0', 10);
-  const response = use(getExercises(accessCode, currentPage));
+  const [response, setResponse] = useState<PaginatedResponse<ExerciseSetResponse>>({
+    content: [],
+    totalPages: 0,
+    totalElements: 0,
+    size: 10,
+    number: currentPage
+  });
+  const [isLoading, setIsLoading] = useState(true);
   const t = useTranslations("TeacherExercises");
 
-  if (response === null) {
-    throw new Error('Failed to fetch exercises');
-  }
+  useEffect(() => {
+    async function fetchExercises() {
+      setIsLoading(true);
+      try {
+        const res = await fetchWithAuth(`/api/exercise-sets?page=${currentPage}&size=10`);
+        if (!res.ok) {
+          console.error(`Failed to fetch exercises: ${res.status} ${res.statusText}`);
+          setResponse({ content: [], totalPages: 0, totalElements: 0, size: 10, number: currentPage });
+        } else {
+          const data = await res.json();
+          setResponse(data);
+        }
+      } catch (error) {
+        console.error('Error in getExercises:', error);
+        setResponse({ content: [], totalPages: 0, totalElements: 0, size: 10, number: currentPage });
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchExercises();
+  }, [currentPage]);
 
   return (
     <div className="page-container">
@@ -49,8 +58,8 @@ export default function ExercisesPage({
             </div>
             <p className="text-slate-500 text-base">{t('description')}</p>
           </div>
-            <Link
-            href={`/teachers/${accessCode}/exercises/new`}
+          <Link
+            href={`/teachers/exercises/new`}
             className="w-full sm:w-auto btn-primary"
           >
             <Plus className="w-5 h-5" />
@@ -58,9 +67,13 @@ export default function ExercisesPage({
           </Link>
         </div>
         
-        {response.content.length === 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+          </div>
+        ) : response.content.length === 0 ? (
           <div className="card p-12 text-center">
-             <p className="text-slate-400 text-lg font-medium">{t('noExercises')}</p>
+            <p className="text-slate-400 text-lg font-medium">{t('noExercises')}</p>
           </div>
         ) : (
           <>
@@ -69,15 +82,13 @@ export default function ExercisesPage({
                 <ExerciseCard
                   key={exercise.id}
                   exercise={exercise}
-                  accessCode={accessCode}
                 />
               ))}
             </div>
-
             {response.totalPages > 1 && (
               <div className="mt-8 flex justify-center items-center gap-2">
                 <Link
-                  href={`/teachers/${accessCode}/exercises?page=${currentPage - 1}`}
+                  href={`/teachers/exercises?page=${currentPage - 1}`}
                   className={`p-2 rounded-lg border border-slate-200 transition-colors ${
                     currentPage === 0 
                       ? 'pointer-events-none opacity-50 bg-slate-50' 
@@ -87,12 +98,11 @@ export default function ExercisesPage({
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </Link>
-                
                 <div className="flex items-center gap-1">
                   {[...Array(response.totalPages)].map((_, i) => (
                     <Link
                       key={i}
-                      href={`/teachers/${accessCode}/exercises?page=${i}`}
+                      href={`/teachers/exercises?page=${i}`}
                       className={`w-10 h-10 flex items-center justify-center rounded-lg border transition-all ${
                         currentPage === i
                           ? 'bg-indigo-600 border-indigo-600 text-white font-bold shadow-sm'
@@ -103,9 +113,8 @@ export default function ExercisesPage({
                     </Link>
                   ))}
                 </div>
-
                 <Link
-                  href={`/teachers/${accessCode}/exercises?page=${currentPage + 1}`}
+                  href={`/teachers/exercises?page=${currentPage + 1}`}
                   className={`p-2 rounded-lg border border-slate-200 transition-colors ${
                     currentPage >= response.totalPages - 1 
                       ? 'pointer-events-none opacity-50 bg-slate-50' 
@@ -118,8 +127,8 @@ export default function ExercisesPage({
               </div>
             )}
           </>
-      )}
+        )}
+      </div>
     </div>
-  </div>
   );
 }

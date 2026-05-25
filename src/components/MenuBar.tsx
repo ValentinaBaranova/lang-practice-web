@@ -3,29 +3,22 @@
 import { useState, useRef, useEffect } from 'react';
 import {useLocale, useTranslations} from 'next-intl';
 import {Link, usePathname, useRouter, routing} from '@/routing';
-import { Globe, MessageSquare, ChevronDown, Check, User } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import { getApiUrl } from '@/lib/api';
+import { Globe, MessageSquare, ChevronDown, Check, User, LogOut } from 'lucide-react';
+import { useAuth } from './AuthProvider';
+import GoogleSignInButton from './GoogleSignInButton';
 
 export default function MenuBar() {
   const locale = useLocale();
   const t = useTranslations('Navigation');
   const pathname = usePathname();
   const router = useRouter();
-  const params = useParams();
-  const accessCode = params?.accessCode as string | undefined;
+  // Legacy: previously read accessCode from params; no longer used
+
+  const { teacher, logout, isLoading } = useAuth();
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [teacherName, setTeacherName] = useState<string | null>(null);
   const [studentName, setStudentName] = useState<string | null>(null);
-  const [lastAccessCode, setLastAccessCode] = useState(accessCode);
-
-  // Reset teacher name when access code changes or is removed
-  if (accessCode !== lastAccessCode) {
-    setLastAccessCode(accessCode);
-    setTeacherName(null);
-  }
 
   const switchLocale = (newLocale: string) => {
     router.replace(pathname, {locale: newLocale as (typeof routing.locales)[number]});
@@ -42,34 +35,7 @@ export default function MenuBar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    if (!accessCode) return;
-
-    const abortController = new AbortController();
-    fetch(getApiUrl(`/api/teachers/${accessCode}`), { signal: abortController.signal })
-      .then(res => {
-        if (res.status === 404) return null;
-        if (!res.ok) throw new Error('Failed to fetch teacher');
-        return res.json();
-      })
-      .then(data => {
-        if (data && data.name) {
-          setTeacherName(data.name);
-        } else {
-          setTeacherName(null);
-        }
-      })
-      .catch(err => {
-        if (err.name !== 'AbortError') {
-          // Only log actual errors, not 404s
-          if (err.message !== 'Failed to fetch teacher') {
-             console.error('Failed to fetch teacher info', err);
-          }
-          setTeacherName(null);
-        }
-      });
-    return () => abortController.abort();
-  }, [accessCode]);
+  // Removed fetching teacher by accessCode; rely on authenticated `teacher` from useAuth
 
   // Load student's name from localStorage to display in the menu bar during practice
   useEffect(() => {
@@ -108,7 +74,7 @@ export default function MenuBar() {
     { code: 'es', label: 'Español' }
   ];
 
-  const displayName = teacherName || studentName;
+  const displayName = teacher?.name || studentName;
 
   return (
     <nav className="bg-white border-b border-gray-100 relative z-50">
@@ -125,6 +91,9 @@ export default function MenuBar() {
             </Link>
           </div>
           <div className="flex items-center gap-4 sm:gap-6">
+            {!isLoading && !teacher && !studentName && (
+              <GoogleSignInButton />
+            )}
             {displayName && (
               <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-slate-200">
                 <User className="w-4 h-4 text-slate-400 hidden sm:block" />
@@ -134,6 +103,15 @@ export default function MenuBar() {
                 <span className="text-sm font-semibold text-slate-700 sm:hidden truncate max-w-[24vw]">
                   {displayName}
                 </span>
+                {teacher && (
+                  <button
+                    onClick={logout}
+                    className="ml-2 p-1 text-slate-400 hover:text-red-500 transition-colors"
+                    title="Logout"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </button>
+                )}
               </div>
             )}
             <div className="relative" ref={dropdownRef}>

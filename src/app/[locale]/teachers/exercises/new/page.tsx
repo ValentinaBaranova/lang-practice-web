@@ -1,18 +1,14 @@
 "use client";
 
-import { use, useState } from "react";
+import { useState } from "react";
 import { useRouter, Link } from "@/routing";
 import { ExerciseFormData } from "@/app/types/exercise";
 import { useTranslations } from "next-intl";
 import { ArrowLeft } from "lucide-react";
 import ExerciseForm from "@/components/ExerciseForm";
+import { fetchWithAuth } from "@/lib/api";
 
-export default function NewExercisePage({
-  params,
-}: {
-  params: Promise<{ accessCode: string; locale: string }>;
-}) {
-  const { accessCode } = use(params);
+export default function NewExercisePage() {
   const router = useRouter();
   const t = useTranslations("EditExercise");
 
@@ -25,24 +21,19 @@ export default function NewExercisePage({
     setError(null);
     setErrors([]);
 
-    const dto = {
-      teacherAccessCode: accessCode,
-      ...data,
-    };
-
     try {
-      const response = await fetch("/api/exercise-sets", {
+      const response = await fetchWithAuth("/api/exercise-sets", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(dto),
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         if (errorData.errors && Array.isArray(errorData.errors)) {
-          const processedErrors = errorData.errors.map((err: any) => 
+          const processedErrors = errorData.errors.map((err: { defaultMessage?: string } | string) => 
             typeof err === 'string' ? err : (err.defaultMessage || JSON.stringify(err))
           );
           setErrors(processedErrors);
@@ -52,7 +43,7 @@ export default function NewExercisePage({
         throw new Error(errorData.message || t("failedToCreate"));
       }
 
-      router.push(`/teachers/${accessCode}/exercises`);
+      router.push(`/teachers/exercises`);
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : t("somethingWentWrong"));
@@ -65,7 +56,7 @@ export default function NewExercisePage({
     <div className="page-container">
       <div className="content-wrapper pb-12">
         <Link
-          href={`/teachers/${accessCode}/exercises`}
+          href={`/teachers/exercises`}
           className="back-link"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -80,12 +71,11 @@ export default function NewExercisePage({
         </div>
 
         <ExerciseForm
-          teacherAccessCode={accessCode}
           onSubmit={handleSubmit}
           isSubmitting={isSubmitting}
           submitButtonText={t("save")}
           submittingButtonText={t("creating")}
-          onCancel={() => router.push(`/teachers/${accessCode}/exercises`)}
+          onCancel={() => router.push(`/teachers/exercises`)}
           externalError={error}
           externalErrors={errors}
         />

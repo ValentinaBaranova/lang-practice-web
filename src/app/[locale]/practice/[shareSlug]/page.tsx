@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { ExerciseType, Question } from "@/app/types/exercise";
 import { ExerciseSetResponse } from "@/app/types/api";
 import { ArrowLeft } from "lucide-react";
+import { fetchWithAuth } from "@/lib/api";
 
 export default function PracticePage({
   params,
@@ -37,7 +38,7 @@ export default function PracticePage({
   useEffect(() => {
     const fetchExercise = async () => {
       try {
-        const response = await fetch(`/api/exercise-sets/share/${shareSlug}`);
+        const response = await fetchWithAuth(`/api/exercise-sets/share/${shareSlug}`);
         if (!response.ok) {
           throw new Error(tEdit("failedToLoad"));
         }
@@ -71,7 +72,7 @@ export default function PracticePage({
 
     setIsSubmitting(true);
     try {
-      const response = await fetch("/api/attempts", {
+      const response = await fetchWithAuth("/api/attempts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -143,7 +144,7 @@ export default function PracticePage({
 
     setIsSubmitting(true);
     try {
-      const response = await fetch(`/api/attempts/${attemptId}/answers`, {
+      const response = await fetchWithAuth(`/api/attempts/${attemptId}/answers`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

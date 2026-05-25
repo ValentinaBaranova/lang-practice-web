@@ -2,7 +2,6 @@ import { ExerciseType, Question, ExerciseVisibility } from "./exercise";
 
 export interface ExerciseSetResponse {
   id: string;
-  teacherAccessCode?: string;
   teacherName?: string;
   title: string;
   type: ExerciseType;
@@ -30,8 +29,8 @@ export interface AttemptResponse {
 }
 
 export interface TeacherResponse {
-  accessCode: string;
   name: string;
+  email?: string;
   createdAt?: string;
   updatedAt?: string;
 }

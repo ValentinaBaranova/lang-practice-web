@@ -8,18 +8,16 @@ import { ExerciseSetResponse } from "@/app/types/api";
 
 interface ExerciseCardProps {
   exercise: ExerciseSetResponse;
-  accessCode?: string;
   isPublic?: boolean;
 }
 
-export function ExerciseCard({ exercise, accessCode, isPublic = false }: ExerciseCardProps) {
+export function ExerciseCard({ exercise, isPublic = false }: ExerciseCardProps) {
   const t = useTranslations("TeacherExercises");
   const router = useRouter();
 
   const formatDistanceToNow = (date: Date) => {
     const now = new Date();
     const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
     if (diffInSeconds < 60) return t('time.justNow');
     const diffInMinutes = Math.floor(diffInSeconds / 60);
     if (diffInMinutes < 60) return t('time.m', { count: diffInMinutes });
@@ -37,7 +35,7 @@ export function ExerciseCard({ exercise, accessCode, isPublic = false }: Exercis
     if (isPublic) {
       router.push(`/practice/${exercise.shareSlug}`);
     } else {
-      router.push(`/teachers/${accessCode}/exercises/${exercise.id}/edit`);
+      router.push(`/teachers/exercises/${exercise.id}/edit`);
     }
   };
 
@@ -47,7 +45,6 @@ export function ExerciseCard({ exercise, accessCode, isPublic = false }: Exercis
       onClick={handleCardClick}
     >
       <div className="p-3.5 flex items-start gap-3.5">
-        {/* Left Side: Icon */}
         <div className="flex-shrink-0 mt-0.5">
           {exercise.id.includes('star') || exercise.title.toLowerCase().includes('article') ? (
             <div className="icon-box-indigo !bg-slate-50 border border-slate-100 !w-9 !h-9">
@@ -64,11 +61,9 @@ export function ExerciseCard({ exercise, accessCode, isPublic = false }: Exercis
           )}
         </div>
 
-        {/* Center: Title + Metadata + Example */}
         <div className="flex-grow flex flex-col gap-1">
           <div className="flex items-start justify-between">
             <h3 className="font-bold text-base text-slate-900 leading-snug">{exercise.title}</h3>
-            
             {!isPublic && (
               <div className="flex items-center gap-1 -mt-1">
                 {exercise.shareSlug && (
@@ -82,7 +77,7 @@ export function ExerciseCard({ exercise, accessCode, isPublic = false }: Exercis
                   </Link>
                 )}
                 <Link 
-                  href={`/teachers/${accessCode}/exercises/${exercise.id}/results`}
+                  href={`/teachers/exercises/${exercise.id}/results`}
                   className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors"
                   onClick={(e) => e.stopPropagation()}
                 >
@@ -92,7 +87,6 @@ export function ExerciseCard({ exercise, accessCode, isPublic = false }: Exercis
             )}
           </div>
 
-          {/* Combined Metadata Row: Type + Questions Count + Created Date */}
           <div className="flex items-center gap-2 flex-wrap">
             <span className={
               (exercise.id.includes('star') || exercise.title.toLowerCase().includes('article')) 
@@ -113,7 +107,6 @@ export function ExerciseCard({ exercise, accessCode, isPublic = false }: Exercis
             )}
           </div>
 
-          {/* Third Row: Example Sentence */}
           <p className="text-slate-400 italic text-xs leading-relaxed mt-0.5">
             {exercise.questions && exercise.questions.length > 0 
               ? `"${exercise.questions[0].prompt}"`

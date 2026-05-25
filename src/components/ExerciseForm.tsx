@@ -4,14 +4,13 @@ import { useState } from "react";
 import { ExerciseType, ExerciseVisibility, ExerciseFormData } from "@/app/types/exercise";
 import { useTranslations } from "next-intl";
 import { Save, Sparkles, Copy, Check } from "lucide-react";
-import { getApiUrl } from "@/lib/api";
+import { fetchWithAuth } from "@/lib/api";
 
 interface ExerciseFormProps {
   initialTitle?: string;
   initialType?: ExerciseType;
   initialVisibility?: ExerciseVisibility;
   initialBulkInput?: string;
-  teacherAccessCode: string;
   onSubmit: (data: ExerciseFormData) => Promise<void>;
   isSubmitting: boolean;
   submitButtonText: string;
@@ -27,7 +26,6 @@ export default function ExerciseForm({
   initialType = ExerciseType.FILL_GAP_TEXT,
   initialVisibility = ExerciseVisibility.PRIVATE,
   initialBulkInput = "",
-  teacherAccessCode,
   onSubmit,
   isSubmitting,
   submitButtonText,
@@ -56,8 +54,8 @@ export default function ExerciseForm({
     setAiError(null);
     try {
       const topicParam = aiTopic || title || "preterito indefinido";
-      const response = await fetch(
-        getApiUrl(`/api/ai/build-exercise-prompt?type=${type}&topic=${encodeURIComponent(topicParam)}&amount=${aiAmount}`)
+      const response = await fetchWithAuth(
+        `/api/ai/build-exercise-prompt?type=${type}&topic=${encodeURIComponent(topicParam)}&amount=${aiAmount}`
       );
       if (!response.ok) throw new Error();
       const data = await response.json();
@@ -79,7 +77,7 @@ export default function ExerciseForm({
     setLocalError(null);
     setAiError(null);
     try {
-      const response = await fetch(getApiUrl("/api/ai/generate"), {
+      const response = await fetchWithAuth("/api/ai/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -88,7 +86,6 @@ export default function ExerciseForm({
           type,
           topic: aiTopic || title,
           amount: aiAmount,
-          teacherAccessCode,
         }),
       });
 

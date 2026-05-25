@@ -6,13 +6,14 @@ import { useTranslations } from "next-intl";
 import { Question, ExerciseVisibility, ExerciseFormData } from "@/app/types/exercise";
 import { ArrowLeft } from "lucide-react";
 import ExerciseForm from "@/components/ExerciseForm";
+import { fetchWithAuth } from "@/lib/api";
 
 export default function EditExerciseSetPage({
   params,
 }: {
-  params: Promise<{ accessCode: string; exerciseSetId: string; locale: string }>;
+  params: Promise<{ exerciseSetId: string; locale: string }>;
 }) {
-  const { accessCode, exerciseSetId } = use(params);
+  const { exerciseSetId } = use(params);
   const router = useRouter();
   const t = useTranslations("EditExercise");
 
@@ -25,7 +26,7 @@ export default function EditExerciseSetPage({
   useEffect(() => {
     const fetchExercise = async () => {
       try {
-        const response = await fetch(`/api/exercise-sets/${exerciseSetId}`);
+        const response = await fetchWithAuth(`/api/exercise-sets/${exerciseSetId}`);
         if (!response.ok) {
           throw new Error(t("failedToLoad"));
         }
@@ -33,7 +34,6 @@ export default function EditExerciseSetPage({
         const reconstructedInput = (data.questions || [])
           .map((q: Question) => q.sourceText)
           .join("\n");
-        
         setInitialData({
           title: data.title,
           type: data.type,
@@ -46,7 +46,6 @@ export default function EditExerciseSetPage({
         setIsLoading(false);
       }
     };
-
     fetchExercise();
   }, [exerciseSetId, t]);
 
@@ -54,26 +53,23 @@ export default function EditExerciseSetPage({
     setIsSubmitting(true);
     setError(null);
     setErrors([]);
-
     const dto = {
       title: data.title,
       visibility: data.visibility,
       bulkInput: data.bulkInput,
     };
-
     try {
-      const response = await fetch(`/api/exercise-sets/${exerciseSetId}`, {
+      const response = await fetchWithAuth(`/api/exercise-sets/${exerciseSetId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(dto),
       });
-
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         if (errorData.errors && Array.isArray(errorData.errors)) {
-          const processedErrors = errorData.errors.map((err: any) => 
+          const processedErrors = errorData.errors.map((err: { defaultMessage?: string } | string) => 
             typeof err === 'string' ? err : (err.defaultMessage || JSON.stringify(err))
           );
           setErrors(processedErrors);
@@ -82,8 +78,7 @@ export default function EditExerciseSetPage({
         }
         throw new Error(errorData.message || t("failedToUpdate"));
       }
-
-      router.push(`/teachers/${accessCode}/exercises`);
+      router.push(`/teachers/exercises`);
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : t("somethingWentWrong"));
@@ -104,7 +99,7 @@ export default function EditExerciseSetPage({
     <div className="page-container">
       <div className="content-wrapper pb-12">
         <Link
-          href={`/teachers/${accessCode}/exercises`}
+          href={`/teachers/exercises`}
           className="back-link"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -124,12 +119,11 @@ export default function EditExerciseSetPage({
             initialType={initialData.type}
             initialVisibility={initialData.visibility}
             initialBulkInput={initialData.bulkInput}
-            teacherAccessCode={accessCode}
             onSubmit={handleSubmit}
             isSubmitting={isSubmitting}
             submitButtonText={t("save")}
             submittingButtonText={t("saving")}
-            onCancel={() => router.push(`/teachers/${accessCode}/exercises`)}
+            onCancel={() => router.push(`/teachers/exercises`)}
             isEditMode={true}
             externalError={error}
             externalErrors={errors}

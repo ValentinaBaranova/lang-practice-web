@@ -14,3 +14,17 @@ export function getApiUrl(path: string): string {
     // Client-side: use relative URL to benefit from Next.js rewrites
     return normalizedPath;
 }
+
+export async function fetchWithAuth(path: string, options: RequestInit = {}): Promise<Response> {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('google_token') : null;
+    const headers = new Headers(options.headers);
+    
+    if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+    }
+    
+    return fetch(getApiUrl(path), {
+        ...options,
+        headers
+    });
+}

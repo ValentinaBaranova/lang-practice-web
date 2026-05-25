@@ -5,13 +5,14 @@ import { Link } from "@/routing";
 import { useTranslations } from "next-intl";
 import { ArrowLeft } from "lucide-react";
 import { ExerciseSetResponse, AttemptResponse } from "@/app/types/api";
+import { fetchWithAuth } from "@/lib/api";
 
 export default function ResultsPage({
   params,
 }: {
-  params: Promise<{ accessCode: string; exerciseSetId: string; locale: string }>;
+  params: Promise<{ exerciseSetId: string; locale: string }>;
 }) {
-  const { accessCode, exerciseSetId } = use(params);
+  const { exerciseSetId } = use(params);
   const t = useTranslations("Results");
   const tEdit = useTranslations("EditExercise");
 
@@ -24,19 +25,16 @@ export default function ResultsPage({
     const fetchData = async () => {
       try {
         const [attemptsRes, exerciseRes] = await Promise.all([
-          fetch(`/api/attempts/exercise-set/${exerciseSetId}`),
-          fetch(`/api/exercise-sets/${exerciseSetId}`)
+          fetchWithAuth(`/api/attempts/exercise-set/${exerciseSetId}`),
+          fetchWithAuth(`/api/exercise-sets/${exerciseSetId}`)
         ]);
-
         if (!attemptsRes.ok || !exerciseRes.ok) {
           throw new Error("Failed to fetch data");
         }
-
         const [attemptsData, exerciseData] = await Promise.all([
           attemptsRes.json(),
           exerciseRes.json()
         ]);
-
         setAttempts(attemptsData);
         setExerciseSet(exerciseData);
       } catch (err) {
@@ -45,7 +43,6 @@ export default function ResultsPage({
         setIsLoading(false);
       }
     };
-
     fetchData();
   }, [exerciseSetId]);
 
@@ -66,7 +63,7 @@ export default function ResultsPage({
           <div className="card border-red-100 p-8">
             <p className="text-red-600 mb-4 font-medium">{error}</p>
             <Link
-              href={`/teachers/${accessCode}/exercises`}
+              href={`/teachers/exercises`}
               className="text-indigo-600 hover:text-indigo-700 font-semibold"
             >
               {tEdit("back")}
@@ -81,7 +78,7 @@ export default function ResultsPage({
     <div className="page-container">
       <div className="content-wrapper pb-12">
         <Link
-          href={`/teachers/${accessCode}/exercises`}
+          href={`/teachers/exercises`}
           className="back-link"
         >
           <ArrowLeft className="w-4 h-4" />
