@@ -77,7 +77,7 @@ export default function MenuBar() {
   const displayName = teacher?.name || studentName;
 
   return (
-    <nav className="bg-white border-b border-gray-100 relative z-50">
+    <nav className="bg-white border-b border-slate-100 relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center gap-2">
@@ -92,15 +92,27 @@ export default function MenuBar() {
           </div>
           <div className="flex items-center gap-4 sm:gap-6">
             {!isLoading && !teacher && !studentName && (
-              <GoogleSignInButton />
+              <>
+                <div className="hidden sm:block">
+                  <GoogleSignInButton />
+                </div>
+                <div className="sm:hidden">
+                  <Link
+                    href="/login"
+                    className="text-sm font-semibold text-indigo-600 hover:text-indigo-500 transition-colors"
+                  >
+                    {t('signIn')}
+                  </Link>
+                </div>
+              </>
             )}
             {displayName && (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-slate-200">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-slate-200 text-sm font-semibold text-slate-700">
                 <User className="w-4 h-4 text-slate-400 hidden sm:block" />
-                <span className="text-sm font-semibold text-slate-700 max-w-[40vw] truncate hidden sm:inline">
+                <span className="max-w-[40vw] truncate hidden sm:inline">
                   {displayName}
                 </span>
-                <span className="text-sm font-semibold text-slate-700 sm:hidden truncate max-w-[24vw]">
+                <span className="sm:hidden truncate max-w-[24vw]">
                   {displayName}
                 </span>
                 {teacher && (
@@ -121,11 +133,11 @@ export default function MenuBar() {
               >
                 <Globe className="w-4 h-4 text-indigo-500" />
                 <span className="hidden sm:inline">{locale === 'en' ? 'English' : 'Español'}</span>
-                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {isOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-100 rounded-xl shadow-lg py-1 z-50 animate-in fade-in zoom-in duration-200">
+                <div className="absolute right-0 mt-2 w-40 bg-white border border-slate-100 rounded-xl shadow-lg py-1 z-50 animate-in fade-in zoom-in duration-200">
                   {languages.map((lang) => (
                     <button
                       key={lang.code}

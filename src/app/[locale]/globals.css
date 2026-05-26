@@ -64,7 +64,7 @@
   }
 
   .btn-outline {
-    @apply flex items-center gap-2 px-3 py-1.5 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 cursor-pointer hover:bg-slate-50 transition-colors bg-white disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white;
+    @apply flex items-center gap-2 px-3 py-1.5 border border-slate-200 rounded-full text-sm font-semibold text-slate-700 cursor-pointer hover:bg-slate-50 transition-colors bg-white disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white;
   }
 
   .page-content-narrow {

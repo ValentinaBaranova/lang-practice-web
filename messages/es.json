@@ -26,7 +26,8 @@
     "home": "Inicio",
     "teachers": "Profesores",
     "teacher": "Profesor/a",
-    "shortTitle": "Ejercicios"
+    "shortTitle": "Ejercicios",
+    "signIn": "Iniciar sesión"
   },
   "EditExercise": {
     "title": "Editar Ejercicio",

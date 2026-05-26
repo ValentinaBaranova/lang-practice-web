@@ -23,7 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [teacher, setTeacher] = useState<TeacherResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchTeacher = async (t: string) => {
+  const fetchTeacher = async (t: string): Promise<boolean> => {
     try {
       const response = await fetch('/api/teachers/me', {
         headers: {
@@ -34,6 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const data = await response.json();
         setTeacher(data);
         setToken(t);
+        return true;
       } else {
         localStorage.removeItem('google_token');
         localStorage.removeItem('studentName');
@@ -41,6 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           window.dispatchEvent(new Event('studentNameUpdated'));
         }
         setToken(null);
+        return false;
       }
     } catch (error) {
       console.error('Failed to fetch teacher', error);
@@ -50,6 +52,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         window.dispatchEvent(new Event('studentNameUpdated'));
       }
       setToken(null);
+      return false;
     } finally {
       setIsLoading(false);
     }
@@ -64,12 +67,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const login = (t: string) => {
+  const login = async (t: string) => {
     localStorage.setItem('google_token', t);
-    // We don't call setToken here because fetchTeacher will do it
-    // Wait, if I'm logging in, I probably want token set immediately to avoid flicker if isLoading becomes false
-    // But fetchTeacher sets it.
-    fetchTeacher(t);
+    const success = await fetchTeacher(t);
+    if (success) {
+      router.push('/teachers/exercises');
+    }
   };
 
   const logout = () => {

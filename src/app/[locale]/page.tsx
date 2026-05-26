@@ -27,6 +27,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   const t = useTranslations("HomePage");
+  const navT = useTranslations("Navigation");
   const { teacher, isLoading: authLoading } = useAuth();
 
   useEffect(() => {
@@ -98,7 +99,20 @@ export default function Home() {
             </div>
             <div className="w-full sm:w-auto mt-auto">
               {!authLoading && !teacher ? (
-                <GoogleSignInButton />
+                <>
+                  <div className="hidden sm:block">
+                    <GoogleSignInButton />
+                  </div>
+                  <div className="sm:hidden w-full">
+                    <Link
+                      href="/login"
+                      className="btn-primary w-full py-2 px-6 flex items-center justify-center gap-2"
+                    >
+                      {navT("signIn")}
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </>
               ) : teacher ? (
                 <Link href="/teachers/exercises" className="btn-primary w-full sm:w-auto py-2 px-6 flex items-center justify-center gap-2">
                   {t("alreadyHaveCode")}

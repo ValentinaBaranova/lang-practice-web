@@ -26,7 +26,8 @@
     "home": "Home",
     "teachers": "Teachers",
     "teacher": "Teacher",
-    "shortTitle": "Exercises"
+    "shortTitle": "Exercises",
+    "signIn": "Sign in"
   },
   "EditExercise": {
     "title": "Edit Exercise",
