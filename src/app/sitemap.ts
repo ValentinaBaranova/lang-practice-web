@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { routing } from '@/routing'
+import { ExerciseSetResponse } from '@/app/types/api'
 
 const locales = routing.locales
 const BASE_URL = 'https://language-exercises.com'
@@ -29,8 +30,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         const data = await res.json()
         const exercises = data.content || []
         dynamicSitemap = locales.flatMap((locale) =>
-            exercises.map((exercise: any) => ({
-                url: `${BASE_URL}/${locale}/practice/${exercise.shareSlug}`,
+            exercises.map((exercise: ExerciseSetResponse) => ({
+                url: `${BASE_URL}/${locale}/spanish/practice/${exercise.shareSlug}`,
                 lastModified: new Date(exercise.createdAt || new Date()),
                 changeFrequency: 'weekly' as const,
                 priority: 0.6,

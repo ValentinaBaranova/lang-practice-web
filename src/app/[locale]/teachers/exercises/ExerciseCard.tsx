@@ -33,7 +33,7 @@ export function ExerciseCard({ exercise, isPublic = false }: ExerciseCardProps) 
 
   const handleCardClick = () => {
     if (isPublic) {
-      router.push(`/practice/${exercise.shareSlug}`);
+      router.push(`/spanish/practice/${exercise.shareSlug}`);
     } else {
       router.push(`/teachers/exercises/${exercise.id}/edit`);
     }
@@ -68,7 +68,7 @@ export function ExerciseCard({ exercise, isPublic = false }: ExerciseCardProps) 
               <div className="flex items-center gap-1 -mt-1">
                 {exercise.shareSlug && (
                   <Link
-                    href={`/practice/${exercise.shareSlug}`}
+                    href={`/spanish/practice/${exercise.shareSlug}`}
                     target="_blank"
                     className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors"
                     onClick={(e) => e.stopPropagation()}

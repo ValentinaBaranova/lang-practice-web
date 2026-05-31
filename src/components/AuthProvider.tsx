@@ -89,10 +89,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
+    <AuthContext.Provider value={{ token, teacher, login, logout, isLoading }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function GoogleAuthProviderWrapper({ children }: { children: React.ReactNode }) {
+  return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      <AuthContext.Provider value={{ token, teacher, login, logout, isLoading }}>
-        {children}
-      </AuthContext.Provider>
+      {children}
     </GoogleOAuthProvider>
   );
 }
