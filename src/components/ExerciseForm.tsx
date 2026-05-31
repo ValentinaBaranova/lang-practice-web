@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ExerciseType, ExerciseVisibility, ExerciseFormData } from "@/app/types/exercise";
+import { ExerciseType, ExerciseFormData } from "@/app/types/exercise";
 import { useTranslations } from "next-intl";
 import { Save, Sparkles, Copy, Check } from "lucide-react";
 import { fetchWithAuth } from "@/lib/api";
@@ -9,7 +9,6 @@ import { fetchWithAuth } from "@/lib/api";
 interface ExerciseFormProps {
   initialTitle?: string;
   initialType?: ExerciseType;
-  initialVisibility?: ExerciseVisibility;
   initialBulkInput?: string;
   onSubmit: (data: ExerciseFormData) => Promise<void>;
   isSubmitting: boolean;
@@ -24,7 +23,6 @@ interface ExerciseFormProps {
 export default function ExerciseForm({
   initialTitle = "",
   initialType = ExerciseType.FILL_GAP_TEXT,
-  initialVisibility = ExerciseVisibility.PRIVATE,
   initialBulkInput = "",
   onSubmit,
   isSubmitting,
@@ -38,7 +36,6 @@ export default function ExerciseForm({
   const t = useTranslations("EditExercise");
   const [title, setTitle] = useState(initialTitle);
   const [type, setType] = useState<ExerciseType>(initialType);
-  const [visibility, setVisibility] = useState<ExerciseVisibility>(initialVisibility);
   const [bulkInput, setBulkInput] = useState(initialBulkInput);
   const [localError, setLocalError] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -140,7 +137,7 @@ export default function ExerciseForm({
       }
     }
 
-    await onSubmit({ title, type, visibility, bulkInput });
+    await onSubmit({ title, type, bulkInput });
   };
 
   const showError = localError || externalError;
@@ -193,21 +190,6 @@ export default function ExerciseForm({
               >
                 <option value={ExerciseType.FILL_GAP_TEXT}>{t("typeFillInBlank")}</option>
                 <option value={ExerciseType.MULTIPLE_CHOICE}>{t("typeMultipleChoice")}</option>
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="visibility" className="block text-sm font-semibold text-slate-900 mb-2">
-                {t("visibility")}
-              </label>
-              <select
-                id="visibility"
-                className="input-field"
-                value={visibility}
-                onChange={(e) => setVisibility(e.target.value as ExerciseVisibility)}
-              >
-                <option value={ExerciseVisibility.PRIVATE}>{t("visibilityPrivate")}</option>
-                <option value={ExerciseVisibility.PUBLIC}>{t("visibilityPublic")}</option>
               </select>
             </div>
 

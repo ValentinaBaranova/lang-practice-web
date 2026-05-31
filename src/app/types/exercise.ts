@@ -26,6 +26,5 @@ export interface ExerciseSetDto {
 export interface ExerciseFormData {
   title: string;
   type: ExerciseType;
-  visibility: ExerciseVisibility;
   bulkInput: string;
 }

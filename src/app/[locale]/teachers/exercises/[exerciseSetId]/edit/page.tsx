@@ -3,7 +3,7 @@
 import { use, useState, useEffect } from "react";
 import { useRouter, Link } from "@/routing";
 import { useTranslations } from "next-intl";
-import { Question, ExerciseVisibility, ExerciseFormData } from "@/app/types/exercise";
+import { Question, ExerciseFormData } from "@/app/types/exercise";
 import { ArrowLeft } from "lucide-react";
 import ExerciseForm from "@/components/ExerciseForm";
 import { fetchWithAuth } from "@/lib/api";
@@ -37,7 +37,6 @@ export default function EditExerciseSetPage({
         setInitialData({
           title: data.title,
           type: data.type,
-          visibility: data.visibility || ExerciseVisibility.PRIVATE,
           bulkInput: reconstructedInput,
         });
       } catch (err) {
@@ -55,7 +54,6 @@ export default function EditExerciseSetPage({
     setErrors([]);
     const dto = {
       title: data.title,
-      visibility: data.visibility,
       bulkInput: data.bulkInput,
     };
     try {
@@ -117,7 +115,6 @@ export default function EditExerciseSetPage({
           <ExerciseForm
             initialTitle={initialData.title}
             initialType={initialData.type}
-            initialVisibility={initialData.visibility}
             initialBulkInput={initialData.bulkInput}
             onSubmit={handleSubmit}
             isSubmitting={isSubmitting}
