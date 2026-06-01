@@ -19,7 +19,10 @@
     "copied": "¡Copiado!",
     "goToWorkspace": "Entrar",
     "telegramBot": "Práctica diaria en Telegram",
-    "telegramBotDesc": "Recibe ejercicios diarios para practicar español."
+    "telegramBotDesc": "Recibe ejercicios diarios para practicar español.",
+    "oneTimeExerciseTitle": "Práctica rápida",
+    "oneTimeExerciseDesc": "Genera un ejercicio puntual sobre cualquier tema y comienza a practicar de inmediato.",
+    "generateAndStart": "Generar y Comenzar"
   },
   "Navigation": {
     "title": "Ejercicios de idiomas",
@@ -74,7 +77,8 @@
     "failedToUpdate": "Error al actualizar el ejercicio",
     "failedToCreate": "Error al crear el ejercicio",
     "somethingWentWrong": "Algo salió mal",
-    "aiGenerationFailed": "No pudimos generar los ejercicios en este momento. Por favor, intenta de nuevo o usa la copia manual del prompt."
+    "aiGenerationFailed": "No pudimos generar los ejercicios en este momento. Por favor, intenta de nuevo o usa la copia manual del prompt.",
+    "dailyLimitReached": "Límite diario de generación por IA alcanzado. Inicia sesión para más o inténtalo de nuevo mañana."
   },
   "Results": {
     "title": "Resultados",

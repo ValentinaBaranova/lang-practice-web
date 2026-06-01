@@ -9,6 +9,7 @@ import { ExerciseSetResponse, PaginatedResponse } from "@/app/types/api";
 import { Link } from "@/routing";
 import { useAuth } from "@/components/AuthProvider";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
+import QuickPracticeSetup from "@/components/QuickPracticeSetup";
 
 async function getPublicExercises(): Promise<PaginatedResponse<ExerciseSetResponse>> {
   const res = await fetchWithAuth(`/api/exercises/public`, {
@@ -56,6 +57,8 @@ export default function Home() {
             {t("subtitle")}
           </p>
         </div>
+
+        <QuickPracticeSetup />
 
         {/* Public Exercises */}
         <div className="mt-4 mb-6">

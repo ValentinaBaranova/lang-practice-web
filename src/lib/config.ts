@@ -1,0 +1,1 @@
+export const QUICK_PRACTICE_DAILY_LIMIT = 10;
