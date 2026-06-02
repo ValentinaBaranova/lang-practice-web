@@ -97,8 +97,12 @@ export default function Home() {
               <BookOpen className="w-6 h-6 text-indigo-600" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-900 mb-0.5">{t("createWorkspaceTitle")}</h2>
-              <p className="text-slate-500 text-xs mb-4">{t("createWorkspaceDesc")}</p>
+              <h2 className="text-lg font-bold text-slate-900 mb-0.5">
+                {teacher ? t("createWorkspaceTitle") : t("signInTitle")}
+              </h2>
+              <p className="text-slate-500 text-xs mb-4">
+                {teacher ? t("createWorkspaceDesc") : t("signInDesc")}
+              </p>
             </div>
             <div className="w-full sm:w-auto mt-auto">
               {!authLoading && !teacher ? (

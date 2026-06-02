@@ -5,6 +5,8 @@
     "createWorkspace": "Create exercises",
     "createWorkspaceTitle": "Create exercises",
     "createWorkspaceDesc": "Create them manually or generate with AI.",
+    "signInTitle": "Sign in",
+    "signInDesc": "Sign in to save and share your exercises with others",
     "alreadyHaveCode": "Manage your exercises",
     "enterCode": "Sign in to access your dashboard",
     "submitCode": "Enter",

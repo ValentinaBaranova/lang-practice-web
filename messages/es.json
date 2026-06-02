@@ -5,6 +5,8 @@
     "createWorkspace": "Crear ejercicios",
     "createWorkspaceTitle": "Crea ejercicios",
     "createWorkspaceDesc": "Créalos manualmente o genéralos con IA.",
+    "signInTitle": "Inicia sesión",
+    "signInDesc": "Inicia sesión para guardar y compartir tus ejercicios con otros",
     "alreadyHaveCode": "Gestiona tus ejercicios",
     "enterCode": "Inicia sesión para acceder a tu panel",
     "submitCode": "Entrar",
