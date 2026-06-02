@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ExerciseType, ExerciseFormData } from "@/app/types/exercise";
 import { useTranslations } from "next-intl";
 import { Save, Sparkles, Copy, Check } from "lucide-react";
@@ -44,7 +44,22 @@ export default function ExerciseForm({
   const [aiAmount, setAiAmount] = useState(10);
   const [isCopying, setIsCopying] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
-  const SUGGESTED_TOPICS = ["Presente", "Indefinido", "Imperfecto", "Imperativo", "Subjuntivo"];
+  const [suggestedTopics, setSuggestedTopics] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        const response = await fetchWithAuth("/api/topics");
+        if (response.ok) {
+          const data = await response.json();
+          setSuggestedTopics(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch topics", error);
+      }
+    };
+    fetchTopics();
+  }, []);
 
   const handleCopyPrompt = async () => {
     setIsCopying(true);
@@ -218,7 +233,7 @@ export default function ExerciseForm({
                         onChange={(e) => setAiTopic(e.target.value)}
                       />
                       <div className="flex flex-wrap gap-1.5 mt-2">
-                        {SUGGESTED_TOPICS.map((topic) => (
+                        {suggestedTopics.map((topic) => (
                           <button
                             key={topic}
                             type="button"

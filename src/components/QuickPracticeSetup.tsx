@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Sparkles } from 'lucide-react';
 import { fetchWithAuth } from "@/lib/api";
@@ -19,6 +19,22 @@ export default function QuickPracticeSetup() {
   const [exerciseType, setExerciseType] = useState<ExerciseType>(ExerciseType.FILL_GAP_TEXT);
   const [isGenerating, setIsGenerating] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
+  const [suggestedTopics, setSuggestedTopics] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        const response = await fetchWithAuth("/api/topics");
+        if (response.ok) {
+          const data = await response.json();
+          setSuggestedTopics(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch topics", error);
+      }
+    };
+    fetchTopics();
+  }, []);
 
   const handleGenerateAndStart = async () => {
     // Check limit for unauthorized users
@@ -109,16 +125,7 @@ export default function QuickPracticeSetup() {
                 onChange={(e) => setAiTopic(e.target.value)}
               />
               <div className="flex flex-wrap gap-1.5 mt-2">
-                {["Presente",
-                  "Pretérito Indefinido",
-                  "Pretérito Imperfecto",
-                  "Pretérito Perfecto",
-                  "Futuro Simple",
-                  "Imperativo",
-                  "Imperativo Negativo",
-                  "Subjuntivo Presente",
-                  "Ser vs Estar",
-                  "Por vs Para",].map((topic) => (
+                {suggestedTopics.map((topic) => (
                   <button
                     key={topic}
                     type="button"
