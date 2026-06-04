@@ -11,9 +11,14 @@ export enum ExerciseVisibility {
 export interface Question {
   id?: string;
   prompt: string;
-  correctAnswer: string;
   sourceText: string;
   options?: string[];
+  gaps?: Gap[];
+}
+
+export interface Gap {
+  index: number;
+  correctAnswer: string;
 }
 
 export interface ExerciseSetDto {

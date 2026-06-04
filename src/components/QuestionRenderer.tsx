@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { ExerciseType, Question } from "@/app/types/exercise";
+import { GapAnswerResponse } from "@/app/types/api";
 
 export default function QuestionRenderer({
   question,
@@ -11,6 +12,7 @@ export default function QuestionRenderer({
   onChange,
   isSubmitted,
   isCorrect,
+  gapResults,
 }: {
   question: Question;
   type: ExerciseType;
@@ -18,6 +20,7 @@ export default function QuestionRenderer({
   onChange: (val: string, index: number) => void;
   isSubmitted: boolean;
   isCorrect: boolean | null;
+  gapResults?: GapAnswerResponse[];
 }) {
   const t = useTranslations("Practice");
   const firstInputRef = useRef<HTMLInputElement>(null);
@@ -52,9 +55,13 @@ export default function QuestionRenderer({
           {isCorrect ? t("correct") : t("incorrect")}
         </p>
       </div>
-      {!isCorrect && question.correctAnswer && (
+      {!isCorrect && (
         <p className="text-slate-600 ml-11 text-sm md:text-base">
-          {t("correctAnswer", { answer: question.correctAnswer })}
+          {t("correctAnswer", { 
+            answer: question.gaps && question.gaps.length > 1 
+              ? question.sourceText.replace(/\[/g, "").replace(/\]/g, "").replace(/\{.*?\}/g, "")
+              : question.gaps?.[0]?.correctAnswer 
+          })}
         </p>
       )}
     </div>
@@ -79,7 +86,11 @@ export default function QuestionRenderer({
                   disabled={isSubmitted}
                   className={`mx-0.5 md:mx-2 px-2 md:px-4 py-0 border-b-2 outline-none w-32 md:w-48 text-center transition-all font-bold inline-block align-baseline ${
                     isSubmitted 
-                      ? (isCorrect ? "border-emerald-500 text-emerald-600 bg-emerald-50/30" : "border-red-500 text-red-600 bg-red-50/30") 
+                      ? (
+                          gapResults?.find(r => r.index === index)
+                          ? (gapResults.find(r => r.index === index)!.isCorrect ? "border-emerald-500 text-emerald-600 bg-emerald-50/30" : "border-red-500 text-red-600 bg-red-50/30")
+                          : (isCorrect ? "border-emerald-500 text-emerald-600 bg-emerald-50/30" : "border-red-500 text-red-600 bg-red-50/30")
+                        ) 
                       : "border-slate-200 focus:border-indigo-500 text-indigo-600 placeholder:text-slate-300"
                   }`}
                   autoFocus={index === 0}
@@ -105,7 +116,7 @@ export default function QuestionRenderer({
             let buttonClass = "w-full px-4 md:px-6 py-3 md:py-4 border-2 rounded-xl transition-all text-left font-semibold text-lg ";
             
             if (isSubmitted) {
-              if (option === question.correctAnswer) {
+              if (option === question.gaps?.[0]?.correctAnswer) {
                 buttonClass += "border-emerald-500 bg-emerald-50 text-emerald-700 ";
               } else if (isSelected && !isCorrect) {
                 buttonClass += "border-red-500 bg-red-50 text-red-700 ";

@@ -27,6 +27,19 @@ export interface AttemptResponse {
   correctAnswers: number;
 }
 
+export interface AttemptQuestionResponse {
+  id: string;
+  attemptId: string;
+  questionId: string;
+  answers: GapAnswerResponse[];
+}
+
+export interface GapAnswerResponse {
+  index: number;
+  answer: string;
+  isCorrect: boolean;
+}
+
 export interface TeacherResponse {
   name: string;
   email?: string;

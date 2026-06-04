@@ -4,7 +4,7 @@ import {use, useState, useEffect, useCallback} from "react";
 import { Link } from "@/routing";
 import { useTranslations } from "next-intl";
 import { ExerciseType, Question } from "@/app/types/exercise";
-import { ExerciseSetResponse } from "@/app/types/api";
+import { ExerciseSetResponse, AttemptQuestionResponse } from "@/app/types/api";
 import { ArrowLeft } from "lucide-react";
 import { fetchWithAuth } from "@/lib/api";
 import QuestionRenderer from "@/components/QuestionRenderer";
@@ -30,11 +30,11 @@ export default function PracticePage({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [answers, setAnswers] = useState<string[][]>([]);
-  const [results, setResults] = useState<(boolean | null)[]>([]);
+  const [results, setResults] = useState<(AttemptQuestionResponse | null)[]>([]);
   const [attemptId, setAttemptId] = useState<string | null>(null);
   const [isFinished, setIsFinished] = useState(false);
 
-  const correctAnswersCount = results.filter((r) => r === true).length;
+  const correctAnswersCount = results.filter((r) => r?.answers?.every(a => a.isCorrect)).length;
 
   useEffect(() => {
     const fetchExercise = async () => {
@@ -49,7 +49,7 @@ export default function PracticePage({
         // Initialize answers as an array of arrays, one per question
         const initialAnswers = data.questions.map((q: Question) => {
           if (data.type === ExerciseType.FILL_GAP_TEXT) {
-            const gapCount = (q.prompt.match(/_+/g) || []).length;
+            const gapCount = q.gaps?.length ?? (q.prompt.match(/_+/g) || []).length;
             return new Array(gapCount).fill("");
           }
           return [""];
@@ -130,19 +130,6 @@ export default function PracticePage({
 
     if (questionAnswers.some(a => !a.trim())) return;
 
-    let fullSentence = "";
-    if (exercise.type === ExerciseType.FILL_GAP_TEXT) {
-      const parts = currentQuestion.prompt.split(/_+/);
-      fullSentence = parts.reduce((acc, part, i) => {
-        if (i < questionAnswers.length) {
-          return acc + part + questionAnswers[i];
-        }
-        return acc + part;
-      }, "");
-    } else {
-      fullSentence = questionAnswers[0].trim();
-    }
-
     setIsSubmitting(true);
     try {
       const response = await fetchWithAuth(`/api/attempts/${attemptId}/answers`, {
@@ -150,7 +137,7 @@ export default function PracticePage({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           questionId: currentQuestion.id,
-          answer: fullSentence.trim(),
+          answers: questionAnswers.map((val, index) => ({ index, answer: val.trim() }))
         }),
       });
 
@@ -160,7 +147,7 @@ export default function PracticePage({
 
       const data = await response.json();
       const newResults = [...results];
-      newResults[currentQuestionIndex] = data.isCorrect;
+      newResults[currentQuestionIndex] = data;
       setResults(newResults);
     } catch (err) {
       setError(err instanceof Error ? err.message : tEdit("somethingWentWrong"));
@@ -362,7 +349,8 @@ export default function PracticePage({
                 setAnswers(newAnswers);
               }}
               isSubmitted={isSubmitted}
-              isCorrect={results[currentQuestionIndex]}
+              isCorrect={results[currentQuestionIndex] ? (results[currentQuestionIndex]?.answers?.every(a => a.isCorrect) ?? false) : null}
+              gapResults={results[currentQuestionIndex]?.answers}
             />
           </div>
 
