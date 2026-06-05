@@ -58,9 +58,10 @@ export default function QuestionRenderer({
       {!isCorrect && (
         <p className="text-slate-600 ml-11 text-sm md:text-base">
           {t("correctAnswer", { 
+            // Ensure `answer` is always a string to satisfy i18n interpolation types
             answer: question.gaps && question.gaps.length > 1 
-              ? question.sourceText.replace(/\[/g, "").replace(/\]/g, "").replace(/\{.*?\}/g, "")
-              : question.gaps?.[0]?.correctAnswer 
+              ? (question.sourceText ?? "").replace(/\[/g, "").replace(/\]/g, "").replace(/\{.*?\}/g, "")
+              : (question.gaps?.[0]?.correctAnswer ?? "")
           })}
         </p>
       )}
