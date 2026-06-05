@@ -8,6 +8,8 @@ import "./globals.css";
 import MenuBar from '@/components/MenuBar';
 import Footer from '@/components/Footer';
 import { AuthProvider, GoogleAuthProviderWrapper } from '@/components/AuthProvider';
+import Script from 'next/script';
+import Analytics from '@/components/Analytics';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -71,9 +73,32 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        {/* Google Analytics (GA4) */}
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ? (
+          <>
+            <Script
+              id="ga4-src"
+              strategy="afterInteractive"
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
+            />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`
+                (function() {
+                  var gtagFn = '${process.env.NEXT_PUBLIC_GTAG_FUNCTION_NAME || 'gtag'}';
+                  window.dataLayer = window.dataLayer || [];
+                  window[gtagFn] = function(){ window.dataLayer.push(arguments); };
+                  window[gtagFn]('js', new Date());
+                  window[gtagFn]('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}', { anonymize_ip: true });
+                })();
+              `}
+            </Script>
+          </>
+        ) : null}
         <NextIntlClientProvider messages={messages}>
           <GoogleAuthProviderWrapper>
             <AuthProvider>
+              {/* Tracks route changes in the App Router */}
+              <Analytics />
               <MenuBar />
               {children}
               <Footer />
