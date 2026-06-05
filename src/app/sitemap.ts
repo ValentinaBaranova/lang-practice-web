@@ -22,20 +22,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let dynamicSitemap: MetadataRoute.Sitemap = []
   try {
     const apiUrl = process.env.API_URL || 'http://localhost:8080'
-    const res = await fetch(`${apiUrl}/api/exercises/public`, { 
+    const res = await fetch(`${apiUrl}/api/exercise-sets/public`, { 
         next: { revalidate: 3600 }
     })
     
     if (res.ok) {
         const data = await res.json()
-        const exercises = data.content || []
+        const exercises: ExerciseSetResponse[] = data.content || []
+        // Only include items that have a shareSlug; prefer updatedAt when available
         dynamicSitemap = locales.flatMap((locale) =>
-            exercises.map((exercise: ExerciseSetResponse) => ({
+            exercises
+              .filter((exercise) => Boolean(exercise.shareSlug))
+              .map((exercise) => ({
                 url: `${BASE_URL}/${locale}/spanish/practice/${exercise.shareSlug}`,
-                lastModified: new Date(exercise.createdAt || new Date()),
+                lastModified: new Date(exercise.updatedAt || exercise.createdAt || new Date()),
                 changeFrequency: 'weekly' as const,
                 priority: 0.6,
-            }))
+              }))
         )
     }
   } catch (e) {

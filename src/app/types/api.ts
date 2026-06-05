@@ -4,10 +4,11 @@ export interface ExerciseSetResponse {
   id: string;
   title: string;
   type: ExerciseType;
-  visibility?: ExerciseVisibility;
-  shareSlug: string;
+  visibility: ExerciseVisibility; // now always provided by API
+  questions: Question[]; // always provided by API
+  shareSlug?: string; // may be absent for non-public sets
   createdAt?: string;
-  questions?: Question[];
+  updatedAt?: string;
 }
 
 export interface PaginatedResponse<T> {

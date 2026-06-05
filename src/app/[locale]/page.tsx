@@ -12,7 +12,7 @@ import GoogleSignInButton from "@/components/GoogleSignInButton";
 import QuickPracticeSetup from "@/components/QuickPracticeSetup";
 
 async function getPublicExercises(): Promise<PaginatedResponse<ExerciseSetResponse>> {
-  const res = await fetchWithAuth(`/api/exercises/public`, {
+  const res = await fetchWithAuth(`/api/exercise-sets/public`, {
     cache: 'no-store'
   });
   

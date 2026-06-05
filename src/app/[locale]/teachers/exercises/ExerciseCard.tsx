@@ -33,10 +33,12 @@ export function ExerciseCard({ exercise, isPublic = false }: ExerciseCardProps) 
 
   const handleCardClick = () => {
     if (isPublic) {
-      router.push(`/spanish/practice/${exercise.shareSlug}`);
-    } else {
-      router.push(`/teachers/exercises/${exercise.id}/edit`);
+      if (exercise.shareSlug) {
+        router.push(`/spanish/practice/${exercise.shareSlug}`);
+      }
+      return;
     }
+    router.push(`/teachers/exercises/${exercise.id}/edit`);
   };
 
   return (
@@ -96,7 +98,7 @@ export function ExerciseCard({ exercise, isPublic = false }: ExerciseCardProps) 
               {exercise.type === 'FILL_GAP_TEXT' ? t('fillInGaps') : (exercise.type === 'MULTIPLE_CHOICE' ? t('multipleChoice') : exercise.type)}
             </span>
             <span className="text-slate-300 text-[10px]">•</span>
-            <span className="text-slate-500 text-xs whitespace-nowrap font-medium">{t('questionsCount', { count: exercise.questions?.length || 0 })}</span>
+            <span className="text-slate-500 text-xs whitespace-nowrap font-medium">{t('questionsCount', { count: exercise.questions.length })}</span>
             {!isPublic && exercise.createdAt && (
               <>
                 <span className="text-slate-300 text-[10px]">•</span>
@@ -108,7 +110,7 @@ export function ExerciseCard({ exercise, isPublic = false }: ExerciseCardProps) 
           </div>
 
           <p className="text-slate-400 italic text-xs leading-relaxed mt-0.5">
-            {exercise.questions && exercise.questions.length > 0 
+            {exercise.questions.length > 0 
               ? `"${exercise.questions[0].prompt}"`
               : `"${t('createFirstQuestion')}"`}
           </p>

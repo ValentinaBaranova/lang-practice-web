@@ -59,7 +59,7 @@
     "bulkInputLabel": "Preguntas",
     "bulkInputPlaceholder": "Yo [fui] a la [escuela] ayer.\nNo [hables] (hablar) tan rápido.",
     "bulkInputPlaceholderMultipleChoice": "No [hables] '{'hablas|hables|hablar'}' tan rápido.\nMañana [iremos] '{'vamos|iremos|fuimos'}' al cine.",
-    "bulkInputHelper": "Un ejercicio por línea: Texto con [respuestas] (pistas opcionales)",
+    "bulkInputHelper": "Un ejercicio por línea: texto con una o más [respuestas] (pistas opcionales)",
     "bulkInputHelperMultipleChoice": "Un ejercicio por línea: Texto con [respuesta correcta] '{'opción1|opción2|opción3'}'",
     "generateWithAI": "Genera ejercicios con IA. Indica un tema en el título para mejores resultados.",
     "generateAI": "Generar con IA",

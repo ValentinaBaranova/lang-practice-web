@@ -288,6 +288,10 @@ export default function PracticePage({
   }
 
   if (isFinished) {
+    // Calculate total number of gaps across all questions. If there are any, prefer showing gaps count
+    // as the total, otherwise fall back to number of questions.
+    const totalGaps = exercise?.questions?.reduce((acc: number, q: Question) => acc + (q.gaps?.length ?? 0), 0) || 0;
+
     return (
       <div className="page-container">
         <div className="page-content-centered">
@@ -305,7 +309,7 @@ export default function PracticePage({
           
             <div className="bg-slate-50/80 rounded-2xl p-4 md:p-8 mb-4 md:mb-8 border border-slate-100">
               <p className="text-4xl md:text-5xl font-bold text-slate-900 mb-1 md:mb-2">
-                {correctAnswersCount} <span className="text-xl md:text-2xl text-slate-400">/ {exercise.questions?.length || 0}</span>
+                {correctAnswersCount} <span className="text-xl md:text-2xl text-slate-400">/ {totalGaps > 0 ? totalGaps : (exercise.questions?.length || 0)}</span>
               </p>
               <p className="text-slate-500 font-bold uppercase tracking-wider text-xs md:text-sm">{t("correct")}</p>
             </div>
