@@ -136,22 +136,6 @@ export default function ExerciseForm({
       return;
     }
 
-    // Basic frontend validation to catch obvious format errors
-    const lines = bulkInput.split("\n").filter(l => l.trim());
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (!line.includes("[") || !line.includes("]")) {
-        setLocalError(t("validationErrorLine", { line: i + 1 }));
-        return;
-      }
-      if (type === ExerciseType.MULTIPLE_CHOICE) {
-        if (!line.includes("{") || !line.includes("}")) {
-          setLocalError(t("validationErrorMultipleChoice", { line: i + 1 }));
-          return;
-        }
-      }
-    }
-
     await onSubmit({ title, type, bulkInput });
   };
 

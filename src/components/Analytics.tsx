@@ -4,11 +4,10 @@ import {useEffect} from 'react';
 import {usePathname, useSearchParams} from 'next/navigation';
 
 declare global {
-  // eslint-disable-next-line no-var
-  var dataLayer: any[] | undefined;
+  var dataLayer: (unknown[] | undefined);
   interface Window {
     // Support custom gtag function name via env var
-    [key: string]: any;
+    [key: string]: unknown;
   }
 }
 
@@ -26,7 +25,7 @@ export default function Analytics() {
     const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '');
 
     try {
-      const gtag = (window as any)[GTAG_FN];
+      const gtag = window[GTAG_FN] as ((...args: unknown[]) => void) | undefined;
       if (typeof gtag === 'function') {
         gtag('config', GA_ID, {
           page_path: url,
