@@ -39,6 +39,7 @@ export interface GapAnswerResponse {
   index: number;
   answer: string;
   isCorrect: boolean;
+  expectedAnswer?: string | null;
 }
 
 export interface TeacherResponse {

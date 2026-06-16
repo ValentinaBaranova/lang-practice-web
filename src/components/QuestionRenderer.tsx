@@ -31,6 +31,10 @@ export default function QuestionRenderer({
     }
   }, [question.id, isSubmitted]);
 
+  // Show expected answer if user's correct answer differs by casing/spacing from expected
+  const expectedMismatchHints = gapResults?.filter(
+    r => r.isCorrect && r.expectedAnswer != null && r.answer?.trim().toLowerCase() !== r.expectedAnswer!.trim().toLowerCase()
+  );
   const feedback = isSubmitted && (
     <div className={`mt-3 md:mt-8 p-3 md:p-6 rounded-2xl border ${
       isCorrect 
@@ -55,6 +59,15 @@ export default function QuestionRenderer({
           {isCorrect ? t("correct") : t("incorrect")}
         </p>
       </div>
+      {isCorrect && expectedMismatchHints && expectedMismatchHints.length > 0 && (
+        <p className="text-slate-600 ml-11 text-sm md:text-base">
+          {t("correctAnswer", { 
+            answer: (question.gaps && question.gaps.length > 1)
+              ? (question.sourceText ?? "").replace(/\[/g, "").replace(/\]/g, "").replace(/\{.*?\}/g, "")
+              : (expectedMismatchHints[0]?.expectedAnswer ?? "")
+          })}
+        </p>
+      )}
       {!isCorrect && (
         <p className="text-slate-600 ml-11 text-sm md:text-base">
           {t("correctAnswer", { 
