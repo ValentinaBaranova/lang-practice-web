@@ -70,6 +70,7 @@
     "aiAmountLabel": "Cantidad de oraciones",
     "exerciseType": "Tipo de Ejercicio",
     "typeFillInBlank": "Completar los huecos",
+    "typeFillInBlankMultiline": "Completar los huecos (multilínea)",
     "typeMultipleChoice": "Opción Múltiple",
     "validationError": "Por favor, verifique su entrada.",
     "validationErrorTitle": "Por favor, introduce un título para el ejercicio.",

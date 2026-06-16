@@ -68,7 +68,7 @@ export default function QuestionRenderer({
     </div>
   );
 
-  if (type === ExerciseType.FILL_GAP_TEXT) {
+  if (type === ExerciseType.FILL_GAP_TEXT || type === ExerciseType.FILL_GAP_TEXT_MULTILINE) {
     // Split by one or more underscores
     const parts = question.prompt.split(/_+/);
     

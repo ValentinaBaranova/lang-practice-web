@@ -18,7 +18,7 @@ export default function QuickPractice({ title, type, questions, onBack }: QuickP
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<string[][]>(() => 
     questions.map((q) => {
-      if (type === ExerciseType.FILL_GAP_TEXT) {
+      if (type === ExerciseType.FILL_GAP_TEXT || type === ExerciseType.FILL_GAP_TEXT_MULTILINE) {
         const gapCount = (q.prompt.match(/_+/g) || []).length;
         return new Array(gapCount).fill("");
       }
@@ -40,7 +40,7 @@ export default function QuickPractice({ title, type, questions, onBack }: QuickP
     if (questionAnswers.some(a => !a.trim())) return;
 
     let fullSentence = "";
-    if (type === ExerciseType.FILL_GAP_TEXT) {
+    if (type === ExerciseType.FILL_GAP_TEXT || type === ExerciseType.FILL_GAP_TEXT_MULTILINE) {
       const parts = currentQuestion.prompt.split(/_+/);
       fullSentence = parts.reduce((acc, part, i) => {
         if (i < questionAnswers.length) {

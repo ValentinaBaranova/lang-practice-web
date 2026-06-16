@@ -188,6 +188,7 @@ export default function ExerciseForm({
                 onChange={(e) => setType(e.target.value as ExerciseType)}
               >
                 <option value={ExerciseType.FILL_GAP_TEXT}>{t("typeFillInBlank")}</option>
+                <option value={ExerciseType.FILL_GAP_TEXT_MULTILINE}>{t("typeFillInBlankMultiline")}</option>
                 <option value={ExerciseType.MULTIPLE_CHOICE}>{t("typeMultipleChoice")}</option>
               </select>
             </div>

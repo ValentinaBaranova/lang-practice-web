@@ -70,6 +70,7 @@
     "aiAmountLabel": "Amount of sentences",
     "exerciseType": "Exercise Type",
     "typeFillInBlank": "Fill in the gaps",
+    "typeFillInBlankMultiline": "Fill in the gaps (multiline)",
     "typeMultipleChoice": "Multiple Choice",
     "validationError": "Please check your input.",
     "validationErrorTitle": "Please enter a title for the exercise.",
