@@ -26,6 +26,7 @@ export interface AttemptResponse {
   totalQuestions: number;
   answeredQuestions: number;
   correctAnswers: number;
+  createdAt: string;
 }
 
 export interface AttemptQuestionResponse {

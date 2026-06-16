@@ -86,9 +86,8 @@
     "subtitle": "Ver el rendimiento de los estudiantes para este conjunto de ejercicios.",
     "noAttempts": "Aún no hay intentos. ¡Comparte el enlace con tus alumnos para ver los resultados aquí!",
     "studentName": "Nombre del Estudiante",
-    "progress": "Progreso",
-    "score": "Puntuación",
-    "accuracy": "Precisión"
+    "date": "Fecha",
+    "result": "Resultado"
   },
   "Practice": {
     "enterName": "Ingresa tu nombre para comenzar",

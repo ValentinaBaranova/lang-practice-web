@@ -86,9 +86,8 @@
     "subtitle": "View student performance for this exercise set.",
     "noAttempts": "No attempts yet. Share the link with your students to see results here!",
     "studentName": "Student Name",
-    "progress": "Progress",
-    "score": "Score",
-    "accuracy": "Accuracy"
+    "date": "Date",
+    "result": "Result"
   },
   "Practice": {
     "enterName": "Enter your name to start",

@@ -12,7 +12,7 @@ export default function ResultsPage({
 }: {
   params: Promise<{ exerciseSetId: string; locale: string }>;
 }) {
-  const { exerciseSetId } = use(params);
+  const { exerciseSetId, locale } = use(params);
   const t = useTranslations("Results");
   const tEdit = useTranslations("EditExercise");
 
@@ -108,40 +108,33 @@ export default function ResultsPage({
                       {t("studentName")}
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">
-                      {t("progress")}
+                      {t("result")}
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">
-                      {t("score")}
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">
-                      {t("accuracy")}
+                      {t("date")}
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-slate-100">
                   {attempts.map((attempt) => {
-                    const accuracy =
-                      attempt.answeredQuestions > 0
-                        ? Math.round(
-                            (attempt.correctAnswers /
-                              attempt.answeredQuestions) *
-                              100
-                          )
-                        : 0;
-
                     return (
                       <tr key={attempt.id} className="hover:bg-slate-50/50 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900">
                           {attempt.studentName}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
-                          {attempt.answeredQuestions} / {attempt.totalQuestions}
+                          {attempt.correctAnswers} / {attempt.totalQuestions}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
-                          {attempt.correctAnswers} / {attempt.answeredQuestions}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900">
-                          {accuracy}%
+                          {(() => {
+                            const date = new Date(attempt.createdAt);
+                            const day = date.getDate();
+                            const monthShort = date.toLocaleString(locale, { month: 'short' });
+                            const month = monthShort.replace(/\./g, "");
+                            const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
+                            const time = date.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit", hour12: false });
+                            return `${day} ${capitalizedMonth} ${time}`;
+                          })()}
                         </td>
                       </tr>
                     );
