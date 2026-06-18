@@ -5,6 +5,7 @@ import { Link as LinkIcon, BarChart2 } from 'lucide-react';
 
 import { useTranslations } from "next-intl";
 import { ExerciseSetResponse } from "@/app/types/api";
+import { truncate } from "@/lib/string-utils";
 
 interface ExerciseCardProps {
   exercise: ExerciseSetResponse;
@@ -111,7 +112,7 @@ export function ExerciseCard({ exercise, isPublic = false }: ExerciseCardProps) 
 
           <p className="text-slate-400 italic text-xs leading-relaxed mt-0.5">
             {exercise.questions.length > 0 
-              ? `"${exercise.questions[0].prompt}"`
+              ? `"${truncate(exercise.questions[0].prompt, 100)}"`
               : `"${t('createFirstQuestion')}"`}
           </p>
         </div>
