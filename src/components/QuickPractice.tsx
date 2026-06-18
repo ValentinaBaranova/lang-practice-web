@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { ArrowLeft } from "lucide-react";
 import { ExerciseType, Question } from "@/app/types/exercise";
+import { ValidateAnswerResponse } from "@/app/types/api";
 import QuestionRenderer from "@/components/QuestionRenderer";
 
 interface QuickPracticeProps {
@@ -25,7 +26,7 @@ export default function QuickPractice({ title, type, questions, onBack }: QuickP
       return [""];
     })
   );
-  const [results, setResults] = useState<(boolean | null)[]>(() => 
+  const [results, setResults] = useState<(ValidateAnswerResponse | null)[]>(() => 
     new Array(questions.length).fill(null)
   );
   const [isFinished, setIsFinished] = useState(false);
@@ -39,43 +40,31 @@ export default function QuickPractice({ title, type, questions, onBack }: QuickP
 
     if (questionAnswers.some(a => !a.trim())) return;
 
-    let fullSentence = "";
-    if (type === ExerciseType.FILL_GAP_TEXT || type === ExerciseType.FILL_GAP_TEXT_MULTILINE) {
-      const parts = currentQuestion.prompt.split(/_+/);
-      fullSentence = parts.reduce((acc, part, i) => {
-        if (i < questionAnswers.length) {
-          return acc + part + questionAnswers[i];
-        }
-        return acc + part;
-      }, "");
-    } else {
-      fullSentence = questionAnswers[0].trim();
-    }
-
     setIsSubmitting(true);
     try {
+      const payload = {
+        question: currentQuestion,
+        answers: questionAnswers.map((val, index) => ({ index, answer: val.trim() })),
+      };
+
       const response = await fetch("/api/exercise-sets/validate-answer", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          question: currentQuestion,
-          answer: fullSentence
-        }),
+        body: JSON.stringify(payload),
       });
-      const data = await response.json();
-      const isCorrect = data.isCorrect;
+      const data: ValidateAnswerResponse = await response.json();
       
       const newResults = [...results];
-      newResults[currentQuestionIndex] = isCorrect;
+      newResults[currentQuestionIndex] = data;
       setResults(newResults);
     } catch (error) {
       console.error("Failed to validate answer:", error);
     } finally {
       setIsSubmitting(false);
     }
-  }, [currentQuestionIndex, questions, answers, results, type, isSubmitting]);
+  }, [currentQuestionIndex, questions, answers, results, isSubmitting]);
 
   const handleNext = useCallback(() => {
     if (currentQuestionIndex < questions.length - 1) {
@@ -93,7 +82,7 @@ export default function QuickPractice({ title, type, questions, onBack }: QuickP
 
   const currentQuestion = questions[currentQuestionIndex];
   const isSubmitted = results[currentQuestionIndex] !== null;
-  const correctAnswersCount = results.filter((r) => r === true).length;
+  const correctAnswersCount = results.filter((r) => r?.isCorrect === true).length;
 
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
@@ -173,7 +162,8 @@ export default function QuickPractice({ title, type, questions, onBack }: QuickP
               setAnswers(newAnswers);
             }}
             isSubmitted={isSubmitted}
-            isCorrect={results[currentQuestionIndex]}
+            isCorrect={results[currentQuestionIndex]?.isCorrect}
+            gapResults={results[currentQuestionIndex]?.gapResults}
           />
         </div>
 

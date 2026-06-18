@@ -43,6 +43,11 @@ export interface GapAnswerResponse {
   expectedAnswer?: string | null;
 }
 
+export interface ValidateAnswerResponse {
+  isCorrect: boolean;
+  gapResults?: GapAnswerResponse[];
+}
+
 export interface TeacherResponse {
   name: string;
   email?: string;
