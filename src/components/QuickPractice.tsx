@@ -162,7 +162,7 @@ export default function QuickPractice({ title, type, questions, onBack }: QuickP
               setAnswers(newAnswers);
             }}
             isSubmitted={isSubmitted}
-            isCorrect={results[currentQuestionIndex]?.isCorrect}
+            isCorrect={results[currentQuestionIndex]?.isCorrect ?? null}
             gapResults={results[currentQuestionIndex]?.gapResults}
           />
         </div>
