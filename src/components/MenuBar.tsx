@@ -121,10 +121,10 @@ export default function MenuBar() {
             {displayName && (
               <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-slate-200 text-sm font-semibold text-slate-700">
                 <User className="w-4 h-4 text-slate-400 hidden sm:block" />
-                <span className="max-w-[40vw] truncate hidden sm:inline">
+                <span className="max-w-[40vw] truncate hidden sm:inline leading-none">
                   {displayName}
                 </span>
-                <span className="sm:hidden truncate max-w-[24vw]">
+                <span className="sm:hidden truncate max-w-[24vw] leading-none">
                   {displayName}
                 </span>
                 {(teacher || studentName) && (

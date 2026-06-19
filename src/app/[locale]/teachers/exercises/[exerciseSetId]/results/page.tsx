@@ -76,7 +76,7 @@ export default function ResultsPage({
 
   return (
     <div className="page-container">
-      <div className="content-wrapper pb-12">
+      <div className="content-wrapper pb-4 sm:pb-12">
         <Link
           href={`/teachers/exercises`}
           className="back-link"
