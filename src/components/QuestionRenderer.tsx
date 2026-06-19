@@ -100,13 +100,22 @@ export default function QuestionRenderer({
       {t("correctAnswer", { answer: text })}
     </p>
   );
-  const renderCorrectAnswerRich = () => (
-    <p className="text-slate-600 ml-11 text-sm md:text-base">
-      {t.rich("correctAnswer", {
-        answer: (_chunks: React.ReactNode) => renderSourceWithBoldAnswers(question),
-      })}
-    </p>
-  );
+  // When translations use simple interpolation (e.g., "Correct answer: {answer}"),
+  // `t.rich` is not suitable because there are no rich tags like <answer/> in the message.
+  // Instead, interpolate a unique marker and splice in our React node.
+  const renderCorrectAnswerRich = () => {
+    const MARK = "[[[__ANSWER__MARK__]]]";
+    const template = t("correctAnswer", { answer: MARK });
+    const [before, after] = template.split(MARK);
+    const answerNode = renderSourceWithBoldAnswers(question);
+    return (
+      <p className="text-slate-600 ml-11 text-sm md:text-base">
+        {before}
+        {answerNode}
+        {after}
+      </p>
+    );
+  };
 
   const feedback = isSubmitted && (
     <div className={`mt-3 md:mt-8 p-3 md:p-6 rounded-2xl border ${
