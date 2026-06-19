@@ -20,6 +20,18 @@ export default function MenuBar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [studentName, setStudentName] = useState<string | null>(null);
 
+  const logoutStudent = () => {
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('studentName');
+        // Notify listeners in this tab and across components
+        window.dispatchEvent(new Event('studentNameUpdated'));
+      }
+    } catch {
+      // no-op
+    }
+  };
+
   const switchLocale = (newLocale: string) => {
     router.replace(pathname, {locale: newLocale as (typeof routing.locales)[number]});
     setIsOpen(false);
@@ -115,11 +127,12 @@ export default function MenuBar() {
                 <span className="sm:hidden truncate max-w-[24vw]">
                   {displayName}
                 </span>
-                {teacher && (
+                {(teacher || studentName) && (
                   <button
-                    onClick={logout}
-                    className="ml-2 p-1 text-slate-400 hover:text-red-500 transition-colors"
-                    title="Logout"
+                    onClick={teacher ? logout : logoutStudent}
+                    className="ml-2 p-0 text-slate-400 hover:text-red-500 transition-colors"
+                    title={teacher ? 'Sign out' : 'Clear name'}
+                    aria-label={teacher ? 'Sign out' : 'Clear name'}
                   >
                     <LogOut className="w-4 h-4" />
                   </button>
@@ -129,7 +142,7 @@ export default function MenuBar() {
             <div className="relative" ref={dropdownRef}>
               <button 
                 onClick={() => setIsOpen(!isOpen)}
-                className="btn-outline"
+                className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-slate-200 text-sm font-semibold text-slate-700"
               >
                 <Globe className="w-4 h-4 text-indigo-500" />
                 <span className="hidden sm:inline">{locale === 'en' ? 'English' : 'Español'}</span>
