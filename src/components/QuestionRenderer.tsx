@@ -166,6 +166,9 @@ export default function QuestionRenderer({
                   value={values[index] || ""}
                   onChange={(e) => onChange(e.target.value, index)}
                   disabled={isSubmitted}
+                  autoComplete="off"
+                  autoCorrect="off"
+                  autoCapitalize="off"
                   className={`mx-0.5 md:mx-2 px-2 md:px-4 py-0 border-b-2 outline-none w-32 md:w-48 text-center transition-all font-bold inline-block align-baseline ${
                     isSubmitted 
                       ? (
@@ -237,6 +240,9 @@ export default function QuestionRenderer({
         value={values[0] || ""}
         onChange={(e) => onChange(e.target.value, 0)}
         disabled={isSubmitted}
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
         className={`w-full px-4 md:px-6 py-3 md:py-4 border-2 rounded-xl transition-all outline-none text-lg md:text-xl font-bold ${
           isSubmitted 
             ? (isCorrect ? "border-emerald-500 text-emerald-600 bg-emerald-50/30" : "border-red-500 text-red-600 bg-red-50/30") 
