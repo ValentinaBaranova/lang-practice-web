@@ -30,22 +30,13 @@ export const metadata: Metadata = {
     description: "Create and share interactive grammar exercises.",
     url: "https://language-exercises.com",
     siteName: "Language Exercises",
-    images: [
-      {
-        url: "https://language-exercises.com/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Language Exercises",
-      },
-    ],
     locale: "en_US",
     type: "website",
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Language Exercises",
     description: "Create and share interactive grammar exercises.",
-    images: ["https://language-exercises.com/og-image.png"],
   },
 };
 
