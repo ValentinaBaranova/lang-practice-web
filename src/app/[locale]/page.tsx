@@ -50,7 +50,7 @@ export default function Home() {
               <BookOpen className="w-8 h-8 text-white" />
             </div>
           </div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3 tracking-tight max-w-xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3 tracking-tight mx-auto max-w-4xl md:whitespace-nowrap">
             {t("title")}
           </h1>
           <p className="text-base text-slate-500 max-w-lg mx-auto">
