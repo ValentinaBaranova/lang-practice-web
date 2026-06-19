@@ -25,6 +25,13 @@ export const metadata: Metadata = {
   title: "Language Exercises",
   description: "Create and share interactive grammar exercises.",
   metadataBase: new URL("https://language-exercises.com"),
+  alternates: {
+    canonical: "https://language-exercises.com/en",
+    languages: {
+      "en": "https://language-exercises.com/en",
+      "es": "https://language-exercises.com/es",
+    },
+  },
   openGraph: {
     title: "Language Exercises",
     description: "Create and share interactive grammar exercises.",
