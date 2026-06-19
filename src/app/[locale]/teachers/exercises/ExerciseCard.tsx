@@ -1,7 +1,8 @@
 'use client';
 
 import { Link, useRouter } from "@/routing";
-import { Link as LinkIcon, BarChart2 } from 'lucide-react';
+import { Link as LinkIcon, BarChart2, Check as CheckIcon, Play } from 'lucide-react';
+import { useState } from 'react';
 
 import { useTranslations } from "next-intl";
 import { ExerciseSetResponse } from "@/app/types/api";
@@ -15,6 +16,7 @@ interface ExerciseCardProps {
 export function ExerciseCard({ exercise, isPublic = false }: ExerciseCardProps) {
   const t = useTranslations("TeacherExercises");
   const router = useRouter();
+  const [copied, setCopied] = useState<string | null>(null);
 
   const formatDistanceToNow = (date: Date) => {
     const now = new Date();
@@ -40,6 +42,20 @@ export function ExerciseCard({ exercise, isPublic = false }: ExerciseCardProps) 
       return;
     }
     router.push(`/teachers/exercises/${exercise.id}/edit`);
+  };
+
+  const handleCopyLink = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!exercise.shareSlug) return;
+    try {
+      const origin = typeof window !== 'undefined' ? window.location.origin : '';
+      const url = `${origin}/spanish/practice/${exercise.shareSlug}`;
+      await navigator.clipboard.writeText(url);
+      setCopied(exercise.id);
+      setTimeout(() => setCopied(null), 1500);
+    } catch {
+      // no-op; optionally we could fallback to prompt
+    }
   };
 
   return (
@@ -73,14 +89,33 @@ export function ExerciseCard({ exercise, isPublic = false }: ExerciseCardProps) 
                   <Link
                     href={`/spanish/practice/${exercise.shareSlug}`}
                     target="_blank"
+                    title={t('openPractice')}
+                    aria-label={t('openPractice')}
                     className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <LinkIcon className="w-3.5 h-3.5" />
+                    <Play className="w-3.5 h-3.5" />
                   </Link>
+                )}
+                {exercise.shareSlug && (
+                  <button
+                    type="button"
+                    title={t('copyPracticeLink')}
+                    aria-label={t('copyPracticeLink')}
+                    className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors"
+                    onClick={handleCopyLink}
+                  >
+                    {copied === exercise.id ? (
+                      <CheckIcon className="w-3.5 h-3.5 text-emerald-600" />
+                    ) : (
+                      <LinkIcon className="w-3.5 h-3.5" />
+                    )}
+                  </button>
                 )}
                 <Link 
                   href={`/teachers/exercises/${exercise.id}/results`}
+                  title={t('results')}
+                  aria-label={t('results')}
                   className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors"
                   onClick={(e) => e.stopPropagation()}
                 >

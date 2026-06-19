@@ -115,6 +115,8 @@
     "questionsCount": "{count, plural, =1 {1 question} other {# questions}}",
     "createFirstQuestion": "Create your first question...",
     "createdAgo": "Created {time} ago",
+    "openPractice": "Open practice",
+    "copyPracticeLink": "Copy practice link",
     "shareLink": "Share link",
     "results": "Results",
     "edit": "Edit",
