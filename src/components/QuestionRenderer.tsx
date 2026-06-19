@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { ExerciseType, Question } from "@/app/types/exercise";
 import { GapAnswerResponse } from "@/app/types/api";
@@ -24,6 +24,64 @@ export default function QuestionRenderer({
 }) {
   const t = useTranslations("Practice");
   const firstInputRef = useRef<HTMLInputElement>(null);
+
+  // Render full source sentence with bolded correct answers for multi-gap questions.
+  // If a user's answer matches the correct answer exactly for a gap, do NOT bold it.
+  const renderSourceWithBoldAnswers = (q: Question) => {
+    const src = q.sourceText ?? "";
+    const nodes: React.ReactNode[] = [];
+    let cursor = 0;
+    let gapIdx = 0;
+    let segIdx = 0;
+
+    const stripHints = (text: string) => text.replace(/\{.*?\}/g, "");
+
+    while (cursor < src.length) {
+      const open = src.indexOf("[", cursor);
+      if (open === -1) {
+        const tail = src.slice(cursor);
+        if (tail)
+          nodes.push(
+            <span key={`t-${segIdx++}`}>{stripHints(tail)}</span>
+          );
+        break;
+      }
+      // push text before gap
+      const before = src.slice(cursor, open);
+      if (before)
+        nodes.push(
+          <span key={`t-${segIdx++}`}>{stripHints(before)}</span>
+        );
+
+      // find closing bracket and replace gap with bold correct answer
+      const close = src.indexOf("]", open + 1);
+      if (close === -1) {
+        // unmatched bracket, push rest and stop
+        const rest = src.slice(open);
+        if (rest)
+          nodes.push(
+            <span key={`t-${segIdx++}`}>{stripHints(rest)}</span>
+          );
+        break;
+      }
+
+      const answer = q.gaps?.[gapIdx]?.correctAnswer ?? "";
+      const userVal = values?.[gapIdx] ?? undefined;
+      const shouldBold = userVal !== answer; // exact match -> no bold
+      nodes.push(
+        shouldBold ? (
+          <strong key={`ga-${gapIdx}`} className="font-bold">{answer}</strong>
+        ) : (
+          <span key={`ga-${gapIdx}`}>{answer}</span>
+        )
+      );
+      gapIdx += 1;
+      cursor = close + 1;
+    }
+
+    // Normalize children to ensure every child has a stable key (React.Children.toArray adds keys if missing)
+    return <>{React.Children.toArray(nodes)}</>;
+  };
 
   useEffect(() => {
     if (!isSubmitted) {
@@ -61,20 +119,20 @@ export default function QuestionRenderer({
       </div>
       {isCorrect && expectedMismatchHints && expectedMismatchHints.length > 0 && (
         <p className="text-slate-600 ml-11 text-sm md:text-base">
-          {t("correctAnswer", { 
+          {t.rich("correctAnswer", {
+            // For multiple gaps show the full sentence with bolded answers
             answer: (question.gaps && question.gaps.length > 1)
-              ? (question.sourceText ?? "").replace(/\[/g, "").replace(/\]/g, "").replace(/\{.*?\}/g, "")
-              : (expectedMismatchHints[0]?.expectedAnswer ?? "")
+              ? (() => renderSourceWithBoldAnswers(question))
+              : (() => (expectedMismatchHints[0]?.expectedAnswer ?? ""))
           })}
         </p>
       )}
       {!isCorrect && (
         <p className="text-slate-600 ml-11 text-sm md:text-base">
-          {t("correctAnswer", { 
-            // Ensure `answer` is always a string to satisfy i18n interpolation types
-            answer: question.gaps && question.gaps.length > 1 
-              ? (question.sourceText ?? "").replace(/\[/g, "").replace(/\]/g, "").replace(/\{.*?\}/g, "")
-              : (question.gaps?.[0]?.correctAnswer ?? "")
+          {t.rich("correctAnswer", {
+            answer: question.gaps && question.gaps.length > 1
+              ? (() => renderSourceWithBoldAnswers(question))
+              : (() => (question.gaps?.[0]?.correctAnswer ?? ""))
           })}
         </p>
       )}
