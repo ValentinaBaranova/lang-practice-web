@@ -44,7 +44,6 @@ export interface GapAnswerResponse {
 }
 
 export interface ValidateAnswerResponse {
-  isCorrect: boolean;
   gapResults?: GapAnswerResponse[];
 }
 

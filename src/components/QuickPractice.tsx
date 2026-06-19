@@ -82,7 +82,10 @@ export default function QuickPractice({ title, type, questions, onBack }: QuickP
 
   const currentQuestion = questions[currentQuestionIndex];
   const isSubmitted = results[currentQuestionIndex] !== null;
-  const correctAnswersCount = results.filter((r) => r?.isCorrect === true).length;
+  const correctAnswersCount = results.reduce((sum, r) => {
+    if (!r || !Array.isArray(r.gapResults)) return sum;
+    return sum + r.gapResults.filter((gr) => gr.isCorrect).length;
+  }, 0);
 
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
@@ -102,6 +105,10 @@ export default function QuickPractice({ title, type, questions, onBack }: QuickP
   }, [isFinished, isSubmitted, answers, currentQuestionIndex, handleSubmitAnswer, handleNext, isSubmitting]);
 
   if (isFinished) {
+    const totalGaps =
+      (type === ExerciseType.FILL_GAP_TEXT || type === ExerciseType.FILL_GAP_TEXT_MULTILINE)
+        ? questions.reduce((acc, q) => acc + ((q.prompt.match(/_+/g) || []).length), 0)
+        : 0;
     return (
       <div className="page-content-centered">
         <button onClick={onBack} className="back-link justify-center">
@@ -118,7 +125,7 @@ export default function QuickPractice({ title, type, questions, onBack }: QuickP
           
           <div className="bg-slate-50/80 rounded-2xl p-4 md:p-8 mb-4 md:mb-8 border border-slate-100">
             <p className="text-4xl md:text-5xl font-bold text-slate-900 mb-1 md:mb-2">
-              {correctAnswersCount} <span className="text-xl md:text-2xl text-slate-400">/ {questions.length}</span>
+              {correctAnswersCount} <span className="text-xl md:text-2xl text-slate-400">/ {totalGaps > 0 ? totalGaps : questions.length}</span>
             </p>
             <p className="text-slate-500 font-bold uppercase tracking-wider text-xs md:text-sm">{t("correct")}</p>
           </div>
@@ -162,7 +169,7 @@ export default function QuickPractice({ title, type, questions, onBack }: QuickP
               setAnswers(newAnswers);
             }}
             isSubmitted={isSubmitted}
-            isCorrect={results[currentQuestionIndex]?.isCorrect ?? null}
+            isCorrect={results[currentQuestionIndex] ? (results[currentQuestionIndex]?.gapResults?.every(gr => gr.isCorrect) ?? false) : null}
             gapResults={results[currentQuestionIndex]?.gapResults}
           />
         </div>

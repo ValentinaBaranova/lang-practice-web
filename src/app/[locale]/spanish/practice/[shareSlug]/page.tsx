@@ -34,7 +34,10 @@ export default function PracticePage({
   const [attemptId, setAttemptId] = useState<string | null>(null);
   const [isFinished, setIsFinished] = useState(false);
 
-  const correctAnswersCount = results.filter((r) => r?.answers?.every(a => a.isCorrect)).length;
+  const correctAnswersCount = results.reduce((sum, r) => {
+    if (!r || !Array.isArray(r.answers)) return sum;
+    return sum + r.answers.filter((a) => a.isCorrect).length;
+  }, 0);
 
   useEffect(() => {
     const fetchExercise = async () => {
