@@ -88,11 +88,26 @@ export default function QuestionRenderer({
       firstInputRef.current?.focus();
     }
   }, [question.id, isSubmitted]);
-
-  // Show expected answer if user's correct answer differs by casing/spacing from expected
+  // Use simple trim + lowercase inequality as requested
   const expectedMismatchHints = gapResults?.filter(
-    r => r.isCorrect && r.expectedAnswer != null && r.answer?.trim().toLowerCase() !== r.expectedAnswer!.trim().toLowerCase()
+    r => r.isCorrect && r.expectedAnswer != null && (r.answer ?? "").trim().toLowerCase() !== r.expectedAnswer!.trim().toLowerCase()
   );
+  const isMultiGap = Boolean(question.gaps && question.gaps.length > 1);
+
+  // Small helpers to render the localized "correct answer" line
+  const renderCorrectAnswerPlain = (text: string) => (
+    <p className="text-slate-600 ml-11 text-sm md:text-base">
+      {t("correctAnswer", { answer: text })}
+    </p>
+  );
+  const renderCorrectAnswerRich = () => (
+    <p className="text-slate-600 ml-11 text-sm md:text-base">
+      {t.rich("correctAnswer", {
+        answer: (_chunks: React.ReactNode) => renderSourceWithBoldAnswers(question),
+      })}
+    </p>
+  );
+
   const feedback = isSubmitted && (
     <div className={`mt-3 md:mt-8 p-3 md:p-6 rounded-2xl border ${
       isCorrect 
@@ -117,25 +132,20 @@ export default function QuestionRenderer({
           {isCorrect ? t("correct") : t("incorrect")}
         </p>
       </div>
-      {isCorrect && expectedMismatchHints && expectedMismatchHints.length > 0 && (
-        <p className="text-slate-600 ml-11 text-sm md:text-base">
-          {t.rich("correctAnswer", {
-            // For multiple gaps show the full sentence with bolded answers
-            answer: (question.gaps && question.gaps.length > 1)
-              ? (() => renderSourceWithBoldAnswers(question))
-              : (() => (expectedMismatchHints[0]?.expectedAnswer ?? ""))
-          })}
-        </p>
-      )}
-      {!isCorrect && (
-        <p className="text-slate-600 ml-11 text-sm md:text-base">
-          {t.rich("correctAnswer", {
-            answer: question.gaps && question.gaps.length > 1
-              ? (() => renderSourceWithBoldAnswers(question))
-              : (() => (question.gaps?.[0]?.correctAnswer ?? ""))
-          })}
-        </p>
-      )}
+      {(() => {
+        const hasExpectedMismatch = Boolean(expectedMismatchHints && expectedMismatchHints.length > 0);
+        if (isCorrect && hasExpectedMismatch) {
+          return isMultiGap
+            ? renderCorrectAnswerRich()
+            : renderCorrectAnswerPlain(expectedMismatchHints?.[0]?.expectedAnswer ?? "");
+        }
+        if (!isCorrect) {
+          return isMultiGap
+            ? renderCorrectAnswerRich()
+            : renderCorrectAnswerPlain(question.gaps?.[0]?.correctAnswer ?? "");
+        }
+        return null;
+      })()}
     </div>
   );
 
