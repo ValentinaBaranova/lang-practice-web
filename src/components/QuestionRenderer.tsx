@@ -118,7 +118,7 @@ export default function QuestionRenderer({
   };
 
   const feedback = isSubmitted && (
-    <div className={`mt-3 md:mt-8 p-3 md:p-6 rounded-2xl border ${
+    <div className={`mt-3 md:mt-8 p-3 md:p-6 rounded-none border ${
       isCorrect 
         ? "bg-emerald-50/50 border-emerald-100 text-emerald-900" 
         : "bg-red-50/50 border-red-100 text-red-900"
