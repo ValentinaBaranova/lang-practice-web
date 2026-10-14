@@ -1,12 +1,12 @@
 import { MetadataRoute } from 'next'
 import { routing } from '@/routing'
 import { ExerciseSetResponse } from '@/app/types/api'
+import { localizedUrl } from '@/lib/seo'
 
 const locales = routing.locales
-const BASE_URL = 'https://language-exercises.com'
 
 function buildAlternates(path: string): Record<string, string> {
-  return Object.fromEntries(locales.map((locale) => [locale, `${BASE_URL}/${locale}${path}`]))
+  return Object.fromEntries(locales.map((locale) => [locale, localizedUrl(locale, path)]))
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticSitemap: MetadataRoute.Sitemap = routes.flatMap((route) =>
     locales.map((locale) => ({
-      url: `${BASE_URL}/${locale}${route}`,
+      url: localizedUrl(locale, route),
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
       priority: route === '' ? 1 : 0.8,
@@ -43,7 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           const path = `/spanish/practice/${exercise.shareSlug}`
           const lastModified = new Date(exercise.updatedAt || exercise.createdAt || new Date())
           return locales.map((locale) => ({
-            url: `${BASE_URL}/${locale}${path}`,
+            url: localizedUrl(locale, path),
             lastModified,
             changeFrequency: 'weekly' as const,
             priority: 0.6,

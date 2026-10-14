@@ -103,7 +103,8 @@
     "backToHome": "Volver al inicio",
     "questionProgress": "{current} / {total}",
     "exerciseCompleted": "¡Ejercicio completado!",
-    "studentLink": "Enlace para el alumno"
+    "studentLink": "Enlace para el alumno",
+    "metaDescription": "Practicá español online: \"{title}\". Ejercicio interactivo con {count, plural, =1 {1 pregunta} other {# preguntas}} y corrección al instante."
   },
   "TeacherExercises": {
     "title": "Mis ejercicios",

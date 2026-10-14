@@ -103,7 +103,8 @@
     "backToHome": "Back to Home",
     "questionProgress": "{current} / {total}",
     "exerciseCompleted": "Exercise completed!",
-    "studentLink": "Student link"
+    "studentLink": "Student link",
+    "metaDescription": "Practice Spanish online: \"{title}\". Interactive exercise with {count, plural, =1 {1 question} other {# questions}} and instant feedback."
   },
   "TeacherExercises": {
     "title": "My exercises",
